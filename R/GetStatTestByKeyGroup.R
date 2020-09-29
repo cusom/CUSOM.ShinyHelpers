@@ -10,7 +10,7 @@
 #' @return dataframe containing resulting p.values for each key/group stat test
 
 #' @export
-GetStatTestByKeyGroup <- function(.data, .id, .key, .group, .value, .statTestName, .addLog10 = TRUE) {
+GetStatTestByKeyGroup <- function(.data, .id, .key, .group, .value, .method, .addLog10 = TRUE) {
 
   .id <- enquo(.id)
   .key <- enquo(.key)
@@ -36,7 +36,7 @@ GetStatTestByKeyGroup <- function(.data, .id, .key, .group, .value, .statTestNam
 
   StatResults <- colnames(D1) %>%
     set_names() %>%
-    map(~ ks.test(D1[, .x], D2[, .x])) %>%
+    map(~ runStatsTest(.method, D1[, .x], D2[, .x])) %>%
     map_dfr(., broom::tidy, .id = quo_name(.key))
 
   if(.addLog10) {
@@ -46,4 +46,20 @@ GetStatTestByKeyGroup <- function(.data, .id, .key, .group, .value, .statTestNam
 
   return(StatResults)
 
+}
+
+runStatsTest <- function(testName,x,y) {
+
+  testName <- str_replace(testName,' ','.')
+  testName <- tolower(testName)
+
+  if(testName=="ks.test") {
+    return(ks.test(x,y))
+  }
+  else if (testName=="t.test"){
+    return(t.test(x,y))
+  }
+  else {
+    return("Not Yet Implmented")
+  }
 }
