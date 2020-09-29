@@ -10,7 +10,7 @@ GetStatTestByKeyGroup(
   .key,
   .group,
   .value,
-  .statTestName,
+  .method,
   .addLog10 = TRUE
 )
 }
@@ -25,7 +25,7 @@ GetStatTestByKeyGroup(
 
 \item{.value}{A number - numerical value to use with statitical test.}
 
-\item{.statTestName}{a string - indicating which statisical test to perform.}
+\item{.method}{a string - indicating which statisical test to perform by name..}
 
 \item{.addLog10}{boolean - whether or not to add a -log10 transfromation of resulting p.values}
 }

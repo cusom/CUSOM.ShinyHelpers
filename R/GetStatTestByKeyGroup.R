@@ -5,7 +5,7 @@
 #' @param .key A string or number - key value for dataframe. Statistics will be computed between groups for each key value
 #' @param .group A string - column indicating group membership - should be binary.
 #' @param .value A number - numerical value to use with statitical test.
-#' @param .statTestName a string - indicating which statisical test to perform.
+#' @param .method a string - indicating which statisical test to perform by name..
 #' @param .addLog10 boolean - whether or not to add a -log10 transfromation of resulting p.values
 #' @return dataframe containing resulting p.values for each key/group stat test
 
