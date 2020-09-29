@@ -10,7 +10,8 @@ Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.1.1
 Imports: 
-    dplyr, 
-    tidyr (>= 1.1.0), 
-    purrr (>= 0.2.5)
-    
+    dplyr,
+    tidyr (>= 1.1.0),
+    purrr (>= 0.2.5),
+    shiny (>= 1.5.0),
+    shinyWidgets
