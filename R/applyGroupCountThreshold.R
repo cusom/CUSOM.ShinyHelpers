@@ -11,7 +11,7 @@ applyGroupCountThreshold <- function(.data, .groupVar, groupLabels, threshold = 
 
   .groupVar <- enquo(.groupVar)
 
-  cartesian <- expand.grid(.groupLabels)
+  cartesian <- expand.grid(groupLabels)
   colnames(cartesian) <- c(quo_name(.groupVar))
 
   t <- .data %>%
