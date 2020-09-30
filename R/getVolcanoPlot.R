@@ -4,7 +4,8 @@
 #' @param .xvar fold change variable
 #' @param .yvar p value variable
 #' @param .significanceGroup significance group column
-#' @param .keyvar - key column in fold change data - will be used for capuring select events
+#' @param .text column containing text values to show in tooltip
+#' @param .key - key column in fold change data - will be used for capuring select events
 #' @param plotName - name to attribute to plot (used for tracking clicks, events, etc)
 #'
 #' @return returns list of lists of plotly annotation objects
@@ -13,12 +14,13 @@
 #'          -- dp value threshold text with "p(a) > threshold" text and up arrow
 #'          -- if a value is chosen, adds in arrow annotation.
 #' @export
-getVolcanoPlot <- function(.data, .xvar, .yvar, .significanceGroup, .keyvar, plotName) {
+getVolcanoPlot <- function(.data, .xvar, .yvar, .significanceGroup, .text, .key, plotName) {
 
   .xvar <- enquo(.xvar)
   .yvar <- enquo(.yvar)
   .significanceGroup <- enquo(.significanceGroup)
-  .keyvar <- enquo(.keyvar)
+  .text <- enquo(.text)
+  .key <- enquo(.key)
 
   maxFoldChange <- max(abs(.data[quo_name(.xvar)])) *1.1
   maxPValue <- max(abs(.data[quo_name(.yvar)])) * 1.1
@@ -82,12 +84,12 @@ getVolcanoPlot <- function(.data, .xvar, .yvar, .significanceGroup, .keyvar, plo
       type ='scatter',
       x = .xvar ,
       y = .yvar,
-      text = ~ text,
+      text = .text,
       hoverinfo = 'text',
       mode = "markers",
       color = .significanceGroup,
       colors = c('#686868','#3E99CD','#1D4D7C'),
-      key = .keyvar,
+      key = .key,
       marker = list(size = 8,width = 2)
     ) %>%
     layout(
@@ -109,7 +111,6 @@ getVolcanoPlot <- function(.data, .xvar, .yvar, .significanceGroup, .keyvar, plo
         size= 18,
         color= "rgb(58, 62, 65)"
       ),
-      annotations = a,
       shapes = list(
         list(
           type = "line",

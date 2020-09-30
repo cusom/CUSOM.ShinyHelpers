@@ -4,7 +4,7 @@
 \alias{getVolcanoPlot}
 \title{Plotly function to generate standard volcano plot from fold change data}
 \usage{
-getVolcanoPlot(.data, .xvar, .yvar, .significanceGroup, .keyvar, plotName)
+getVolcanoPlot(.data, .xvar, .yvar, .significanceGroup, .text, .key, plotName)
 }
 \arguments{
 \item{.data}{dataframe containing fold change data}
@@ -15,7 +15,9 @@ getVolcanoPlot(.data, .xvar, .yvar, .significanceGroup, .keyvar, plotName)
 
 \item{.significanceGroup}{significance group column}
 
-\item{.keyvar}{- key column in fold change data - will be used for capuring select events}
+\item{.text}{column containing text values to show in tooltip}
+
+\item{.key}{- key column in fold change data - will be used for capuring select events}
 
 \item{plotName}{- name to attribute to plot (used for tracking clicks, events, etc)}
 }
