@@ -7,7 +7,7 @@
 #' @param  selected - string
 #' @param ... dots - additional arguments to pass to widgets functions
 #' @return returns a shiny input widget based on inputs
-
+#' @export
 createInputControl <- function(controlType, inputId, label, choices, selected, ...) {
 
   if(controlType=="radioButtons") {

@@ -13,10 +13,11 @@
 
 getDefaultVolcanoAnnotations <- function(maxFoldChange,pValueThreshold,upRegulatedText) {
 
+  upTextLength <- nchar(upRegulatedText)
+  upAnchor <- 80 / 100
   downRegulatedText <- stringr::str_replace(upRegulatedText,'Up','Down')
-  n <- nchar(downRegulatedText)
-  downAnchor <- round(n / 32.5,2)
-  upAnchor <- 1 - downAnchor
+  downTextLength <- nchar(downRegulatedText)
+  downAnchor <- (25 - round(downTextLength / 2)) / 100
 
   return(
     list(
