@@ -22,11 +22,7 @@ getVolcanoPlot(.data, .xvar, .yvar, .significanceGroup, .text, .key, plotName)
 \item{plotName}{- name to attribute to plot (used for tracking clicks, events, etc)}
 }
 \value{
-returns list of lists of plotly annotation objects
-         -- up regulated arror at top of plot (with up regulated text)
-         -- down regulated arrow at the top of plot (
-         -- dp value threshold text with "p(a) > threshold" text and up arrow
-         -- if a value is chosen, adds in arrow annotation.
+returns Plotly scatter plot showing fold change vs p value colored by significance group
 }
 \description{
 Plotly function to generate standard volcano plot from fold change data

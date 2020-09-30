@@ -8,11 +8,7 @@
 #' @param .key - key column in fold change data - will be used for capuring select events
 #' @param plotName - name to attribute to plot (used for tracking clicks, events, etc)
 #'
-#' @return returns list of lists of plotly annotation objects
-#'          -- up regulated arror at top of plot (with up regulated text)
-#'          -- down regulated arrow at the top of plot (
-#'          -- dp value threshold text with "p(a) > threshold" text and up arrow
-#'          -- if a value is chosen, adds in arrow annotation.
+#' @return returns Plotly scatter plot showing fold change vs p value colored by significance group
 #' @export
 getVolcanoPlot <- function(.data, .xvar, .yvar, .significanceGroup, .text, .key, plotName) {
 
