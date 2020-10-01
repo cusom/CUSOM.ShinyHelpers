@@ -28,9 +28,9 @@ getVolcanoAnnotations <- function(.data, .xvar, .yvar,.selected,.text, pValueThr
 
   if(addArrow) {
 
-    xcoordinate <- .data %>% filter(!!.selected == 1) %>% select(!!.xvar) %>% pull()
-    ycoordinate <- .data %>% filter(!!.selected == 1) %>% select(!!.yvar) %>% pull()
-    text <- .data %>% filter(!!.selected == 1) %>% select(!!.text) %>% pull()
+    xcoordinate <- .data %>% ungroup() %>% filter(!!.selected == 1) %>% select(!!.xvar) %>% pull()
+    ycoordinate <- .data %>% ungroup() %>% filter(!!.selected == 1) %>% select(!!.yvar) %>% pull()
+    text <- .data %>% ungroup() %>% filter(!!.selected == 1) %>% select(!!.text) %>% pull()
 
     arrow_a <- getVolcanoArrowAnnotation(xcoordinate,ycoordinate,text)
 
