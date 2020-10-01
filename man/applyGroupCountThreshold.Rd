@@ -4,16 +4,14 @@
 \alias{applyGroupCountThreshold}
 \title{Utility function to check for minimum group membership in a dataframe}
 \usage{
-applyGroupCountThreshold(.data, .groupVar, groupLabels, threshold = 10)
+applyGroupCountThreshold(.data, ..., threshold = 10)
 }
 \arguments{
 \item{.data}{dataframe containing group column to check}
 
-\item{.groupVar}{column, string - group labels to check}
+\item{...}{columns, string - any combinaton of grouping variables to check threshold against}
 
-\item{groupLabels}{vector - labels to check for membership - useful when the source dataframe is missing a required group ex(Sex- Male, Female)}
-
-\item{threshold}{integer - minimum group membership threshold to be met in order to return data}
+\item{threshold}{integer - minimum group membership threshold to be met in order to return data. default = 10}
 }
 \value{
 returns original dataframe if threshold is met for each group member. If threshold not met, NULL is returned

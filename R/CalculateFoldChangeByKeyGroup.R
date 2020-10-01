@@ -9,7 +9,7 @@
 #' @return dataframe indicating  fold change (raw and log2) between baseline and comparison for each group by key value
 
 #' @export
-CalculateFoldChangeByKeyGroup <- function(.data, .key, .group, .value, baselineGroupLabel) {
+calculateFoldChangeByKeyGroup <- function(.data, .key, .group, .value, baselineGroupLabel) {
 
   .key <- enquo(.key)
   .group <- enquo(.group)

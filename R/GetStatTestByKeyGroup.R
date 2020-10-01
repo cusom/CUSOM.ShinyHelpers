@@ -10,7 +10,7 @@
 #' @return dataframe containing resulting p.values for each key/group stat test
 
 #' @export
-GetStatTestByKeyGroup <- function(.data, .id, .key, .group, .value, .method, .addLog10 = TRUE) {
+getStatTestByKeyGroup <- function(.data, .id, .key, .group, .value, .method, .addLog10 = TRUE) {
 
   .id <- enquo(.id)
   .key <- enquo(.key)
@@ -39,9 +39,20 @@ GetStatTestByKeyGroup <- function(.data, .id, .key, .group, .value, .method, .ad
     map(~ runStatsTest(.method, D1[, .x], D2[, .x])) %>%
     map_dfr(., broom::tidy, .id = quo_name(.key))
 
-  if(.addLog10) {
+  # check for valid results from test.
+  if(.addLog10 & "p.value" %in% colnames(StatResults) ) {
+
     StatResults <- StatResults %>%
       mutate(`-log10pvalue` = -log10(p.value))
+
+  }
+
+  # if NA was returned, return back empty results with error column
+  else {
+
+    StatResults <- StatResults %>%
+      mutate(statistic = NA, p.value = NA, `-log10pvalue` = 0, method = .method, error = "Not Enough Observations to run test")
+
   }
 
   return(StatResults)
@@ -54,11 +65,38 @@ runStatsTest <- function(testName,x,y) {
   testName <- tolower(testName)
 
   if(testName=="ks.test") {
-    return(ks.test(x,y))
+
+    tryCatch({
+
+      result <- ks.test(x,y)
+
+      return(result)
+
+    }, error = function(err) {
+
+      return(NA)
+
+    })
+
   }
+
   else if (testName=="t.test"){
-    return(t.test(x,y))
+
+    tryCatch({
+
+      result <- t.test(x,y)
+
+      return(result)
+
+
+    }, error = function(err) {
+
+      return(NA)
+
+    })
+
   }
+
   else {
     return("Not Yet Implmented")
   }
