@@ -1,16 +1,17 @@
-#' Calculate statistical test across 2 groups for each key value in a dataframe
+#' Calculate statistical test between 2 groups for each key value in a dataframe
 #'
 #' @param .data A dataframe
-#' @param .id A string or number - represents a unique observation within each key/group combination. PersonId, LabId, etc
-#' @param .key A string or number - key value for dataframe. Statistics will be computed between groups for each key value
-#' @param .group A string - column indicating group membership - should be binary.
-#' @param .value A number - numerical value to use with statitical test.
-#' @param .method a string - indicating which statisical test to perform by name..
-#' @param .addLog10 boolean - whether or not to add a -log10 transfromation of resulting p.values
+#' @param .id A string or numeric column - represents a unique observation within each key/group combination. PersonId, LabId, etc
+#' @param .key A string or numeric column - key value for dataframe. Statistics will be computed between groups for each key value
+#' @param .group A string column indicating group membership - should be binary.
+#' @param .value A numeric column - numerical value to use with statitical test between groups.
+#' @param method a string - indicating which statisical test to perform.
+#' @param adjustMethod a string - indicating which method to be used to adjust P-values for multiple comparisons - defaults to "none"
+#' @param addLog10 boolean - whether or not to add a -log10 transfromation of resulting p.values
 #' @return dataframe containing resulting p.values for each key/group stat test
 
 #' @export
-getStatTestByKeyGroup <- function(.data, .id, .key, .group, .value, .method, .addLog10 = TRUE) {
+getStatTestByKeyGroup <- function(.data, .id, .key, .group, .value, method, adjustMethod ="none", addLog10 = TRUE) {
 
   .id <- enquo(.id)
   .key <- enquo(.key)
@@ -36,14 +37,22 @@ getStatTestByKeyGroup <- function(.data, .id, .key, .group, .value, .method, .ad
 
   StatResults <- colnames(D1) %>%
     set_names() %>%
-    map(~ runStatsTest(.method, D1[, .x], D2[, .x])) %>%
+    map(~ runStatsTest(method, D1[, .x], D2[, .x])) %>%
     map_dfr(., broom::tidy, .id = quo_name(.key))
 
   # check for valid results from test.
-  if(.addLog10 & "p.value" %in% colnames(StatResults) ) {
+  if("p.value" %in% colnames(StatResults)) {
 
-    StatResults <- StatResults %>%
-      mutate(`-log10pvalue` = -log10(p.value))
+    StatResults$p.value.original <- StatResults$p.value
+    StatResults$p.value <- p.adjust(StatResults$p.value, adjustMethod)
+    StatResults$p.value.adjustment.method <- adjustMethod
+
+    if(addLog10) {
+
+      StatResults <- StatResults %>%
+        mutate(`-log10pvalue` = -log10(p.value))
+
+    }
 
   }
 
@@ -51,13 +60,14 @@ getStatTestByKeyGroup <- function(.data, .id, .key, .group, .value, .method, .ad
   else {
 
     StatResults <- StatResults %>%
-      mutate(statistic = NA, p.value = NA, `-log10pvalue` = 0, method = .method, error = "Not Enough Observations to run test")
+      mutate(statistic = NA, p.value = NA, `-log10pvalue` = 0, method = method, error = paste0("Not Enough Observations to run ", method ))
 
   }
 
   return(StatResults)
 
 }
+
 
 runStatsTest <- function(testName,x,y) {
 
@@ -98,6 +108,6 @@ runStatsTest <- function(testName,x,y) {
   }
 
   else {
-    return("Not Yet Implmented")
+    return(paste0(testName," Not Yet Implemented"))
   }
 }

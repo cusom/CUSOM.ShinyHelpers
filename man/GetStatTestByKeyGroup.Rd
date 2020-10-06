@@ -2,7 +2,7 @@
 % Please edit documentation in R/getStatTestByKeyGroup.R
 \name{getStatTestByKeyGroup}
 \alias{getStatTestByKeyGroup}
-\title{Calculate statistical test across 2 groups for each key value in a dataframe}
+\title{Calculate statistical test between 2 groups for each key value in a dataframe}
 \usage{
 getStatTestByKeyGroup(
   .data,
@@ -10,28 +10,31 @@ getStatTestByKeyGroup(
   .key,
   .group,
   .value,
-  .method,
-  .addLog10 = TRUE
+  method,
+  adjustMethod = "none",
+  addLog10 = TRUE
 )
 }
 \arguments{
 \item{.data}{A dataframe}
 
-\item{.id}{A string or number - represents a unique observation within each key/group combination. PersonId, LabId, etc}
+\item{.id}{A string or numeric column - represents a unique observation within each key/group combination. PersonId, LabId, etc}
 
-\item{.key}{A string or number - key value for dataframe. Statistics will be computed between groups for each key value}
+\item{.key}{A string or numeric column - key value for dataframe. Statistics will be computed between groups for each key value}
 
-\item{.group}{A string - column indicating group membership - should be binary.}
+\item{.group}{A string column indicating group membership - should be binary.}
 
-\item{.value}{A number - numerical value to use with statitical test.}
+\item{.value}{A numeric column - numerical value to use with statitical test between groups.}
 
-\item{.method}{a string - indicating which statisical test to perform by name..}
+\item{method}{a string - indicating which statisical test to perform.}
 
-\item{.addLog10}{boolean - whether or not to add a -log10 transfromation of resulting p.values}
+\item{adjustMethod}{a string - indicating which method to be used to adjust P-values for multiple comparisons - defaults to "none"}
+
+\item{addLog10}{boolean - whether or not to add a -log10 transfromation of resulting p.values}
 }
 \value{
 dataframe containing resulting p.values for each key/group stat test
 }
 \description{
-Calculate statistical test across 2 groups for each key value in a dataframe
+Calculate statistical test between 2 groups for each key value in a dataframe
 }
