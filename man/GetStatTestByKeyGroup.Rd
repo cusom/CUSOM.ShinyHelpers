@@ -26,7 +26,7 @@ getStatTestByKeyGroup(
 
 \item{.value}{A numeric column - numerical value to use with statitical test between groups.}
 
-\item{method}{a string - indicating which statisical test to perform.}
+\item{method}{a string - indicating which statisical test to perform. One of either ks.test, t.test, or wilcox.test}
 
 \item{adjustMethod}{a string - indicating which method to be used to adjust P-values for multiple comparisons - defaults to "none"}
 

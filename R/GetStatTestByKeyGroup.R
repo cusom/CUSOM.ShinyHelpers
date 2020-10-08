@@ -5,7 +5,7 @@
 #' @param .key A string or numeric column - key value for dataframe. Statistics will be computed between groups for each key value
 #' @param .group A string column indicating group membership - should be binary.
 #' @param .value A numeric column - numerical value to use with statitical test between groups.
-#' @param method a string - indicating which statisical test to perform.
+#' @param method a string - indicating which statisical test to perform. One of either ks.test, t.test, or wilcox.test
 #' @param adjustMethod a string - indicating which method to be used to adjust P-values for multiple comparisons - defaults to "none"
 #' @param addLog10 boolean - whether or not to add a -log10 transfromation of resulting p.values
 #' @return dataframe containing resulting p.values for each key/group stat test
@@ -95,6 +95,23 @@ runStatsTest <- function(testName,x,y) {
     tryCatch({
 
       result <- t.test(x,y)
+
+      return(result)
+
+
+    }, error = function(err) {
+
+      return(NA)
+
+    })
+
+  }
+
+  else if (testName=="wilcox.test"){
+
+    tryCatch({
+
+      result <- wilcox.test(x,y)
 
       return(result)
 
