@@ -4,15 +4,21 @@
 \alias{formatPValue}
 \title{HTML formats p value based on threshold}
 \usage{
-formatPValue(pvalue, threshold = 0.05)
+formatPValue(
+  p.value,
+  p.value.adjustment.method = "none",
+  p.value.threshold = 0.05
+)
 }
 \arguments{
-\item{pvalue}{- numeric - p value}
+\item{p.value}{- numeric - p value}
 
-\item{threshold}{- numeric - threshold under which to display formatted p value - defaults to 0.05. For values above threshold, returns "No Significant Difference"}
+\item{p.value.adjustment.method}{string - p value adjustment method if any - defaults to "none"}
+
+\item{p.value.threshold}{- numeric - threshold under which to display formatted p value - defaults to 0.05. For values above threshold, returns "No Significant Difference"}
 }
 \value{
-dataframe with html formatted p value.
+string with html formatted p value.
 }
 \description{
 HTML formats p value based on threshold
