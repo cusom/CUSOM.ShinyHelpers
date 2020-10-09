@@ -2,7 +2,7 @@
 % Please edit documentation in R/formatPValue.R
 \name{formatPValue}
 \alias{formatPValue}
-\title{HTML formats p value based on threshold}
+\title{formats p value based on threshold}
 \usage{
 formatPValue(
   p.value,
@@ -18,8 +18,8 @@ formatPValue(
 \item{p.value.threshold}{- numeric - threshold under which to display formatted p value - defaults to 0.05. For values above threshold, returns "No Significant Difference"}
 }
 \value{
-string with html formatted p value.
+string - formatted p value.
 }
 \description{
-HTML formats p value based on threshold
+formats p value based on threshold
 }
