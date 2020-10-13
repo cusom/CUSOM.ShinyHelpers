@@ -23,7 +23,7 @@ getMaxAbsValue <- function(.data, .var, inf.rm = TRUE, buffer=1.1) {
   }
 
   maxAbsValue <- dataframe %>%
-    summarise(max = max(abs(!!.xvar)) * buffer) %>%
+    summarise(max = max(abs(!!.var)) * buffer) %>%
     pull()
 
   return(maxAbsValue)
