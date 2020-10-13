@@ -9,6 +9,8 @@
 #' @export
 getMaxAbsValue <- function(.data, .var, inf.rm = TRUE, buffer=1.1) {
 
+  .var <- enquo(.var)
+
   dataframe  <- .data %>%
     ungroup() %>%
     select(!!.var)
