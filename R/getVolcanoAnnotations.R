@@ -21,7 +21,7 @@ getVolcanoAnnotations <- function(.data, .xvar, .yvar,.selected,.text, pValueThr
   .selected <- enquo(.selected)
   .text <- enquo(.text)
 
-  maxFoldChange <- getMaxAbsValue(.data,.xvar,inf.rm = TRUE, buffer=1.1)
+  maxFoldChange <- getMaxAbsValue(.data,!!.xvar,inf.rm = TRUE, buffer=1.1)
 
   default_a <- getDefaultVolcanoAnnotations(maxFoldChange,pValueThreshold,upRegulatedText)
 
