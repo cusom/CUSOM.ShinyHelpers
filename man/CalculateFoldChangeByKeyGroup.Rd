@@ -4,7 +4,14 @@
 \alias{calculateFoldChangeByKeyGroup}
 \title{Calculate fold change for each key value between groups}
 \usage{
-calculateFoldChangeByKeyGroup(.data, .key, .group, .value, baselineGroupLabel)
+calculateFoldChangeByKeyGroup(
+  .data,
+  .key,
+  .group,
+  .value,
+  baselineGroupLabel,
+  inf.rm = TRUE
+)
 }
 \arguments{
 \item{.data}{A dataframe}
@@ -16,6 +23,8 @@ calculateFoldChangeByKeyGroup(.data, .key, .group, .value, baselineGroupLabel)
 \item{.value}{A number - numerical value to use with statitical test.}
 
 \item{baselineGroupLabel}{a string - indicating which statisical test to perform by name..}
+
+\item{inf.rm}{logical indicating whether to remove INF fold changes (dividing by 0) - defaults to TRUE}
 }
 \value{
 dataframe indicating  fold change (raw and log2) between baseline and comparison for each group by key value

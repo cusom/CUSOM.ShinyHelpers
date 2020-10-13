@@ -18,8 +18,8 @@ getVolcanoPlot <- function(.data, .xvar, .yvar, .significanceGroup, .text, .key,
   .text <- enquo(.text)
   .key <- enquo(.key)
 
-  maxFoldChange <- max(abs(.data[quo_name(.xvar)])) *1.1
-  maxPValue <- max(abs(.data[quo_name(.yvar)])) * 1.1
+  maxFoldChange <- getMaxAbsValue(.data,.xvar,inf.rm = TRUE, buffer=1.1)
+  maxPValue <- getMaxAbsValue(.data,.yvar,inf.rm = TRUE, buffer=1.1)
 
   if(maxPValue < 5) { maxPValue <- 5.0}
 
