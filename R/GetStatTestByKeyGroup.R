@@ -37,7 +37,7 @@ getStatTestByKeyGroup <- function(.data, .id, .key, .group, .value, method, adju
 
   StatResults <- colnames(D1) %>%
     set_names() %>%
-    map(~ runStatsTest(method, D1[, .x], D2[, .x])) %>%
+    map(~ runStatMethod(method, D1[, .x], D2[, .x])) %>%
     map_dfr(., broom::tidy, .id = quo_name(.key))
 
   # check for valid results from test.
@@ -60,7 +60,9 @@ getStatTestByKeyGroup <- function(.data, .id, .key, .group, .value, method, adju
   else {
 
     StatResults <- StatResults %>%
-      mutate(statistic = NA, p.value = NA, `-log10pvalue` = 0, method = method, error = paste0("Not Enough Observations to run ", method ))
+      mutate(statistic = NA, p.value = NA, `-log10pvalue` = 0,
+             method = method, error = paste0("Not Enough Observations to run ", method )
+             )
 
   }
 
@@ -69,62 +71,53 @@ getStatTestByKeyGroup <- function(.data, .id, .key, .group, .value, method, adju
 }
 
 
-runStatsTest <- function(testName,x,y) {
+runStatMethod <- function(method,x,y) {
 
-  testName <- str_replace(testName,' ','.')
-  testName <- tolower(testName)
+  methodName <- getStatTestByKeyGroup.getMethodName(method)
 
-  if(testName=="ks.test") {
+  tryCatch({
 
-    tryCatch({
+    result <- do.call(methodName,args = list(x,y))
 
-      result <- ks.test(x,y)
-
-      return(result)
-
-    }, error = function(err) {
-
-      return(NA)
-
-    })
-
-  }
-
-  else if (testName=="t.test"){
-
-    tryCatch({
-
-      result <- t.test(x,y)
-
-      return(result)
+    return(result)
 
 
-    }, error = function(err) {
+  }, error = function(err) {
 
-      return(NA)
+    return(NA)
 
-    })
+  })
 
-  }
-
-  else if (testName=="wilcox.test"){
-
-    tryCatch({
-
-      result <- wilcox.test(x,y)
-
-      return(result)
-
-
-    }, error = function(err) {
-
-      return(NA)
-
-    })
-
-  }
-
-  else {
-    return(paste0(testName," Not Yet Implemented"))
-  }
 }
+
+#' Return implemented stat test methods
+#' @return vector of all implemented stat test methods
+#' @export
+getStatTestByKeyGroup.methods <- c("Kolmogorov-Smirnov Test","Student's t-test","Wilcoxon test")
+
+#' Return available adjustmemt methods
+#' @return vector of all available adjustmemt methods
+#' @export
+getStatTestByKeyGroup.adjustment.methods <- p.adjust.methods
+
+# internal lookup between label and method name for all stat tests
+getStatTestByKeyGroup.getMethodName <- function(method) {
+
+  statMethods <- data.frame(
+    StatTestMethodLabel = c("Kolmogorov-Smirnov Test","Student's t-test","Wilcoxon test"),
+    StatTestMethodName = c("ks.test","t.test","wilcox.test")
+  )
+
+  methodName <- as.character(statMethods[which(statMethods$StatTestMethodLabel == method),'StatTestMethodName'])
+
+  if(length(methodName)==0) {
+    msg <- paste0("'", method,"' Method Not Yet Implemented")
+    stop(msg, call. = FALSE)
+  }
+  else {
+    return(methodName)
+  }
+
+}
+
+
