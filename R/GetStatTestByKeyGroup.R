@@ -44,7 +44,7 @@ getStatTestByKeyGroup <- function(.data, .id, .key, .group, .value, method, adju
   if("p.value" %in% colnames(StatResults)) {
 
     StatResults$p.value.original <- StatResults$p.value
-    StatResults$p.value <- p.adjust(StatResults$p.value, adjustMethod)
+    StatResults$p.value <- p.adjust(StatResults$p.value, getStatTestByKeyGroup.getAdjustmentMethodName(adjustMethod))
     StatResults$p.value.adjustment.method <- adjustMethod
 
     if(addLog10) {
@@ -116,6 +116,25 @@ getStatTestByKeyGroup.getMethodName <- function(method) {
   }
   else {
     return(methodName)
+  }
+
+}
+
+# internal lookup between label and method name for all adjustment methods
+getStatTestByKeyGroup.getAdjustmentMethodName <- function(adjustment) {
+
+  adjustmentMethods <- data.frame(
+    AdjustmentMethodLabel = c("None","Bonferroni","Benjamini-Hochberg (FDR)"),
+    AdjustmentMethodName = c("none","bonferroni","BH")
+  )
+
+  adjustmentName <- as.character(adjustmentMethods[which(adjustmentMethods$AdjustmentMethodLabel == adjustment),'AdjustmentMethodName'])
+
+  if(length(adjustmentName)==0) {
+    return(adjustment)
+  }
+  else {
+    return(adjustmentName)
   }
 
 }
