@@ -175,7 +175,7 @@ getBoxPlotWithHighlightGroup <- function(.data, .key, .group, .groupBaselineLabe
         showlegend = TRUE
       )
 
-    p$x$source <- paste0(plotName,"Boxplot")
+    p$x$source <- paste0(plotName,"BoxPlot")
 
     return(p)
 
