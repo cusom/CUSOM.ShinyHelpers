@@ -12,7 +12,7 @@ fillMissingSexObservations <- function(.data, .group, groupLabels) {
   .group <- enquo(.group)
   sexes <- c("Male","Female")
 
-  cartesian <- expand.grid(.groupLabels,sexes)
+  cartesian <- expand.grid(groupLabels,sexes)
   colnames(cartesian) <- c(quo_name(.group),"Sex")
 
   return(
