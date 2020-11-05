@@ -42,7 +42,7 @@ getStatTestByKeyGroup <- function(.data, .id, .key, .group, .value, method, adju
 
   # check for valid results from test.
   if("p.value" %in% colnames(StatResults)) {
-
+    StatResults$p.value <- as.numeric(gsub('.*<','\\1',format.pval(StatResults$p.value)))
     StatResults$p.value.original <- StatResults$p.value
     StatResults$p.value <- p.adjust(StatResults$p.value, getStatTestByKeyGroup.getAdjustmentMethodName(adjustMethod))
     StatResults$p.value.adjustment.method <- adjustMethod
