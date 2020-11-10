@@ -11,10 +11,6 @@ getSOMStandardFooter <- function(footerImageFilePath='./images/medicine_h_clr.pn
   return(
     paste0(
       '<br />
-      <div class="u-foottextwrap">
-      This website is currently in beta-testing.
-      </div>
-      <br />
       <hr />
         <center>
           <img src="',footerImageFilePath,'" width="400" height="auto">
