@@ -7,19 +7,29 @@
 #' @export
 formatPValue <- function(p.value,p.value.adjustment.method="none",p.value.threshold = 0.05){
 
-  if(p.value <= p.value.threshold){
+  if(!is.na(p.value)) {
 
-    p.value <- formatC(p.value, format = "e", digits = 2)
+    if(p.value <= p.value.threshold){
 
-    p.value.suffix <- ifelse(p.value.adjustment.method=="none",""," (adj)")
+      p.value <- formatC(p.value, format = "e", digits = 2)
 
-    return(paste0("*p-value",p.value.suffix," = ",p.value,""))
+      p.value.suffix <- ifelse(p.value.adjustment.method=="none",""," (adj)")
+
+      return(paste0("*p-value",p.value.suffix," = ",p.value,""))
+
+    }
+
+    else {
+
+      return(paste0('No significant difference'))
+
+    }
 
   }
 
   else {
 
-    return(paste0('No significant difference'))
+    return(paste0("Unable to compute p-value using chosen methods"))
 
   }
 
