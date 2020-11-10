@@ -25,7 +25,7 @@ getVolcanoAnnotations <- function(.data, .xvar, .yvar,.selected,.text, pValueThr
 
   default_a <- getDefaultVolcanoAnnotations(maxFoldChange,pValueThreshold,upRegulatedText)
 
-  addArrow <- dim(.data %>% filter(!!.selected == 1))[1] > 0
+  addArrow <- dim(.data %>% filter(!!.selected == 1, !is.na(!!.xvar), !is.na(!!.yvar)) )[1] > 0
 
   if(addArrow) {
 
