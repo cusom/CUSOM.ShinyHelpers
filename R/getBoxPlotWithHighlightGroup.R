@@ -9,13 +9,13 @@
 #' @param text string - column containing text values to show in tooltip
 #' @param highlightGroup string - column with highlight groups (A vs B or 1 vs 2 etc...)
 #' @param colors vector of colors to use for base boxplot and jitter - defaults to grey/blue. Color used for baseline should be passed as first value
-#' @param highlightColors vector of colors to use for highlighted points - defaults to organge/red
+#' @param highlightColors vector of colors to use for highlighted points - defaults to orange/red
 #' @param plotName string - name to attribute to plot (used for tracking clicks, events, etc)
 #'
 #' @return returns plotly box and whisker plot with secondary traces indicating highlighted groups
 #' @export
 getBoxPlotWithHighlightGroup <- function(.data, key, group, groupBaselineLabel, value, valueLabel,
-                                         text, highlightGroup, colors = c("#BBBDC0","#287BA5"), highlightColors = c("organge","red"), plotName) {
+                                         text, highlightGroup, colors = c("#BBBDC0","#287BA5"), highlightColors = c("orange","red"), plotName) {
 
   .key <- enquo(key)
   .group <- enquo(group)

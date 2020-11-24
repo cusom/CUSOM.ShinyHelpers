@@ -14,7 +14,7 @@ getBoxPlotWithHighlightGroup(
   text,
   highlightGroup,
   colors = c("#BBBDC0", "#287BA5"),
-  highlightColors = c("organge", "red"),
+  highlightColors = c("orange", "red"),
   plotName
 )
 }
@@ -37,7 +37,7 @@ getBoxPlotWithHighlightGroup(
 
 \item{colors}{vector of colors to use for base boxplot and jitter - defaults to grey/blue. Color used for baseline should be passed as first value}
 
-\item{highlightColors}{vector of colors to use for highlighted points - defaults to organge/red}
+\item{highlightColors}{vector of colors to use for highlighted points - defaults to orange/red}
 
 \item{plotName}{string - name to attribute to plot (used for tracking clicks, events, etc)}
 }
