@@ -93,10 +93,11 @@ getBoxPlotWithHighlightGroup <- function(.data, key, group, groupBaselineLabel, 
                    t = 20,
                    b = 20)
 
-    if(median(baseline$value) < median(comparison$value)) {
-      plotColors <- c(comparisonColor,baselineColor)
-    } else {
-      plotColors <- as.vector(c(baselineColor,comparisonColor))
+    if ( median(baseline$value) < median(comparison$value) ) {
+      plotColors <- c(baselineColor, comparisonColor)
+    }
+    else {
+      plotColors <- c(comparisonColor, baselineColor)
     }
 
     p <- plot_ly(type='box', colors = plotColors) %>%
