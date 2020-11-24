@@ -1,39 +1,44 @@
 #' Plotly function to generate standard box and whisker plot with highighted groups
 #'
 #' @param .data dataframe containing numeric values between 2 groups
-#' @param .key dataframe key column
-#' @param .group string - group column - should only contain 2 groups
-#' @param .groupBaselineLabel string - value indicating the group label that should be used as the comparison
-#' @param .value numeric - numeric value to compare between groups
-#' @param .valueLabel string - column indicating the label for the .value values
-#' @param .text string - column containing text values to show in tooltip
-#' @param .highlightGroup string - column with highlight groups (A vs B or 1 vs 2 etc...)
+#' @param key dataframe key column
+#' @param group string - group column - should only contain 2 groups
+#' @param groupBaselineLabel string - value indicating the group label that should be used as the comparison
+#' @param value numeric - numeric value to compare between groups
+#' @param valueLabel string - column indicating the label for the .value values
+#' @param text string - column containing text values to show in tooltip
+#' @param highlightGroup string - column with highlight groups (A vs B or 1 vs 2 etc...)
+#' @param colors vector of colors to use for base boxplot and jitter - defaults to grey/blue. Color used for baseline should be passed as first value
+#' @param highlightColors vector of colors to use for highlighted points - defaults to organge/red
 #' @param plotName string - name to attribute to plot (used for tracking clicks, events, etc)
 #'
 #' @return returns plotly box and whisker plot with secondary traces indicating highlighted groups
 #' @export
-getBoxPlotWithHighlightGroup <- function(.data, .key, .group, .groupBaselineLabel, .value, .valueLabel, .text, .highlightGroup, plotName){
+getBoxPlotWithHighlightGroup <- function(.data, key, group, groupBaselineLabel, value, valueLabel,
+                                         text, highlightGroup, colors = c("#BBBDC0","#287BA5"), highlightColors = c("organge","red"), plotName) {
 
-  .key <- enquo(.key)
-  .group <- enquo(.group)
-  .value <- enquo(.value)
-  .valueLabel <- enquo(.valueLabel)
-  .text <- enquo(.text)
-  .highlightGroup <- enquo(.highlightGroup)
+  .key <- enquo(key)
+  .group <- enquo(group)
+  .value <- enquo(value)
+  .valueLabel <- enquo(valueLabel)
+  .text <- enquo(text)
+  .highlightGroup <- enquo(highlightGroup)
+  baselineColor <- colors[1]
+  comparisonColor <- colors[2]
 
   if(nrow(.data)>0){
 
     .data <- .data %>%
       mutate(key = !!.key, group = !!.group, value = !!.value, text = !!.text) %>%
       add_tally() %>%
-      mutate(x = rnorm(n, mean = ifelse(!!.group == .groupBaselineLabel, -1, 1), sd=0.15))
+      mutate(x = rnorm(n, mean = ifelse(!!.group == groupBaselineLabel, -1, 1), sd=0.15))
 
     yVariableLabel <- .data %>%
       distinct(!!.valueLabel) %>%
       pull()
 
-    baseline <- .data %>% filter(!!.group == .groupBaselineLabel)
-    comparison <- .data %>% filter(!!.group != .groupBaselineLabel)
+    baseline <- .data %>% filter(!!.group == groupBaselineLabel)
+    comparison <- .data %>% filter(!!.group != groupBaselineLabel)
 
     highlightGroups <- .data %>%
       select(!!.highlightGroup) %>%
@@ -88,15 +93,26 @@ getBoxPlotWithHighlightGroup <- function(.data, .key, .group, .groupBaselineLabe
                    t = 20,
                    b = 20)
 
+    if(median(baseline$value) < median(comparison$value)) {
+      plotColors <- c(comparisonColor,baselineColor)
+    } else {
+      plotColors <- as.vector(c(baselineColor,comparisonColor))
+    }
 
-    p <- plot_ly(type='box', colors = c("#BBBDC0", "#287BA5")) %>%
+    p <- plot_ly(type='box', colors = plotColors) %>%
       add_boxplot(y = baseline$value,
                   x = -1,
                   type = "box",
                   boxpoints = FALSE,
                   name = baseline$group,
-                  color = baseline$group,
-                  colors = c("#BBBDC0", "#287BA5")
+                  color = baseline$group
+      ) %>%
+      add_boxplot(y = comparison$value,
+                  x = 1,
+                  type = "box",
+                  boxpoints = FALSE,
+                  name= comparison$group,
+                  color = comparison$group
       ) %>%
       add_markers(y = baseline$value,
                   text = baseline$text,
@@ -104,18 +120,10 @@ getBoxPlotWithHighlightGroup <- function(.data, .key, .group, .groupBaselineLabe
                   key = baseline$key,
                   x = baseline$x,
                   marker = list(
-                    color = '#BBBDC0',
+                    color = baselineColor,
                     size = 8
                   ),
                   showlegend = FALSE
-      ) %>%
-      add_boxplot(y = comparison$value,
-                  x = 1,
-                  type = "box",
-                  boxpoints = FALSE,
-                  name= comparison$group,
-                  color = comparison$group,
-                  colors = c("#BBBDC0", "#287BA5")
       ) %>%
       add_markers(y = comparison$value,
                   text = comparison$text,
@@ -123,7 +131,7 @@ getBoxPlotWithHighlightGroup <- function(.data, .key, .group, .groupBaselineLabe
                   key = comparison$key,
                   x = comparison$x,
                   marker = list(
-                    color = '#287BA5',
+                    color = comparisonColor,
                     size = 8
                   ),
                   showlegend = FALSE
@@ -137,7 +145,7 @@ getBoxPlotWithHighlightGroup <- function(.data, .key, .group, .groupBaselineLabe
                     hoverinfo = 'text',
                     x = highlight_A$x,
                     marker = list(
-                      color = "orange",
+                      color = highlightColors[1],
                       size = 8
                     ),
                     showlegend = TRUE,
@@ -153,7 +161,7 @@ getBoxPlotWithHighlightGroup <- function(.data, .key, .group, .groupBaselineLabe
                     hoverinfo = 'text',
                     x = highlight_B$x,
                     marker = list(
-                      color = "red",
+                      color = highlightColors[2],
                       size = 8
                     ),
                     showlegend = TRUE,

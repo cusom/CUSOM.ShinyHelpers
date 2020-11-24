@@ -6,32 +6,38 @@
 \usage{
 getBoxPlotWithHighlightGroup(
   .data,
-  .key,
-  .group,
-  .groupBaselineLabel,
-  .value,
-  .valueLabel,
-  .text,
-  .highlightGroup,
+  key,
+  group,
+  groupBaselineLabel,
+  value,
+  valueLabel,
+  text,
+  highlightGroup,
+  colors = c("#BBBDC0", "#287BA5"),
+  highlightColors = c("organge", "red"),
   plotName
 )
 }
 \arguments{
 \item{.data}{dataframe containing numeric values between 2 groups}
 
-\item{.key}{dataframe key column}
+\item{key}{dataframe key column}
 
-\item{.group}{string - group column - should only contain 2 groups}
+\item{group}{string - group column - should only contain 2 groups}
 
-\item{.groupBaselineLabel}{string - value indicating the group label that should be used as the comparison}
+\item{groupBaselineLabel}{string - value indicating the group label that should be used as the comparison}
 
-\item{.value}{numeric - numeric value to compare between groups}
+\item{value}{numeric - numeric value to compare between groups}
 
-\item{.valueLabel}{string - column indicating the label for the .value values}
+\item{valueLabel}{string - column indicating the label for the .value values}
 
-\item{.text}{string - column containing text values to show in tooltip}
+\item{text}{string - column containing text values to show in tooltip}
 
-\item{.highlightGroup}{string - column with highlight groups (A vs B or 1 vs 2 etc...)}
+\item{highlightGroup}{string - column with highlight groups (A vs B or 1 vs 2 etc...)}
+
+\item{colors}{vector of colors to use for base boxplot and jitter - defaults to grey/blue. Color used for baseline should be passed as first value}
+
+\item{highlightColors}{vector of colors to use for highlighted points - defaults to organge/red}
 
 \item{plotName}{string - name to attribute to plot (used for tracking clicks, events, etc)}
 }
