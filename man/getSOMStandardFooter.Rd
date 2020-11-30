@@ -4,10 +4,15 @@
 \alias{getSOMStandardFooter}
 \title{Utility function to get standard School of Medicine Footer HTML}
 \usage{
-getSOMStandardFooter(footerImageFilePath = "./images/medicine_h_clr.png")
+getSOMStandardFooter(
+  footerImageFilePath = "./images/medicine_h_clr.png",
+  additionalText = ""
+)
 }
 \arguments{
 \item{footerImageFilePath}{optional parameter to source a specfic image for footer. Assumes image is in "www" directroy in application folder}
+
+\item{additionalText}{string - optional text to include below footer image}
 }
 \value{
 HTML
