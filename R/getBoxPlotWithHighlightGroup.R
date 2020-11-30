@@ -31,14 +31,17 @@ getBoxPlotWithHighlightGroup <- function(.data, key, group, groupBaselineLabel, 
     .data <- .data %>%
       mutate(key = !!.key, group = !!.group, value = !!.value, text = !!.text) %>%
       add_tally() %>%
-      mutate(x = rnorm(n, mean = ifelse(!!.group == groupBaselineLabel, -1, 1), sd=0.15))
+      mutate(x = rnorm(n, mean = ifelse(!!.group == groupBaselineLabel,-1, 1), sd = 0.15))
 
     yVariableLabel <- .data %>%
       distinct(!!.valueLabel) %>%
       pull()
 
-    baseline <- .data %>% filter(!!.group == groupBaselineLabel)
-    comparison <- .data %>% filter(!!.group != groupBaselineLabel)
+    baseline <- .data %>%
+      filter(!!.group == groupBaselineLabel)
+
+    comparison <- .data %>%
+      filter(!!.group != groupBaselineLabel)
 
     highlightGroups <- .data %>%
       select(!!.highlightGroup) %>%
@@ -46,8 +49,17 @@ getBoxPlotWithHighlightGroup <- function(.data, key, group, groupBaselineLabel, 
       unique() %>%
       pull()
 
-    highlight_A <- .data %>% filter(!!.highlightGroup == highlightGroups[1])
-    highlight_B <- .data %>% filter(!!.highlightGroup != highlightGroups[1])
+    highlight_A_baseline <- .data %>%
+      filter(!!.group == groupBaselineLabel,!!.highlightGroup == highlightGroups[1])
+
+    highlight_A_comparison <- .data %>%
+      filter(!!.group != groupBaselineLabel,!!.highlightGroup == highlightGroups[1])
+
+    highlight_B_baseline <- .data %>%
+      filter(!!.group == groupBaselineLabel,!!.highlightGroup != highlightGroups[1])
+
+    highlight_B_comparison <- .data %>%
+      filter(!!.group != groupBaselineLabel,!!.highlightGroup != highlightGroups[1])
 
     f <- list(
       family = "Arial",
@@ -57,7 +69,7 @@ getBoxPlotWithHighlightGroup <- function(.data, key, group, groupBaselineLabel, 
 
     x <- list(
       title = "",
-      font = list (
+      font = list(
         family = "Arial",
         color = "rgb(58, 62, 65)",
         size = 18
@@ -69,14 +81,14 @@ getBoxPlotWithHighlightGroup <- function(.data, key, group, groupBaselineLabel, 
     )
 
     y <- list(
-      title = list (
+      title = list(
         text = yVariableLabel,
-        font = list (
+        font = list(
           family = "Arial",
           size = 18
         )
       ),
-      font = list (
+      font = list(
         family = "Arial",
         color = "rgb(58, 62, 65)",
         size = 18
@@ -84,107 +96,129 @@ getBoxPlotWithHighlightGroup <- function(.data, key, group, groupBaselineLabel, 
       showgrid = FALSE,
       zeroline = FALSE,
       showline = TRUE,
-      showticklabels = TRUE
+      showticklabels = TRUE,
+      fixedrange = TRUE
     )
 
-    margin <- list(autoexpand = TRUE,
-                   l = 25,
-                   r = 15,
-                   t = 20,
-                   b = 20)
+    margin <- list(
+      autoexpand = TRUE,
+      l = 25,
+      r = 15,
+      t = 20,
+      b = 20
+    )
 
-    if ( median(baseline$value) < median(comparison$value) ) {
-      plotColors <- c(baselineColor, comparisonColor)
-    }
-    else {
-      plotColors <- c(comparisonColor, baselineColor)
-    }
+    p1 <- plot_ly(type = "box", colors = baselineColor) %>%
+      add_boxplot(y = baseline$value, x = -1, type = "box",
+                  boxpoints = FALSE, name = baseline$group, color = baseline$group, legendgroup="baseline") %>%
+      add_markers(y = baseline$value, text = baseline$text, hoverinfo = "text", key = baseline$key,
+                  x = baseline$x, marker = list(color = baselineColor, size = 8), showlegend = FALSE,legendgroup="baseline")
 
-    p <- plot_ly(type='box', colors = plotColors) %>%
-      add_boxplot(y = baseline$value,
-                  x = -1,
-                  type = "box",
-                  boxpoints = FALSE,
-                  name = baseline$group,
-                  color = baseline$group
-      ) %>%
-      add_boxplot(y = comparison$value,
-                  x = 1,
-                  type = "box",
-                  boxpoints = FALSE,
-                  name= comparison$group,
-                  color = comparison$group
-      ) %>%
-      add_markers(y = baseline$value,
-                  text = baseline$text,
-                  hoverinfo = 'text',
-                  key = baseline$key,
-                  x = baseline$x,
-                  marker = list(
-                    color = baselineColor,
-                    size = 8
-                  ),
-                  showlegend = FALSE
-      ) %>%
-      add_markers(y = comparison$value,
-                  text = comparison$text,
-                  hoverinfo = 'text',
-                  key = comparison$key,
-                  x = comparison$x,
-                  marker = list(
-                    color = comparisonColor,
-                    size = 8
-                  ),
-                  showlegend = FALSE
-      )
-
-    if(nrow(highlight_A)>0){
-
-      p <- p %>%
-        add_markers(y = highlight_A$value,
-                    text = highlight_A$text,
-                    hoverinfo = 'text',
-                    x = highlight_A$x,
-                    marker = list(
-                      color = highlightColors[1],
-                      size = 8
-                    ),
-                    showlegend = TRUE,
-                    name = "Group A"
-        )
+    if(nrow(highlight_A_baseline) > 0) {
+      p1 <- p1 %>%
+        add_markers(y = highlight_A_baseline$value, text = highlight_A_baseline$text,
+                    hoverinfo = "text", x = highlight_A_baseline$x,
+                    marker = list(color = highlightColors[1], size = 8),
+                    showlegend = TRUE, name = "Group A",legendgroup='groupA')
     }
 
-    if(nrow(highlight_B)>0){
-
-      p <- p %>%
-        add_markers(y = highlight_B$value,
-                    text =  highlight_B$text,
-                    hoverinfo = 'text',
-                    x = highlight_B$x,
-                    marker = list(
-                      color = highlightColors[2],
-                      size = 8
-                    ),
-                    showlegend = TRUE,
-                    name = "Group B"
-        )
+    if(nrow(highlight_B_baseline) > 0) {
+      p1 <- p1 %>%
+        add_markers(y = highlight_B_baseline$value, text = highlight_B_baseline$text,
+                    hoverinfo = "text", x = highlight_B_baseline$x,
+                    marker = list(color = highlightColors[2], size = 8),
+                    showlegend = TRUE, name = "Group B",legendgroup='groupB')
     }
 
-    p <- p %>%
+    p1 <- p1 %>%
       layout(
         title = '',
-        xaxis = x,
+        xaxis = list(
+          title = "",
+          font = list(
+            family = "Arial",
+            color = "rgb(58, 62, 65)",
+            size = 18),
+          showgrid = FALSE,
+          zeroline = FALSE,
+          showline = TRUE,
+          showticklabels = FALSE,
+          fixedrange = TRUE
+        ),
         yaxis = y,
         font = list(
           family="Arial",
           size= 18,
           color= "rgb(58, 62, 65)"
         ),
-        margin = margin,
-        showlegend = TRUE
+        showlegend = TRUE,
+        legendgroup='baseline'
       )
 
-    p$x$source <- paste0(plotName,"BoxPlot")
+
+    p2 <- plot_ly(type = "box", colors = comparisonColor) %>%
+      add_boxplot(y = comparison$value, x = 1, type = "box",
+                  boxpoints = FALSE, name = comparison$group, color = comparison$group,legendgroup="comparison") %>%
+      add_markers(y = comparison$value, text = comparison$text,
+                  hoverinfo = "text", key = comparison$key,
+                  x = comparison$x, marker = list(color = comparisonColor, size = 8), showlegend = FALSE,legendgroup="comparison")
+
+
+    if(nrow(highlight_A_comparison) > 0) {
+      showLegend <- ifelse(nrow(highlight_A_baseline)>0,FALSE,TRUE)
+      p2 <- p2 %>%
+        add_markers(y = highlight_A_comparison$value, text = highlight_A_comparison$text,
+                    hoverinfo = "text", x = highlight_A_comparison$x,
+                    marker = list(color = highlightColors[1], size = 8),
+                    showlegend = showLegend, name = "Group A",legendgroup='groupA')
+    }
+
+    if(nrow(highlight_B_comparison) > 0) {
+      showLegend <- ifelse(nrow(highlight_B_baseline)>0,FALSE,TRUE)
+      p2 <- p2 %>%
+        add_markers(y = highlight_B_comparison$value, text = highlight_B_comparison$text,
+                    hoverinfo = "text", x = highlight_B_comparison$x,
+                    marker = list(color = highlightColors[2], size = 8),
+                    showlegend = showLegend, name = "Group B",legendgroup='groupB')
+    }
+
+    p2 <- p2 %>%
+      layout(
+        title = '',
+        xaxis = list(
+          title = "",
+          font = list(
+            family = "Arial",
+            color = "rgb(58, 62, 65)",
+            size = 18),
+          showgrid = FALSE,
+          zeroline = FALSE,
+          showline = TRUE,
+          showticklabels = FALSE,
+          fixedrange = TRUE
+        ),
+        yaxis = y,
+        font = list(
+          family="Arial",
+          size= 18,
+          color= "rgb(58, 62, 65)"
+        ),
+        showlegend = TRUE,
+        legendgroup="comparison"
+      )
+
+    p <- subplot(p1,p2,shareX = TRUE,shareY = TRUE,margin = 0.0) %>%
+      layout(title = "",
+             font = list(
+               family = "Arial",
+               size = 18,
+               color = "rgb(58, 62, 65)"
+             ),
+             margin = margin,
+             showlegend = TRUE
+      )
+
+    p$x$source <- paste0(plotName, "BoxPlot")
 
     return(p)
 
