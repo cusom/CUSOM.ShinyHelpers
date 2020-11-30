@@ -10,13 +10,13 @@ getSOMStandardFooter <- function(footerImageFilePath='./images/medicine_h_clr.pn
 
   return(
     paste0(
-      '<br />
-      <hr />
-        <center>
+      '<center>
           <img src="',footerImageFilePath,'" width="400" height="auto">
         </center>
       <br />
-      <p>',additionalText,'</p>
+      <center>
+        <strong>',additionalText,'</strong>
+      </center>
       <hr />
       <div class="u-foottextwrap">
         <p>&copy; ',format(Sys.Date(), "%Y"),'&nbsp;
