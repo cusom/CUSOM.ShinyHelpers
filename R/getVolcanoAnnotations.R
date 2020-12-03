@@ -38,13 +38,13 @@ getVolcanoAnnotations <- function(.data, foldChangeVar, pValueVar, selected, arr
     "pValueThresholdTransformed" = pValueThresholdTransformed
   )
 
-  annotations <- getDefaultVolcanoAnnotations_dev(maxFoldChange,
+  annotations <- getDefaultVolcanoAnnotations(maxFoldChange,
                                                   pValueThreshold = pValueThresholdTransformed,
                                                   pValueThresholdLabel = pValueThreshold,
                                                   pValueAdjustedInd = pValueAdjustedInd,
                                                   ...)
 
-  shapes <- getDefaultVolcanoLine_dev(cutoffThreshold=pValueThresholdTransformed,color="black",lineType="dash")
+  shapes <- getDefaultVolcanoLine(cutoffThreshold=pValueThresholdTransformed,color="black",lineType="dash")
 
   if(includeArrow) {
 
