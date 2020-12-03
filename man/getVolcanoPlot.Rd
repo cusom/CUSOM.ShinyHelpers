@@ -4,22 +4,30 @@
 \alias{getVolcanoPlot}
 \title{Plotly function to generate standard volcano plot from fold change data}
 \usage{
-getVolcanoPlot(.data, .xvar, .yvar, .significanceGroup, .text, .key, plotName)
+getVolcanoPlot(
+  .data,
+  foldChangeVar,
+  pValueVar,
+  significanceGroup,
+  text,
+  key,
+  plotName
+)
 }
 \arguments{
 \item{.data}{dataframe containing fold change data}
 
-\item{.xvar}{fold change variable}
+\item{significanceGroup}{significance group column}
 
-\item{.yvar}{p value variable}
+\item{text}{column containing text values to show in tooltip}
 
-\item{.significanceGroup}{significance group column}
-
-\item{.text}{column containing text values to show in tooltip}
-
-\item{.key}{- key column in fold change data - will be used for capuring select events}
+\item{key}{- key column in fold change data - will be used for capuring select events}
 
 \item{plotName}{- name to attribute to plot (used for tracking clicks, events, etc)}
+
+\item{xvar}{fold change variable}
+
+\item{yvar}{p value variable}
 }
 \value{
 returns Plotly scatter plot showing fold change vs p value colored by significance group

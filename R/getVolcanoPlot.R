@@ -1,25 +1,25 @@
 #' Plotly function to generate standard volcano plot from fold change data
 #'
 #' @param .data dataframe containing fold change data
-#' @param .xvar fold change variable
-#' @param .yvar p value variable
-#' @param .significanceGroup significance group column
-#' @param .text column containing text values to show in tooltip
-#' @param .key - key column in fold change data - will be used for capuring select events
+#' @param xvar fold change variable
+#' @param yvar p value variable
+#' @param significanceGroup significance group column
+#' @param text column containing text values to show in tooltip
+#' @param key - key column in fold change data - will be used for capuring select events
 #' @param plotName - name to attribute to plot (used for tracking clicks, events, etc)
 #'
 #' @return returns Plotly scatter plot showing fold change vs p value colored by significance group
 #' @export
-getVolcanoPlot <- function(.data, .xvar, .yvar, .significanceGroup, .text, .key, plotName) {
+getVolcanoPlot <- function(.data, foldChangeVar, pValueVar, significanceGroup, text, key, plotName) {
 
-  .xvar <- enquo(.xvar)
-  .yvar <- enquo(.yvar)
-  .significanceGroup <- enquo(.significanceGroup)
-  .text <- enquo(.text)
-  .key <- enquo(.key)
+  foldChangeVar <- enquo(foldChangeVar)
+  pValueVar <- enquo(pValueVar)
+  significanceGroup <- enquo(significanceGroup)
+  text <- enquo(text)
+  key <- enquo(key)
 
-  maxFoldChange <- getMaxAbsValue(.data,!!.xvar,inf.rm = TRUE, buffer=1.1)
-  maxPValue <- getMaxAbsValue(.data,!!.yvar,inf.rm = TRUE, buffer=1.1)
+  maxFoldChange <- getMaxAbsValue(.data,!!foldChangeVar,inf.rm = TRUE, buffer=1.1)
+  maxPValue <- getMaxAbsValue(.data,!!pValueVar,inf.rm = TRUE, buffer=1.1)
 
   if(maxPValue < 5) { maxPValue <- 5.0}
 
@@ -31,7 +31,6 @@ getVolcanoPlot <- function(.data, .xvar, .yvar, .significanceGroup, .text, .key,
 
   x <- list(
     title = list(
-
       font = list (
         family = "Arial",
         size = 18
@@ -76,16 +75,15 @@ getVolcanoPlot <- function(.data, .xvar, .yvar, .significanceGroup, .text, .key,
 
   p <- .data %>%
     plot_ly(
-      data = ,
       type ='scatter',
-      x = .xvar ,
-      y = .yvar,
-      text = .text,
+      x = foldChangeVar ,
+      y = pValueVar,
+      text = text,
       hoverinfo = 'text',
       mode = "markers",
-      color = .significanceGroup,
+      color = significanceGroup,
       colors = c('#686868','#3E99CD','#1D4D7C'),
-      key = .key,
+      key = key,
       marker = list(size = 8,width = 2)
     ) %>%
     layout(
@@ -106,16 +104,6 @@ getVolcanoPlot <- function(.data, .xvar, .yvar, .significanceGroup, .text, .key,
         family="Arial",
         size= 18,
         color= "rgb(58, 62, 65)"
-      ),
-      shapes = list(
-        list(
-          type = "line",
-          y0 = -log10(pValueThreshold),
-          y1 = -log10(pValueThreshold),
-          x0 = -maxFoldChange,
-          x1 = maxFoldChange,
-          line = list(color = "black", dash="dash")
-        )
       )
     )
 
@@ -124,3 +112,4 @@ getVolcanoPlot <- function(.data, .xvar, .yvar, .significanceGroup, .text, .key,
   p
 
 }
+
