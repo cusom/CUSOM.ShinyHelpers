@@ -1,50 +1,76 @@
 #' gets all possible volcano plot annotations in a single call. Combines list output from default and arrow annotations.
 #'
 #' @param .data dataframe containing fold change data along with selecte point indicator "selected_"
-#' @param .xvar fold change variable
-#' @param .yvar p value variable
-#' @param .selected selected indicator column
-#' @param .text name of column in dataframe to pull for arrow annotation text
-#' @param pValueThreshold - p value threshold - passed to default arrow annotation function
-#' @param upRegulatedText - text to use for "up regulated" groups -- down regulated text will simply replace "up" with "down"
-#'
-#' @return returns list of lists of plotly annotation objects
-#'          -- up regulated arror at top of plot (with up regulated text)
-#'          -- down regulated arrow at the top of plot (
-#'          -- dp value threshold text with "p(a) > threshold" text and up arrow
-#'          -- if a value is chosenl, adds in arrow annotation.
+#' @param foldChangeVar fold change variable
+#' @param pValueVar p value variable
+#' @param selected selected indicator column
+#' @param arrowLabelTextVar name of column in dataframe to pull for arrow annotation text
+#' @param ... - additiaonal named arguments to include in calls to other functions.
+#' @return returns list of lists of annotation objects
+#'          -- annotations - list of default volcano annotations
+#'          -- shapes - list of shapes - defaults to dotted line separating significance groups
+#'          -- arrow - list of arrow annotations to highlight points on volcano plot
+#'          -- parameters - metatdata used to generate annotation lists
 #' @export
-getVolcanoAnnotations <- function(.data, .xvar, .yvar,.selected,.text, pValueThreshold,upRegulatedText) {
+getVolcanoAnnotations <- function(.data, foldChangeVar, pValueVar, selected, arrowLabelTextVar, ... ) {
 
-  .xvar <- enquo(.xvar)
-  .yvar <- enquo(.yvar)
-  .selected <- enquo(.selected)
-  .text <- enquo(.text)
+  foldChangeVar <- enquo(foldChangeVar)
+  pValueVar <- enquo(pValueVar)
+  selected <- enquo(selected)
+  arrowLabelTextVar <- enquo(arrowLabelTextVar)
 
-  maxFoldChange <- getMaxAbsValue(.data,!!.xvar,inf.rm = TRUE, buffer=1.1)
+  maxFoldChange <- getMaxAbsValue(.data,!!foldChangeVar,inf.rm = TRUE, buffer=1.1)
+  includeArrow <- dim(.data %>% filter(!!selected == 1, !is.na(!!foldChangeVar), !is.na(!!pValueVar)) )[1] > 0
 
-  default_a <- getDefaultVolcanoAnnotations(maxFoldChange,pValueThreshold,upRegulatedText)
+  adjustmentMethodVar <- colnames(.data)[which(grepl('adjust',colnames(.data)))][1]
+  tranformationVar <- colnames(.data)[which(grepl('log',colnames(.data)))][1]
+  adjustmentMethod <- .data %>% ungroup() %>% select(!!adjustmentMethodVar) %>% unique() %>% pull()
+  pValueAdjustedInd <- adjustmentMethod != "none"
+  pValueThreshold <- ifelse(pValueAdjustedInd,0.1,0.05)
+  pValueThresholdTransformed <- ifelse(!is.na(tranformationVar),-log10(pValueThreshold),pValueThreshold)
 
-  addArrow <- dim(.data %>% filter(!!.selected == 1, !is.na(!!.xvar), !is.na(!!.yvar)) )[1] > 0
+  parameters <- list(
+    "maxFoldChange" = maxFoldChange,
+    "includeArrow" = includeArrow,
+    "adjustmentMethod" = adjustmentMethod,
+    "pValueAdjustedInd" = pValueAdjustedInd,
+    "pValueThreshold" = pValueThreshold,
+    "pValueThresholdTransformed" = pValueThresholdTransformed
+  )
 
-  if(addArrow) {
+  annotations <- getDefaultVolcanoAnnotations_dev(maxFoldChange,
+                                                  pValueThreshold = pValueThresholdTransformed,
+                                                  pValueThresholdLabel = pValueThreshold,
+                                                  pValueAdjustedInd = pValueAdjustedInd,
+                                                  ...)
 
-    xcoordinate <- .data %>% ungroup() %>% filter(!!.selected == 1) %>% select(!!.xvar) %>% pull()
-    ycoordinate <- .data %>% ungroup() %>% filter(!!.selected == 1) %>% select(!!.yvar) %>% pull()
-    text <- .data %>% ungroup() %>% filter(!!.selected == 1) %>% select(!!.text) %>% pull()
+  shapes <- getDefaultVolcanoLine_dev(cutoffThreshold=pValueThresholdTransformed,color="black",lineType="dash")
 
-    arrow_a <- getVolcanoArrowAnnotation(xcoordinate,ycoordinate,text)
+  if(includeArrow) {
 
-    return(c(default_a,arrow_a))
+    xcoordinate <-    .data %>% ungroup() %>% filter(!!selected == 1) %>% select(!!foldChangeVar) %>% pull()
+    ycoordinate <-    .data %>% ungroup() %>% filter(!!selected == 1) %>% select(!!pValueVar) %>% pull()
+    arrowLabelText <- .data %>% ungroup() %>% filter(!!selected == 1) %>% select(!!arrowLabelTextVar) %>% pull()
+
+    arrow <- getVolcanoArrowAnnotation(xcoordinate,ycoordinate,arrowLabelText)
 
   }
 
   else {
 
-    return(default_a)
+    arrow <- list()
 
   }
 
+  return(
+    list(
+      "annotations" = annotations,
+      "shapes" = shapes,
+      "arrow" = arrow,
+      "parameters" = parameters
+    )
+  )
 
 }
+
 

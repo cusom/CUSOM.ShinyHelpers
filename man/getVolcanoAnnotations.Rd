@@ -6,35 +6,32 @@
 \usage{
 getVolcanoAnnotations(
   .data,
-  .xvar,
-  .yvar,
-  .selected,
-  .text,
-  pValueThreshold,
-  upRegulatedText
+  foldChangeVar,
+  pValueVar,
+  selected,
+  arrowLabelTextVar,
+  ...
 )
 }
 \arguments{
 \item{.data}{dataframe containing fold change data along with selecte point indicator "selected_"}
 
-\item{.xvar}{fold change variable}
+\item{foldChangeVar}{fold change variable}
 
-\item{.yvar}{p value variable}
+\item{pValueVar}{p value variable}
 
-\item{.selected}{selected indicator column}
+\item{selected}{selected indicator column}
 
-\item{.text}{name of column in dataframe to pull for arrow annotation text}
+\item{arrowLabelTextVar}{name of column in dataframe to pull for arrow annotation text}
 
-\item{pValueThreshold}{- p value threshold - passed to default arrow annotation function}
-
-\item{upRegulatedText}{- text to use for "up regulated" groups -- down regulated text will simply replace "up" with "down"}
+\item{...}{- additiaonal named arguments to include in calls to other functions.}
 }
 \value{
-returns list of lists of plotly annotation objects
-         -- up regulated arror at top of plot (with up regulated text)
-         -- down regulated arrow at the top of plot (
-         -- dp value threshold text with "p(a) > threshold" text and up arrow
-         -- if a value is chosenl, adds in arrow annotation.
+returns list of lists of annotation objects
+         -- annotations - list of default volcano annotations
+         -- shapes - list of shapes - defaults to dotted line separating significance groups
+         -- arrow - list of arrow annotations to highlight points on volcano plot
+         -- parameters - metatdata used to generate annotation lists
 }
 \description{
 gets all possible volcano plot annotations in a single call. Combines list output from default and arrow annotations.
