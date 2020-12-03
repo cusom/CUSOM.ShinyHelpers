@@ -4,18 +4,12 @@
 \alias{formatPValue}
 \title{formats p value based on threshold}
 \usage{
-formatPValue(
-  p.value,
-  p.value.adjustment.method = "none",
-  p.value.threshold = 0.05
-)
+formatPValue(p.value, p.value.adjustment.method = "none")
 }
 \arguments{
 \item{p.value}{- numeric - p value}
 
 \item{p.value.adjustment.method}{string - p value adjustment method if any - defaults to "none"}
-
-\item{p.value.threshold}{- numeric - threshold under which to display formatted p value - defaults to 0.05. For values above threshold, returns "No Significant Difference"}
 }
 \value{
 string - formatted p value.
