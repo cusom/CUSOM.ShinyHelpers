@@ -3,25 +3,26 @@
 #' @param maxFoldChange - numeric - indicates the max value along the x axis for the plot (fold change) - helps anchor the annotations along the x-axis
 #' @param pValueThreshold - numeric - p value cutoff threshold - helps anchor the dotted line for splits between significant groups
 #' @param upRegulatedText - text to use for "up regulated" groups -- down regulated text will simply replace "up" with "down"
+#' @param pValueAdjustedInd - logical - indicates if the p.value has been adjusted
 #' @return list of lists of plotly annotation objects
 #'          -- up regulated arror at top of plot (with up regulated text)
-#'          -- down regulated arrow at the top of plot (
-#'          -- dotted line showing p value threshold with "p(a) > threshold" text and up arrow
+#'          -- down regulated arrow at the top of plot
+#'          -- p value threshold with "p  < threshold" text and up arrow
 #'
 #'
 #' @export
 
-getDefaultVolcanoAnnotations <- function(maxFoldChange,pValueThreshold,upRegulatedText) {
+getDefaultVolcanoAnnotations <- function(maxFoldChange,upRegulatedText,pValueThreshold,pValueThresholdLabel,pValueAdjustedInd = FALSE) {
 
   upTextLength <- nchar(upRegulatedText)
   upAnchor <- 80 / 100
   downRegulatedText <- stringr::str_replace(upRegulatedText,'Up','Down')
   downTextLength <- nchar(downRegulatedText)
   downAnchor <- (25 - round(downTextLength / 2)) / 100
+  pValueThresholdAnnotation <- ifelse(pValueAdjustedInd,"p (adj)","p")
 
   return(
     list(
-
       # top level up regulated arrow going from center to right
       list (
         x = maxFoldChange,
@@ -78,11 +79,11 @@ getDefaultVolcanoAnnotations <- function(maxFoldChange,pValueThreshold,upRegulat
         )
       ) ,
 
-      # p(a) < threshold text and dotted line
+      # p < threshold text
       list (
         x = 0.025,
-        y = -log10(pValueThreshold) + 0.35,
-        text = paste0("&#9650; <b>p(a)<",pValueThreshold,"</b>"),
+        y = pValueThreshold * 1.1 ,
+        text = paste0("&#9650; <b>",pValueThresholdAnnotation," < ",pValueThresholdLabel,"</b>"),
         xref = "paper",
         yref = "y",
         axref = "x",

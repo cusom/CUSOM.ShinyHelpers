@@ -4,20 +4,28 @@
 \alias{getDefaultVolcanoAnnotations}
 \title{volcano plot Plotly function to get standard volcano annotations}
 \usage{
-getDefaultVolcanoAnnotations(maxFoldChange, pValueThreshold, upRegulatedText)
+getDefaultVolcanoAnnotations(
+  maxFoldChange,
+  upRegulatedText,
+  pValueThreshold,
+  pValueThresholdLabel,
+  pValueAdjustedInd = FALSE
+)
 }
 \arguments{
 \item{maxFoldChange}{- numeric - indicates the max value along the x axis for the plot (fold change) - helps anchor the annotations along the x-axis}
 
+\item{upRegulatedText}{- text to use for "up regulated" groups -- down regulated text will simply replace "up" with "down"}
+
 \item{pValueThreshold}{- numeric - p value cutoff threshold - helps anchor the dotted line for splits between significant groups}
 
-\item{upRegulatedText}{- text to use for "up regulated" groups -- down regulated text will simply replace "up" with "down"}
+\item{pValueAdjustedInd}{- logical - indicates if the p.value has been adjusted}
 }
 \value{
 list of lists of plotly annotation objects
          -- up regulated arror at top of plot (with up regulated text)
-         -- down regulated arrow at the top of plot (
-         -- dotted line showing p value threshold with "p(a) > threshold" text and up arrow
+         -- down regulated arrow at the top of plot
+         -- p value threshold with "p  < threshold" text and up arrow
 }
 \description{
 volcano plot Plotly function to get standard volcano annotations
