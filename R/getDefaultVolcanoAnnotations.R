@@ -14,12 +14,15 @@
 
 getDefaultVolcanoAnnotations <- function(maxFoldChange,upRegulatedText,pValueThreshold,pValueThresholdLabel,pValueAdjustedInd = FALSE) {
 
-  upTextLength <- nchar(upRegulatedText)
-  upAnchor <- 80 / 100
-  downRegulatedText <- stringr::str_replace(upRegulatedText,'Up','Down')
-  downTextLength <- nchar(downRegulatedText)
-  downAnchor <- (25 - round(downTextLength / 2)) / 100
-  pValueThresholdAnnotation <- ifelse(pValueAdjustedInd,"p (adj)","p")
+  # text length is not 1:1 with "paper" units -- add 25% to length to properly center annotation
+  upTextLength <- nchar(upRegulatedText) * 1.25
+  upAnchor <- 0.75 + (upTextLength/100/2)
+
+  downRegulatedText <- stringr::str_replace(upRegulatedText,"Up", "Down")
+  downTextLength <- nchar(downRegulatedText) * 1.25
+  downAnchor <-  0.25 - (downTextLength/100/2)
+
+  pValueThresholdAnnotation <- ifelse(pValueAdjustedInd, "p (adj)","p")
 
   return(
     list(
