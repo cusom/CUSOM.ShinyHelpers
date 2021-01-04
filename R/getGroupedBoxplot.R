@@ -79,7 +79,7 @@ getGroupedBoxplot <- function(.data,.key,.group,.legendGroup,.value,.valueLabel,
       text = ~ text,
       hoverinfo = 'text',
       key = ~ key,
-      customdata = ~ customdata,
+      customdata = ~ customData,
       colors = c("#BBBDC0", "#287BA5"),
       boxpoints = ifelse(showJitter,"all","none"),
       pointpos = 0
