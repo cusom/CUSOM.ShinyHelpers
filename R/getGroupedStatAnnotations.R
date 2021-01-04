@@ -22,10 +22,10 @@ getGroupedStatAnnotations <- function(AnnotationAnchorLines) {
   )
 
 
-  for (i in 1:length(linesList)) {
+  for (i in 1:length(AnnotationAnchorLines)) {
 
-    statResult <- linesList[[i]]$statResult
-    annotation[["x"]] <- linesList[[i]]$x1 - (linesList[[i]]$x1 - linesList[[i]]$x0) / 2
+    statResult <- AnnotationAnchorLines[[i]]$statResult
+    annotation[["x"]] <- AnnotationAnchorLines[[i]]$x1 - (AnnotationAnchorLines[[i]]$x1 - AnnotationAnchorLines[[i]]$x0) / 2
     annotation[["y"]] <- 1.05
     annotation[["text"]] <-  ifelse(statResult<=0.001,'***',ifelse(statResult<=0.01,'**','*'))
 
