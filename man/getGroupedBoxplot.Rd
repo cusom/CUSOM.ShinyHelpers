@@ -12,6 +12,7 @@ getGroupedBoxplot(
   .value,
   .valueLabel,
   .text,
+  .customData,
   showJitter = TRUE,
   plotName
 )
@@ -30,6 +31,8 @@ getGroupedBoxplot(
 \item{.valueLabel}{string - column indicating the label for numerical values used in boxplots}
 
 \item{.text}{string - column containing text values to show in tooltip}
+
+\item{.customData}{string - column of custom data for plot (can be used to store additional data in custom data attribute)}
 
 \item{showJitter}{boolean - show jittered points?}
 

@@ -7,6 +7,7 @@
 #' @param .value numeric - column with numerical value to compare between groups
 #' @param .valueLabel string - column indicating the label for numerical values used in boxplots
 #' @param .text string - column containing text values to show in tooltip
+#' @param .customData string - column of custom data for plot (can be used to store additional data in custom data attribute)
 #' @param showJitter boolean - show jittered points?
 #' @param plotName string - name to attribute to plot (used for tracking clicks, events, etc)
 #'
@@ -14,7 +15,7 @@
 #' @export
 
 
-getGroupedBoxplot <- function(.data,.key,.group,.legendGroup,.value,.valueLabel,.text, showJitter = TRUE, plotName) {
+getGroupedBoxplot <- function(.data,.key,.group,.legendGroup,.value,.valueLabel,.text, .customData,  showJitter = TRUE, plotName) {
   # key = RecordID
   # x = celltype
   # y = MeasuredValue
@@ -27,11 +28,12 @@ getGroupedBoxplot <- function(.data,.key,.group,.legendGroup,.value,.valueLabel,
   .value <- enquo(.value)
   .valueLabel <- enquo(.valueLabel)
   .text <- enquo(.text)
+  .customData <- enquo(.customData)
 
   if(nrow(.data)>0){
 
     .data <- .data %>%
-      mutate(key = !!.key, group = !!.group, legendGroup = !!.legendGroup, value = !!.value, text = !!.text)
+      mutate(key = !!.key, group = !!.group, legendGroup = !!.legendGroup, value = !!.value, text = !!.text, customData = !!.customData)
 
     yVariableLabel <- .data %>%
       distinct(!!.valueLabel) %>%
@@ -76,6 +78,8 @@ getGroupedBoxplot <- function(.data,.key,.group,.legendGroup,.value,.valueLabel,
       type = "box",
       text = ~ text,
       hoverinfo = 'text',
+      key = ~ key,
+      customdata = ~ customdata,
       colors = c("#BBBDC0", "#287BA5"),
       boxpoints = ifelse(showJitter,"all","none"),
       pointpos = 0
