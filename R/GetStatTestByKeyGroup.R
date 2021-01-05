@@ -24,14 +24,14 @@ getStatTestByKeyGroup <- function(.data, .id, .key, .group, .value, method, adju
   D1 <- .data %>%
     filter(!!.group==groupLabels[1]) %>%
     select(!!.id, !!.key,!!.value) %>%
-    pivot_wider(names_from = !!.key, values_from=!!.value, values_fill=list(NA)) %>%
+    pivot_wider(names_from = !!.key, values_from=!!.value) %>%
     select(-c(!!.id)) %>%
     as.data.frame()
 
   D2 <- .data %>%
     filter(!!.group!=groupLabels[1]) %>%
     select(!!.id, !!.key,!!.value)  %>%
-    pivot_wider(names_from = !!.key, values_from=!!.value, values_fill=list(NA)) %>%
+    pivot_wider(names_from = !!.key, values_from=!!.value) %>%
     select(-c(!!.id)) %>%
     as.data.frame()
 
