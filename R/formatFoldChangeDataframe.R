@@ -10,8 +10,8 @@
 formatFoldChangeDataframe <- function(.data,baselineLabel,foldchangeStatistic="Median") {
 
   standardColumns <- c("Analyte","FoldChange","log2Foldchange","statistic","p.value","method","alternative","p.value.original","p.value.adjustment.method","-log10pvalue" )
-  groupLabels <- str_split(setdiff(colnames(.data),standardColumns),' ', simplify = TRUE)[1:2]
-  comparisonLabel <- groupLabels[which(groupLabels!=baselineLabel)]
+  groupLabels <- setdiff(colnames(.data), standardColumns)
+  comparisonLabel <- groupLabels[which(groupLabels!=baselineLabel)][1]
   pValueAdjInd <- unique(.data$p.value.adjustment.method)!="none"
 
   .data <- .data %>%
