@@ -5,7 +5,7 @@
 \alias{getStatTestByKeyGroup.methods}
 \title{Return implemented stat test methods}
 \format{
-An object of class \code{character} of length 3.
+An object of class \code{character} of length 4.
 }
 \usage{
 getStatTestByKeyGroup.methods

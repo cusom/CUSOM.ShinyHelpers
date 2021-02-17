@@ -14,9 +14,9 @@ getStatTestByKeyGroup <- function(.data,.id,.key,.group, baselineLabel, .respons
 
   .id <- enquo(.id)
   .key <- enquo(.key)
-  .group <- enquo(.group)  
+  .group <- enquo(.group)
   .response <- enquo(.response)
-    
+
   if(method=="Linear Model") {
 
     finalData <- .data %>%
@@ -29,14 +29,14 @@ getStatTestByKeyGroup <- function(.data,.id,.key,.group, baselineLabel, .respons
       CUSOMShinyHelpers::summarizeByGroup(!!.response, !!.key, !!.group, na.rm = TRUE) %>%
       CUSOMShinyHelpers::calculateFoldChangeByKeyGroup(!!.key,!!.group, median, baselineLabel, inf.rm = TRUE)
 
-    statsData <- .data %>%       
+    statsData <- .data %>%
       getPairwiseStatTestByKeyGroup(!!.id,!!.key,!!.group,!!.response,method,...)
 
     finalData <- inner_join(foldChange, statsData, by = quo_name(.key) )
   }
 
   return(finalData)
-    
+
 }
 
 getLinearModel <- function(.data,.id, .key, .response, .group, adjustmentMethod, ...) {
@@ -45,7 +45,7 @@ getLinearModel <- function(.data,.id, .key, .response, .group, adjustmentMethod,
   .key <- enquo(.key)
   .response <- enquo(.response)
   .group <- enquo(.group)
-  
+
   independentVars <- enquos(...)
 
   for(i in 1:length(independentVars) ) {
@@ -55,35 +55,35 @@ getLinearModel <- function(.data,.id, .key, .response, .group, adjustmentMethod,
           summarise(n=n_distinct(!!iv))
 
       if(n < 2) {
-          independentVars[[i]] <- NULL 
+          independentVars[[i]] <- NULL
       }
 
   }
-  
+
   ModelVarLevels <- levels(.data[[quo_name(.group)]])
-  
+
   ivs = paste(map(independentVars, quo_name), collapse=" + ")
 
   lmformula = paste(quo_name(.response), " ~ ", ivs)
-  
+
   .data %>%
-      nest(data = c(!!.id,!!.response,!!!independentVars)) %>% 
+      nest(data = c(!!.id,!!.response,!!!independentVars)) %>%
       mutate(
           fit = map(data, ~ lm(lmformula, data = .x)),
           tidied = map(fit, broom::tidy) # see ?tidy.lm
       ) %>%
       unnest(tidied) %>%
-      select(!!.key, term, estimate, p.value) %>% 
-      group_by(!!.key) %>% 
+      select(!!.key, term, estimate, p.value) %>%
+      group_by(!!.key) %>%
       summarize(
-          log2_denom = first(estimate), 
-          log2_num = nth(estimate, n = 2) + log2_denom, 
-          log2FoldChange = nth(estimate, n = 2), 
-          FoldChange = 2^log2FoldChange, 
+          log2_denom = first(estimate),
+          log2_num = nth(estimate, n = 2) + log2_denom,
+          log2FoldChange = nth(estimate, n = 2),
+          FoldChange = 2^log2FoldChange,
           p.value.original = nth(p.value, n = 2)
-      ) %>% 
-      arrange(p.value.original) %>% 
-      ungroup() %>% 
+      ) %>%
+      arrange(p.value.original) %>%
+      ungroup() %>%
       mutate("p.value" = p.adjust(p.value.original, method = getStatTestByKeyGroup.getAdjustmentMethodName(adjustmentMethod), n = length(p.value.original))) %>%
       mutate("p.value.adjustment.method" = adjustmentMethod) %>%
       mutate(`-log10pvalue` = -log10(p.value.original)) %>%
@@ -99,7 +99,7 @@ getPairwiseStatTestByKeyGroup <- function (.data, .id, .key, .group, .response, 
   .response <- enquo(.response)
 
   groupLabels <- .data %>% pull(!!.group) %>% unique()
-  
+
   StatResults <- .data %>%
     select(!!.key,!!.group,!!.response) %>%
     group_by(!!.key,!!.group) %>%
@@ -112,8 +112,8 @@ getPairwiseStatTestByKeyGroup <- function (.data, .id, .key, .group, .response, 
           ) %>%
     unnest(tidied) %>%
     select(-c(data,fit))
-  
-  
+
+
   if ("p.value" %in% colnames(StatResults)) {
 
     StatResults$p.value <- as.numeric(gsub(".*<", "\\1",format.pval(StatResults$p.value)))
@@ -121,15 +121,15 @@ getPairwiseStatTestByKeyGroup <- function (.data, .id, .key, .group, .response, 
     StatResults$p.value <- p.adjust(StatResults$p.value, getStatTestByKeyGroup.getAdjustmentMethodName(adjustmentMethod))
     StatResults$p.value.adjustment.method <- adjustmentMethod
     StatResults <- StatResults %>% mutate(`-log10pvalue` = -log10(p.value))
-    
+
   }
-  
+
   else {
 
-    StatResults <- StatResults %>% 
+    StatResults <- StatResults %>%
       mutate(statistic = NA, p.value = NA, `-log10pvalue` = 0, method = method, error = paste0("Not Enough Observations to run ",  method))
   }
-  
+
   return(StatResults)
 
 }
@@ -157,9 +157,9 @@ runStatMethod <- function(method,x,y) {
 #' Return implemented stat test methods
 #' @return vector of all implemented stat test methods
 #' @export
-getStatTestByKeyGroup.methods <- c("Kolmogorov-Smirnov Test","Student's t-test","Wilcoxon test")
+getStatTestByKeyGroup.methods <- c("Linear Model", "Kolmogorov-Smirnov Test","Student's t-test","Wilcoxon test")
 
-#' Return available adjustmemt methods
+#' Return available adjustmemt methodss
 #' @return vector of all available adjustmemt methods
 #' @export
 getStatTestByKeyGroup.adjustment.methods <- p.adjust.methods

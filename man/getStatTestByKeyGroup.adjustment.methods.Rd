@@ -3,7 +3,7 @@
 \docType{data}
 \name{getStatTestByKeyGroup.adjustment.methods}
 \alias{getStatTestByKeyGroup.adjustment.methods}
-\title{Return available adjustmemt methods}
+\title{Return available adjustmemt methodss}
 \format{
 An object of class \code{character} of length 8.
 }
@@ -14,6 +14,6 @@ getStatTestByKeyGroup.adjustment.methods
 vector of all available adjustmemt methods
 }
 \description{
-Return available adjustmemt methods
+Return available adjustmemt methodss
 }
 \keyword{datasets}
