@@ -6,33 +6,30 @@
 #' @param .value A number - numerical value to use with statitical test.
 #' @param baselineGroupLabel a string - indicating which statisical test to perform by name..
 #' @param inf.rm logical indicating whether to remove INF fold changes (dividing by 0) - defaults to TRUE
-
+#' @param ... dots to accomodate additiaon arguments passed when called from parent function
 #' @return dataframe indicating  fold change (raw and log2) between baseline and comparison for each group by key value
 
 #' @export
-calculateFoldChangeByKeyGroup <- function(.data, .key, .group, .value, baselineGroupLabel, inf.rm = TRUE) {
-
+calculateFoldChangeByKeyGroup <- function (.data, .key, .group, .response, baselineGroupLabel, inf.rm = TRUE, ...) {
+  
   .key <- enquo(.key)
   .group <- enquo(.group)
-  .value <- enquo(.value)
-
-  groupLabels <- .data %>%  pull(!!.group) %>% unique()
-  comparisonGroupLabel <- groupLabels[which(groupLabels != baselineGroupLabel)]
-
+  .response <- enquo(.response)
+  
+  groupLabels <- .data %>% ungroup() %>% select(!!.group) %>% unique()
+  comparisonGroupLabel <- groupLabels %>% filter(!!.group != baselineGroupLabel) %>% pull() %>% as.character()
   baselineGroupLabel <- sym(baselineGroupLabel)
   comparisonGroupLabel <- sym(comparisonGroupLabel)
 
-  foldChangeData <- .data %>%
-    select(!!.key,!!.group,!!.value) %>%
-    pivot_wider(names_from = !!.group, values_from=!!.value, values_fill=NA) %>%
-    mutate(FoldChange = !!comparisonGroupLabel / !!baselineGroupLabel) %>%
-    mutate(log2Foldchange = log2(FoldChange))
+  foldChangeData <- .data %>% 
+    select(!!.key, !!.group, !!.response) %>% 
+    pivot_wider(names_from = !!.group, values_from = !!.response, values_fill = NA) %>% 
+    mutate(FoldChange = !!comparisonGroupLabel/!!baselineGroupLabel) %>% 
+    mutate(log2FoldChange = log2(FoldChange))
 
-  if(inf.rm) {
-
-    foldChangeData <- foldChangeData %>% filter(FoldChange != Inf)
-
+  if (inf.rm) {
+      foldChangeData <- foldChangeData %>% filter(FoldChange != Inf)
   }
-
+  
   return(foldChangeData)
 }

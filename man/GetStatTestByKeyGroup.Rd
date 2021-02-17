@@ -9,10 +9,10 @@ getStatTestByKeyGroup(
   .id,
   .key,
   .group,
-  .value,
+  baselineLabel,
+  .response,
   method,
-  adjustMethod = "none",
-  addLog10 = TRUE
+  ...
 )
 }
 \arguments{
@@ -24,13 +24,11 @@ getStatTestByKeyGroup(
 
 \item{.group}{A string column indicating group membership - should be binary.}
 
-\item{.value}{A numeric column - numerical value to use with statitical test between groups.}
-
 \item{method}{a string - indicating which statisical test to perform. One of either ks.test, t.test, or wilcox.test}
 
-\item{adjustMethod}{a string - indicating which method to be used to adjust P-values for multiple comparisons - defaults to "none"}
+\item{...}{dots - accomodate additional arguments when function is called as parent router}
 
-\item{addLog10}{boolean - whether or not to add a -log10 transfromation of resulting p.values}
+\item{.value}{A numeric column - numerical value to use with statitical test between groups.}
 }
 \value{
 dataframe containing resulting p.values for each key/group stat test
