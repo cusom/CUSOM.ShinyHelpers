@@ -48,15 +48,27 @@ getLinearModel <- function(.data,.id, .key, .response, .group, adjustmentMethod,
 
   independentVars <- enquos(...)
 
-  for(i in 1:length(independentVars) ) {
-      iv <- independentVars[[i]]
-      n <- .data %>%
-          select(!!iv) %>%
-          summarise(n=n_distinct(!!iv))
+  # generate list of variables that have singluar values
+  varsToRemove <- list()
 
-      if(n < 2) {
-          independentVars[[i]] <- NULL
-      }
+  for(i in 1:length(independentVars) ) {
+
+    iv <- independentVars[[i]]
+    n <- .data %>% select(!!iv) %>% summarise(n=n_distinct(!!iv))
+
+    if(n < 2) {
+
+      j <- length(varsToRemove) + 1
+      varsToRemove[[j]] <- i
+
+    }
+
+  }
+
+  # remove singular variables
+  for(var in varsToRemove) {
+
+    independentVars[[var]] <- NULL
 
   }
 
