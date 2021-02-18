@@ -46,31 +46,20 @@ getLinearModel <- function(.data,.id, .key, .response, .group, adjustmentMethod,
   .response <- enquo(.response)
   .group <- enquo(.group)
 
-  independentVars <- enquos(...)
+  vars <- enquos(...)
 
-  # generate list of variables that have singluar values
-  varsToRemove <- list()
+  independentVars <- list()
 
-  for(i in 1:length(independentVars) ) {
+  for (i in 1:length(vars)) {
 
-    iv <- independentVars[[i]]
-    n <- .data %>% select(!!iv) %>% summarise(n=n_distinct(!!iv))
-
-    if(n < 2) {
-
-      j <- length(varsToRemove) + 1
-      varsToRemove[[j]] <- i
-
+    iv <- vars[[i]]
+    n <- .data %>% select(!!iv) %>% summarise(n = n_distinct(!!iv))
+    if (n >= 2) {
+      j <- length(independentVars) + 1
+      independentVars[[j]] <- iv
     }
-
   }
 
-  # remove singular variables
-  for(var in varsToRemove) {
-
-    independentVars[[var]] <- NULL
-
-  }
 
   ModelVarLevels <- levels(.data[[quo_name(.group)]])
 
