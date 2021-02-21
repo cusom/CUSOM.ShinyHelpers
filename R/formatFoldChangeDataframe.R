@@ -9,7 +9,7 @@
 #' @export
 formatFoldChangeDataframe <- function(.data,baselineLabel,foldchangeStatistic="Median") {
 
-  standardColumns <- c("Analyte","FoldChange","log2Foldchange","statistic","p.value","method","alternative","p.value.original","p.value.adjustment.method","-log10pvalue" )
+  standardColumns <- c("Analyte","FoldChange","log2FoldChange","statistic","p.value","method","alternative","p.value.original","p.value.adjustment.method","-log10pvalue" )
   groupLabels <- setdiff(colnames(.data), standardColumns)
   comparisonLabel <- groupLabels[which(groupLabels!=baselineLabel)][1]
   pValueAdjInd <- unique(.data$p.value.adjustment.method)!="none"
@@ -21,7 +21,7 @@ formatFoldChangeDataframe <- function(.data,baselineLabel,foldchangeStatistic="M
            "p-value (original)" = p.value.original,
            !!comparisonLabel,
            !!baselineLabel,
-           "log<sub>2</sub> Fold Change" = `log2Foldchange`,
+           "log<sub>2</sub> Fold Change" = `log2FoldChange`,
            "-log<sub>10</sub> p-value" = `-log10pvalue`,
            "Statistical test" = method,
            "Adjustment Method" = p.value.adjustment.method)
