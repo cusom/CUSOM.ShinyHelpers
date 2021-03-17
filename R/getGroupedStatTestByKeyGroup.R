@@ -14,20 +14,19 @@ getGroupedStatTestByKeyGroup <- function(.data, groupVar, ...) {
 
   groups <- .data %>% select(!!groupVar) %>% unique() %>% pull()
 
-  statsData <- data.frame(Group = character(),
-                          p.value = numeric(),
-                          stringsAsFactors=FALSE,
-                          check.names = FALSE)
+  statsData <- tibble()
 
   for(group in groups) {
 
-    results <- .data %>%
-      filter(!!groupVar==group) %>%
-      CUSOMShinyHelpers::getStatTestByKeyGroup(...) %>%
-      mutate(!!groupVar := group) %>%
-      select(!!groupVar,p.value)
-
-    statsData <- rbind(statsData,results)
+    statsData <- statsData %>%
+      bind_rows(
+        .data %>%
+          filter(!!groupVar == group) %>%
+          CUSOMShinyHelpers::getStatTestByKeyGroup(...) %>%
+          mutate(`:=`(!!groupVar, group)) %>%
+          ungroup() %>%
+          select(!!groupVar, p.value)
+      )
 
   }
 
