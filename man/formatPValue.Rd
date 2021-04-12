@@ -12,7 +12,7 @@ formatPValue(p.value, p.value.adjustment.method = "none")
 \item{p.value.adjustment.method}{string - p value adjustment method if any - defaults to "none"}
 }
 \value{
-string - formatted p value.
+string - formatted p or q value depending on adjustment method.
 }
 \description{
 formats p value based on threshold
