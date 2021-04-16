@@ -93,7 +93,7 @@ getLinearModel <- function(.data,.id, .key, .response, .group, adjustmentMethod,
     mutate(p.value = p.adjust(p.value.original, method = getStatTestByKeyGroup.getAdjustmentMethodName(adjustmentMethod),
                               n = length(p.value.original))) %>%
     mutate(p.value.adjustment.method = adjustmentMethod) %>%
-    mutate(`-log10pvalue` = -log10(p.value.original)) %>%
+    mutate(`-log10pvalue` = -log10(p.value)) %>%
     rename(`:=`(!!quo_name(ModelVarLevels[1]), log2_denom),
            `:=`(!!quo_name(ModelVarLevels[2]), log2_num)) %>%
     mutate("lmFormula" = lmformula, ivs = ivs)
