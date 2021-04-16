@@ -7,7 +7,7 @@
 #' @return list of lists of plotly annotation objects
 #'          -- up regulated arror at top of plot (with up regulated text)
 #'          -- down regulated arrow at the top of plot
-#'          -- p value threshold with "p  < threshold" text and up arrow
+#'          -- p value threshold with "p or q < threshold" text and up arrow
 #'
 #'
 #' @export
@@ -22,7 +22,7 @@ getDefaultVolcanoAnnotations <- function(maxFoldChange,upRegulatedText,pValueThr
   downTextLength <- nchar(downRegulatedText) * 1.25
   downAnchor <-  0.25 - (downTextLength/100/2)
 
-  pValueThresholdAnnotation <- ifelse(pValueAdjustedInd, "p (adj)","p")
+  pValueThresholdAnnotation <- ifelse(pValueAdjustedInd, "q","p")
 
   return(
     list(

@@ -25,7 +25,7 @@ getDefaultVolcanoAnnotations(
 list of lists of plotly annotation objects
          -- up regulated arror at top of plot (with up regulated text)
          -- down regulated arrow at the top of plot
-         -- p value threshold with "p  < threshold" text and up arrow
+         -- p value threshold with "p or q < threshold" text and up arrow
 }
 \description{
 volcano plot Plotly function to get standard volcano annotations
