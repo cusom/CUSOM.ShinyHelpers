@@ -39,56 +39,64 @@ getStatTestByKeyGroup <- function(.data,.id,.key,.group, baselineLabel, .respons
 
 }
 
-getLinearModel <- function(.data,.id, .key, .response, .group, adjustmentMethod, ...) {
+getLinearModel <- function(.data,.id, .key, .response, .group, adjustmentMethod, regressor, covariates, ...) {
 
   .id <- enquo(.id)
   .key <- enquo(.key)
   .response <- enquo(.response)
   .group <- enquo(.group)
 
-  vars <- enquos(...)
+  if(!is.null(covariates)) {
 
-  independentVars <- list()
+    modelCovariates <- .data %>%
+      select(!!.key, !!.id, !!.response, !!covariates) %>%
+      group_by(!!.key) %>%
+      summarise_at(vars(!!covariates),n_distinct) %>%
+      pivot_longer(!!covariates) %>%
+      mutate(KeepVar = ifelse(value >=2,1,0)) %>%
+      filter(KeepVar==1) %>%
+      select(name) %>%
+      distinct() %>%
+      pull()
 
-  for (i in 1:length(vars)) {
-
-    iv <- vars[[i]]
-    n <- .data %>% select(!!iv) %>% summarise(n = n_distinct(!!iv))
-    if (n >= 2) {
-      j <- length(independentVars) + 1
-      independentVars[[j]] <- iv
-    }
   }
 
+  else {
+
+    modelCovariates <- NULL
+
+  }
+
+  independentVars <- as.list(c(quo_name(.group),modelCovariates))
 
   ModelVarLevels <- levels(.data[[quo_name(.group)]])
-
-  ivs = paste(map(independentVars, quo_name), collapse=" + ")
-
-  lmformula = paste(quo_name(.response), " ~ ", ivs)
+  ivs = paste(map(independentVars, quo_name), collapse = " + ")
+  lmformula = paste(quo_name(.response), " ~ ",  ivs)
 
   .data %>%
-      nest(data = c(!!.id,!!.response,!!!independentVars)) %>%
-      mutate(
-          fit = map(data, ~ lm(lmformula, data = .x)),
-          tidied = map(fit, broom::tidy) # see ?tidy.lm
-      ) %>%
-      unnest(tidied) %>%
-      select(!!.key, term, estimate, p.value) %>%
-      group_by(!!.key) %>%
-      summarize(
-          log2_denom = first(estimate),
-          log2_num = nth(estimate, n = 2) + log2_denom,
-          log2FoldChange = nth(estimate, n = 2),
-          FoldChange = 2^log2FoldChange,
-          p.value.original = nth(p.value, n = 2)
-      ) %>%
-      arrange(p.value.original) %>%
-      ungroup() %>%
-      mutate("p.value" = p.adjust(p.value.original, method = getStatTestByKeyGroup.getAdjustmentMethodName(adjustmentMethod), n = length(p.value.original))) %>%
-      mutate("p.value.adjustment.method" = adjustmentMethod) %>%
-      mutate(`-log10pvalue` = -log10(p.value.original)) %>%
-      rename(!!quo_name(ModelVarLevels[1]) := log2_denom, !!quo_name(ModelVarLevels[2]) := log2_num)
+    select(!!.key, !!.id, !!.response, !!!independentVars) %>%
+    nest(data = c(!!.id, !!.response, !!!independentVars)) %>%
+    mutate(fit = map(data, ~lm(lmformula, data = .x)),
+           tidied = map(fit,  broom::tidy)
+    ) %>%
+    unnest(tidied) %>%
+    select(!!.key, term, estimate, p.value) %>%
+    group_by(!!.key) %>%
+    summarize(log2_denom = first(estimate),
+              log2_num = nth(estimate, n = 2) + log2_denom,
+              log2FoldChange = nth(estimate,  n = 2),
+              FoldChange = 2^log2FoldChange,
+              p.value.original = nth(p.value, n = 2)
+    ) %>%
+    arrange(p.value.original) %>%
+    ungroup() %>%
+    mutate(p.value = p.adjust(p.value.original, method = getStatTestByKeyGroup.getAdjustmentMethodName(adjustmentMethod),
+                              n = length(p.value.original))) %>%
+    mutate(p.value.adjustment.method = adjustmentMethod) %>%
+    mutate(`-log10pvalue` = -log10(p.value.original)) %>%
+    rename(`:=`(!!quo_name(ModelVarLevels[1]), log2_denom),
+           `:=`(!!quo_name(ModelVarLevels[2]), log2_num)) %>%
+    mutate("lmFormula" = lmformula, ivs = ivs)
 
 }
 
