@@ -11,7 +11,9 @@ getVolcanoPlot(
   significanceGroup,
   text,
   key,
-  plotName
+  plotName,
+  colors = c("#686868", "#3E99CD", "#1D4D7C"),
+  shape = "X"
 )
 }
 \arguments{
@@ -24,6 +26,10 @@ getVolcanoPlot(
 \item{key}{- key column in fold change data - will be used for capuring select events}
 
 \item{plotName}{- name to attribute to plot (used for tracking clicks, events, etc)}
+
+\item{colors}{- optional colors argument}
+
+\item{shape}{- optional shape - should be passed as a nammed column in source data.}
 
 \item{xvar}{fold change variable}
 

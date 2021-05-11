@@ -7,16 +7,19 @@
 #' @param text column containing text values to show in tooltip
 #' @param key - key column in fold change data - will be used for capuring select events
 #' @param plotName - name to attribute to plot (used for tracking clicks, events, etc)
+#' @param colors - optional colors argument
+#' @param shape - optional shape - should be passed as a nammed column in source data. 
 #'
 #' @return returns Plotly scatter plot showing fold change vs p value colored by significance group
 #' @export
-getVolcanoPlot <- function(.data, foldChangeVar, pValueVar, significanceGroup, text, key, plotName) {
+getVolcanoPlot <- function(.data, foldChangeVar, pValueVar, significanceGroup, text, key, plotName, colors = c("#686868","#3E99CD", "#1D4D7C"), shape = "X") {
 
   foldChangeVar <- enquo(foldChangeVar)
   pValueVar <- enquo(pValueVar)
   significanceGroup <- enquo(significanceGroup)
   text <- enquo(text)
   key <- enquo(key)
+  shape <- enquo(shape)
 
   maxFoldChange <- getMaxAbsValue(.data,!!foldChangeVar,inf.rm = TRUE, buffer=1.1)
   maxPValue <- getMaxAbsValue(.data,!!pValueVar,inf.rm = TRUE, buffer=1.1)
@@ -82,9 +85,13 @@ getVolcanoPlot <- function(.data, foldChangeVar, pValueVar, significanceGroup, t
       hoverinfo = 'text',
       mode = "markers",
       color = significanceGroup,
-      colors = c('#686868','#3E99CD','#1D4D7C'),
+      colors = colors, 
+      symbol = shape,
       key = key,
-      marker = list(size = 8,width = 2)
+      marker = list(
+        size = 8,
+        width = 2
+      )
     ) %>%
     layout(
       title = list(
