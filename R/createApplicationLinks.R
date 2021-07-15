@@ -38,7 +38,6 @@ createApplicationLinks <- function(linkData) {
     lapply(linkItems, getActionButtonLink)
   )
 
-
 }
 
 
@@ -47,13 +46,11 @@ getActionButtonLink <- function(x) {
   if(x$IsCurrentApplication[1]==1) {
 
     return(
-      tags$div(
-        actionButton(
-          inputId = x$label,
-          label =  x$label,
-          class = "header-button-active",
-          style = paste0("background-image: url('",x$imageURL,"');"),
-        )
+      actionButton(
+        inputId = x$label,
+        label =  x$label,
+        class = "header-button-active",
+        style = paste0("background-image: url('",x$imageURL,"');"),
       )
     )
   }
@@ -61,14 +58,12 @@ getActionButtonLink <- function(x) {
   else {
 
     return(
-      tags$div(
-        actionButton(
-          inputId = x$label,
-          label =  x$label,
-          class = "header-button",
-          style = paste0("background-image: url('",x$imageURL,"');"),
-          onclick = paste0("window.open('",x$onclick,"', '_blank')")
-        )
+      actionButton(
+        inputId = x$label,
+        label =  x$label,
+        class = "header-button",
+        style = paste0("background-image: url('",x$imageURL,"');"),
+        onclick = paste0("window.open('",x$onclick,"', '_blank')")
       )
     )
   }
