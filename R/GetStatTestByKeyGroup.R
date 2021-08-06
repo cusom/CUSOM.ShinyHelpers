@@ -10,55 +10,55 @@
 #' @return dataframe containing resulting p.values for each key/group stat test
 
 #' @export
-getStatTestByKeyGroup <- function(.data,.id,.key,.group, baselineLabel, .response, method,...) {
+getStatTestByKeyGroup <- function(.data,id, key, response, independentVariable, baselineLabel, testMethod, ...) {
 
-  .id <- enquo(.id)
-  .key <- enquo(.key)
-  .group <- enquo(.group)
-  .response <- enquo(.response)
+  id <- enquo(id)
+  key <- enquo(key)
+  response <- enquo(response)
+  independentVariable <- enquo(independentVariable)
 
-  if(method=="Linear Model") {
+  if (testMethod == "Linear Model") {
 
     finalData <- .data %>%
-      getLinearModel (!!.id,!!.key, !!.response,!!.group, ...)
+      getLinearModel(!!id, !!key, !!response, !!independentVariable, ...)
   }
 
   else {
 
     foldChange <- .data %>%
-      CUSOMShinyHelpers::summarizeByGroup(!!.response, !!.key, !!.group, na.rm = TRUE) %>%
-      CUSOMShinyHelpers::calculateFoldChangeByKeyGroup(!!.key,!!.group, median, baselineLabel, inf.rm = TRUE)
+      CUSOMShinyHelpers::summarizeByGroup(!!response, !!key, !!independentVariable, na.rm = TRUE) %>%
+      CUSOMShinyHelpers::calculateFoldChangeByKeyGroup(!!key, !!independentVariable, median, baselineLabel, inf.rm = TRUE)
 
     statsData <- .data %>%
-      getPairwiseStatTestByKeyGroup(!!.id,!!.key,!!.group,!!.response,method,...)
+      getPairwiseStatTestByKeyGroup(!!id, !!key, !!independentVariable, !!response, method = testMethod, ...)
 
-    finalData <- inner_join(foldChange, statsData, by = quo_name(.key) )
+    finalData <- inner_join(foldChange, statsData, by = quo_name(key))
+
   }
 
   return(finalData)
 
 }
 
-getLinearModel <- function(.data,.id, .key, .response, .group, adjustmentMethod, regressor, covariates, ...) {
+getLinearModel <- function(.data, id, key, response, independentVariable, covariates, adjustmentMethod,...) {
 
-  .id <- enquo(.id)
-  .key <- enquo(.key)
-  .response <- enquo(.response)
-  .group <- enquo(.group)
+  id <- enquo(id)
+  key <- enquo(key)
+  response <- enquo(response)
+  independentVariable <- enquo(independentVariable)
 
-  if(!is.null(covariates)) {
+  if (!is.null(covariates)) {
 
     modelCovariates <- .data %>%
-      select(!!.key, !!.id, !!.response, !!covariates) %>%
-      group_by(!!.key) %>%
-      summarise_at(vars(!!covariates),n_distinct) %>%
+      select(!!key, !!id, !!response, !!covariates) %>%
+      group_by(!!key) %>%
+      summarise_at(vars(!!covariates), n_distinct) %>%
       pivot_longer(!!covariates) %>%
-      mutate(KeepVar = ifelse(value >=2,1,0)) %>%
-      filter(KeepVar==1) %>%
+      mutate(KeepVar = ifelse(value >= 2, 1, 0)) %>%
+      filter(KeepVar == 1) %>%
       select(name) %>%
       distinct() %>%
       pull()
-
   }
 
   else {
@@ -67,36 +67,57 @@ getLinearModel <- function(.data,.id, .key, .response, .group, adjustmentMethod,
 
   }
 
-  independentVars <- as.list(c(quo_name(.group),modelCovariates))
+  independentVariableClass <- .data %>%
+    select(!!independentVariable) %>%
+    pull() %>%
+    class()
 
-  ModelVarLevels <- levels(.data[[quo_name(.group)]])
+  independentVars <- as.list(c(quo_name(independentVariable), modelCovariates))
+
   ivs = paste(map(independentVars, quo_name), collapse = " + ")
-  lmformula = paste(quo_name(.response), " ~ ",  ivs)
 
-  .data %>%
-    select(!!.key, !!.id, !!.response, !!!independentVars) %>%
-    nest(data = c(!!.id, !!.response, !!!independentVars)) %>%
-    mutate(fit = map(data, ~lm(lmformula, data = .x)),
-           tidied = map(fit,  broom::tidy)
-    ) %>%
+  lmformula = paste(quo_name(response), " ~ ", ivs)
+
+  linearModelData <- .data %>%
+    select(!!key, !!id, !!response, !!!independentVars) %>%
+    nest(data = c(!!id, !!response, !!!independentVars)) %>%
+    mutate(
+      fit = map(data, ~lm(lmformula, data = .x)),
+      tidied = map(fit, broom::tidy)) %>%
     unnest(tidied) %>%
-    select(!!.key, term, estimate, p.value) %>%
-    group_by(!!.key) %>%
+    select(!!key, term, estimate, p.value) %>%
+    group_by(!!key) %>%
     summarize(log2_denom = first(estimate),
               log2_num = nth(estimate, n = 2) + log2_denom,
-              log2FoldChange = nth(estimate,  n = 2),
+              log2FoldChange = nth(estimate, n = 2),
               FoldChange = 2^log2FoldChange,
               p.value.original = nth(p.value, n = 2)
     ) %>%
     arrange(p.value.original) %>%
     ungroup() %>%
-    mutate(p.value = p.adjust(p.value.original, method = getStatTestByKeyGroup.getAdjustmentMethodName(adjustmentMethod),
-                              n = length(p.value.original))) %>%
+    mutate(p.value = p.adjust(p.value.original,
+                              method = getStatTestByKeyGroup.getAdjustmentMethodName(adjustmentMethod),
+                              n = length(p.value.original))
+    ) %>%
     mutate(p.value.adjustment.method = adjustmentMethod) %>%
     mutate(`-log10pvalue` = -log10(p.value)) %>%
-    rename(`:=`(!!quo_name(ModelVarLevels[1]), log2_denom),
-           `:=`(!!quo_name(ModelVarLevels[2]), log2_num)) %>%
-    mutate("lmFormula" = lmformula, ivs = ivs)
+    mutate(lmFormula = lmformula, ivs = ivs)
+
+  if(independentVariableClass %in% c("factor","character")) {
+
+    independentVariableLevels <- levels(.data[[quo_name(independentVariable)]])
+
+    linearModelData <- linearModelData %>%
+      rename(`:=`(!!quo_name(independentVariableLevels[1]), log2_denom), `:=`(!!quo_name(independentVariableLevels[2]), log2_num))
+
+  } else {
+
+    linearModelData <- linearModelData %>%
+      select(-log2_denom) %>%
+      rename(`:=`(!!quo_name(independentVariable), log2_num))
+  }
+
+  return(linearModelData)
 
 }
 

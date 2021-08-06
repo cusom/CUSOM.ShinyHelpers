@@ -9,34 +9,48 @@
 #' @export
 formatFoldChangeDataframe <- function(.data,baselineLabel,foldchangeStatistic="Median") {
 
-  standardColumns <- c("Analyte","FoldChange","log2FoldChange","statistic","p.value","method","alternative","p.value.original","p.value.adjustment.method","-log10pvalue" )
-  groupLabels <- setdiff(colnames(.data), standardColumns)
-  comparisonLabel <- groupLabels[which(groupLabels!=baselineLabel)][1]
-  pValueAdjInd <- unique(.data$p.value.adjustment.method)!="none"
+  if(.data$method[1]=="Linear Model") {
 
-  .data <- .data %>%
-    select(Analyte,
-           FoldChange,
-           p.value,
-           "p-value (original)" = p.value.original,
-           !!comparisonLabel,
-           !!baselineLabel,
-           "log<sub>2</sub> Fold Change" = `log2FoldChange`,
-           "-log<sub>10</sub> p-value" = `-log10pvalue`,
-           "Statistical test" = method,
-           "Adjustment Method" = p.value.adjustment.method)
-
-  colnames(.data)[which(colnames(.data)=="FoldChange")] <-  paste0("Fold Change (",comparisonLabel,"/",baselineLabel,")")
-  colnames(.data)[which(colnames(.data)==baselineLabel)] <- paste0(baselineLabel," ",foldchangeStatistic)
-  colnames(.data)[which(colnames(.data)==comparisonLabel)] <- paste0(comparisonLabel," ",foldchangeStatistic)
-  colnames(.data)[which(colnames(.data)=="p.value")] <- ifelse(pValueAdjInd,"p-value (adj)","p-value")
-
-  if(!pValueAdjInd) {
-    # if no adjustment method was used, drop the adjustment columns
-    .data$`p-value (original)` <- NULL
-    .data$`Adjustment Method` <- NULL
+    standardColumns <- c("Analyte", "FoldChange",
+                         "log2FoldChange", "statistic", "p.value",
+                         "method", "alternative", "p.value.original",
+                         "p.value.adjustment.method", "-log10pvalue","lmFormula","ivs")
   }
 
-  return(.data)
+  else {
+
+    standardColumns <- c("Analyte", "FoldChange",
+                         "log2FoldChange", "statistic", "p.value",
+                         "method", "alternative", "p.value.original",
+                         "p.value.adjustment.method", "-log10pvalue")
+  }
+
+  groupLabels <- setdiff(colnames(.data), standardColumns)
+  comparisonLabel <- groupLabels[which(groupLabels != baselineLabel)][1]
+  if(is.na(comparisonLabel)) { comparisonLabel <- baselineLabel }
+  pValueAdjInd <- unique(.data$p.value.adjustment.method) !="none"
+
+  foldChangeDataframe <- .data %>%
+    select(Analyte, FoldChange, p.value, `p-value (original)` = p.value.original,
+           !!comparisonLabel, !!baselineLabel, `log<sub>2</sub> Fold Change` = log2FoldChange,
+           `-log<sub>10</sub> p-value` = `-log10pvalue`,
+           `Statistical test` = method, `Adjustment Method` = p.value.adjustment.method
+    )
+
+  foldChangeLabel <- ifelse(length(groupLabels)==1,glue("Fold Change (per unit of {comparisonLabel})"),glue("Fold Change ({comparisonLabel} / {baselineLabel})"))
+
+  colnames(foldChangeDataframe)[which(colnames(foldChangeDataframe) == "FoldChange")] <- foldChangeLabel
+  colnames(foldChangeDataframe)[which(colnames(foldChangeDataframe) == baselineLabel)] <- glue("{baselineLabel} {foldchangeStatistic}")
+  colnames(foldChangeDataframe)[which(colnames(foldChangeDataframe) == comparisonLabel)] <- glue("{comparisonLabel} {foldchangeStatistic}")
+  colnames(foldChangeDataframe)[which(colnames(foldChangeDataframe) == "p.value")] <- ifelse(pValueAdjInd,"p-value (adj)", "p-value")
+
+  if (!pValueAdjInd) {
+
+    foldChangeDataframe$`p-value (original)` <- NULL
+    foldChangeDataframe$`Adjustment Method` <- NULL
+
+  }
+
+  return(foldChangeDataframe)
 
 }
