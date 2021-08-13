@@ -39,7 +39,7 @@ getScatterPlotByGroup <- function (.data, key, x, y, group, groupBaselineLabel, 
         size = 18
       ),
       showgrid = FALSE,
-      zeroline = TRUE,
+      zeroline = FALSE,
       showline = TRUE,
       showticklabels = TRUE,
       range = xRange
@@ -58,7 +58,7 @@ getScatterPlotByGroup <- function (.data, key, x, y, group, groupBaselineLabel, 
         size = 18
       ),
       showgrid = FALSE,
-      zeroline = TRUE,
+      zeroline = FALSE,
       showline = TRUE,
       showticklabels = TRUE
     )
@@ -169,9 +169,9 @@ getScatterPlotByGroup <- function (.data, key, x, y, group, groupBaselineLabel, 
             x = x,
             y = ~fit,
             mode = "lines",
-            name="All",
+            name= groups,
             line = list(
-              color = 'rgb(205, 12, 24)',
+              color = ifelse(groups==groupBaselineLabel,"rgb(81, 81, 81)","rgb(48, 128, 255)"),
               width = 2
               )
             )
