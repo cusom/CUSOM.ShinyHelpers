@@ -22,18 +22,17 @@ getLinearModelWithInteraction <- function (.data,id,key,response,independentVari
 
   if (!is.null(covariates)) {
 
-    modelCovariates <- .data %>%
-      select(!!key, !!id, !!response,!!covariates) %>%
-      group_by(!!key) %>%
-      summarise_at(vars(!!covariates), n_distinct) %>%
-      pivot_longer(!!covariates) %>%
-      mutate(KeepVar = ifelse(value >= 2, 1, 0)) %>%
-      filter(KeepVar == 1) %>%
-      select(name) %>%
-      distinct() %>%
-      pull()
-
-  }
+    modelCovariates <- .data %>% 
+        select(!!key, !!id, !!response, !!covariates) %>% 
+        group_by(!!key) %>% 
+        summarise_at(vars(!!covariates), n_distinct) %>% 
+        pivot_longer(!!covariates) %>% 
+        mutate(KeepVar = ifelse(value >=2, 1, 0)) %>% 
+        filter(KeepVar == 1) %>% 
+        select(name) %>% 
+        distinct() %>% 
+        pull()
+    }
 
   else {
 
@@ -41,33 +40,126 @@ getLinearModelWithInteraction <- function (.data,id,key,response,independentVari
 
   }
 
-  independentVars <- as.list(c(quo_name(independentVariable),modelCovariates))
+  independentVariableClass <- .data %>% 
+    select(!!independentVariable) %>% 
+    pull() %>% 
+    class()
 
-  ivs = paste(paste(map(independentVars, quo_name), collapse = " + "),'+',quo_name(interactionVariable),collapse = "")
+  independentVars <- as.list(c(quo_name(independentVariable), modelCovariates))
+    
+  addInteractionTerm <- .data %>%
+    select(!!interactionVariable) %>%
+    summarise(n = n_distinct(!!interactionVariable)) %>%
+    mutate(AddInteraction = ifelse(n >=2, TRUE, FALSE)) %>% 
+    pull(AddInteraction)
+    
+  if(addInteractionTerm) {
+  
+    ivs =  glue_collapse(map(c(independentVars,quo_name(interactionVariable)), quo_name), sep = " + ")
 
-  interactionTerm <- paste(quo_name(independentVariable),'*',quo_name(interactionVariable))
+    interactionTerm <- glue("{quo_name(independentVariable)} * {quo_name(interactionVariable)}")
 
-  allVars <- paste0(ivs,' + ',interactionTerm)
+    allVars <- glue("{ivs} + {interactionTerm}")
 
-  lmformula = paste(quo_name(response), " ~ ", allVars)
+  }
 
-  interactionModelData <- .data %>%
-    select(!!key, !!id, !!response,!!!independentVars,!!interactionVariable) %>%
-    nest(data = c(!!id, !!response,!!!independentVars,!!interactionVariable)) %>%
+  else {
+  
+    ivs = glue_collapse(map(independentVars, quo_name), sep = " + ")
+    
+    allVars <- ivs
+
+  }
+
+  lmformula = glue("{quo_name(response)} ~ {allVars}")
+
+  rawModelData <- .data %>% 
+    select(!!key, !!id, !!response, !!!independentVars, !!interactionVariable) %>% 
+    nest(data = c(!!id,!!response, !!!independentVars, !!interactionVariable)) %>% 
     mutate(
-      fit = map(data, ~lm(lmformula, data = .x)),
-      tidied = map(fit, broom::tidy)
+        fit = map(data, ~lm(lmformula, data = .x)), 
+        tidied = map(fit,broom::tidy)
+    ) %>% 
+    unnest(tidied) %>% 
+    select(!!key,term,estimate, std.error, statistic, p.value) %>% 
+    mutate(
+        interaction.term.flag = str_detect(term, ":") 
+        & str_detect(term, quo_name(independentVariable)) 
+        & str_detect(term, quo_name(interactionVariable))
     ) %>%
-    unnest(tidied) %>%
-    select(term,estimate,std.error,statistic,p.value) %>%
-    mutate(
-      interaction.term.flag = str_detect(term,':') & str_detect(term,quo_name(independentVariable)) & str_detect(term,quo_name(interactionVariable)),
-      `-log10pvalue` = -log10(p.value),
-      p.value.adjustment.method = adjustmentMethod,
-      lmFormula = lmformula,
-      ivs = ivs
-    )
+    group_by(Analyte) %>%
+    mutate(rank = row_number()) %>%
+    ungroup()
 
-  return(interactionModelData)
+  interactionTermLocation <- rawModelData %>%
+    filter(interaction.term.flag==TRUE) %>%
+    group_by(rank) %>%
+    summarise(n = n()) %>%
+    ungroup() %>%
+    arrange(n) %>%
+    top_n(1,n) %>%
+    select(rank) %>%
+    pull()
+
+  if(length(interactionTermLocation)==0) {
+
+      interactionTermLocation <- 999
+
+  }
+
+  linearModelData <- rawModelData %>%
+    group_by(!!key) %>%
+    summarize(
+        log2_denom = first(estimate), 
+        log2_num = nth(estimate, n = 2) + log2_denom, 
+        log2FoldChange = ifelse(
+            addInteractionTerm,
+            nth(estimate,n=interactionTermLocation), 
+            nth(estimate, n = 2)
+        ), 
+        FoldChange = 2^log2FoldChange, 
+        p.value.original = nth(p.value,n = 2), 
+        p.value.interaction = nth(p.value, n=interactionTermLocation) 
+    ) %>% 
+    arrange(p.value.original) %>% 
+    ungroup() %>%
+    mutate(
+      p.value.original = case_when(
+        is.na(p.value.interaction)~p.value.original, 
+        TRUE ~ p.value.interaction
+      )
+    ) %>%
+    select(-p.value.interaction) %>%
+    mutate(
+      p.value = p.adjust(
+        p.value.original,
+        method = getStatTestByKeyGroup.getAdjustmentMethodName(adjustmentMethod), 
+        n = length(p.value.original)
+      ), 
+      `-log10pvalue` = -log10(p.value), 
+      p.value.adjustment.method = adjustmentMethod,
+      lmFormula = lmformula,  
+      ivs = ivs
+    ) 
+
+    if (independentVariableClass %in% c("factor", "character")) {
+
+      independentVariableLevels <- levels(.data[[quo_name(independentVariable)]])
+      linearModelData <- linearModelData %>% 
+      rename(
+        `:=`(!!quo_name(independentVariableLevels[1]), log2_denom), 
+        `:=`(!!quo_name(independentVariableLevels[2]), log2_num)
+        )
+
+    }
+
+    else {
+
+      linearModelData <- linearModelData %>% select(-log2_denom) %>% 
+      rename(`:=`(!!quo_name(independentVariable), log2_num))
+
+    }
+
+  return(linearModelData)
 
 }

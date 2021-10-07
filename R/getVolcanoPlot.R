@@ -3,28 +3,32 @@
 #' @param .data dataframe containing fold change data
 #' @param xvar fold change variable
 #' @param yvar p value variable
-#' @param significanceGroup significance group column
+#' @param significanceGroup significance group column - each group results in a separate trace
 #' @param text column containing text values to show in tooltip
 #' @param key - key column in fold change data - will be used for capuring select events
 #' @param plotName - name to attribute to plot (used for tracking clicks, events, etc)
-#' @param colors - optional colors argument
+#' @param color - column with color to use for each row / group in dataset - should be unique per significance group / trace
 #' @param shape - optional shape - should be passed as a nammed column in source data. 
 #'
 #' @return returns Plotly scatter plot showing fold change vs p value colored by significance group
 #' @export
-getVolcanoPlot <- function(.data, foldChangeVar, pValueVar, significanceGroup, text, key, plotName, colors = c("#686868","#3E99CD", "#1D4D7C"), shape = "X") {
+getVolcanoPlot <- function(.data, foldChangeVar, pValueVar, significanceGroup, text, key, plotName, color, shape = "circle") {
 
   foldChangeVar <- enquo(foldChangeVar)
   pValueVar <- enquo(pValueVar)
   significanceGroup <- enquo(significanceGroup)
   text <- enquo(text)
   key <- enquo(key)
+  color <- enquo(color)
   shape <- enquo(shape)
 
-  maxFoldChange <- getMaxAbsValue(.data,!!foldChangeVar,inf.rm = TRUE, buffer=1.1)
-  maxPValue <- getMaxAbsValue(.data,!!pValueVar,inf.rm = TRUE, buffer=1.1)
+  maxFoldChange <- getMaxAbsValue(.data, !!foldChangeVar, inf.rm = TRUE, buffer = 1.1)
 
-  if(maxPValue < 5) { maxPValue <- 5.0}
+  maxPValue <- getMaxAbsValue(.data, !!pValueVar, inf.rm = TRUE,buffer = 1.1) 
+
+  if (maxPValue < 5) {
+    maxPValue <- 5
+  }
 
   f <- list(
     family = "Arial",
@@ -71,52 +75,100 @@ getVolcanoPlot <- function(.data, foldChangeVar, pValueVar, significanceGroup, t
     range = c(0,maxPValue)
   )
 
-  margin <- list(autoexpand = TRUE,
-                 l = 10,
-                 r = 30,
-                 t = 30)
+  margin <- list(
+    autoexpand = TRUE,
+    l = 10,
+    r = 30,
+    t = 30
+  )
 
-  p <- .data %>%
-    plot_ly(
-      type ='scatter',
-      x = foldChangeVar ,
-      y = pValueVar,
-      text = text,
-      hoverinfo = 'text',
-      mode = "markers",
-      color = significanceGroup,
-      colors = colors, 
-      symbol = shape,
-      key = key,
-      marker = list(
-        size = 8,
-        width = 2
-      )
-    ) %>%
-    layout(
-      title = list(
-        text = '',
-        font = list(
-          family="Arial",
-          size=24,
-          color="#004F80"
+  unselectedOpacity <- ifelse(nrow(.data %>% filter(selectedPoint==1)) == 0,1.0,0.7)
+
+  groups <- .data %>%
+    select(!!significanceGroup,!!shape) %>%
+    distinct()
+
+  p <- plot_ly()
+
+  for(i in 1:nrow(groups)) {
+        
+    i_group = as.character(groups[i,1])
+    i_shape = as.character(groups[i,2])
+
+    df <- .data %>%
+        filter(!!significanceGroup==i_group, !!shape==i_shape )
+        
+    selectedIndex <- ifelse(nrow( df %>% filter(selectedPoint==1) ) > 0, which(df$selectedPoint==1) - 1, -1)
+        
+    groupColor <- df %>%
+        select(!!color) %>%
+        unique() %>%
+        pull()
+    
+    p <- p %>%
+      add_trace(
+        data = df,
+        type = "scatter", 
+        x = foldChangeVar, 
+        y = pValueVar, 
+        text = text, 
+        hoverinfo = "text", 
+        mode = "markers", 
+        color = significanceGroup, 
+        colors = groupColor, 
+        key = key, 
+        marker = list(
+          symbol = shape,
+          size = 8, 
+          width = 2
+        ),
+        selectedpoints = list(selectedIndex), 
+        selected = list(
+          marker = list(
+            color='#ff0000',
+            opacity = 1, 
+            size = 14
+          )
+        ),
+        unselected = list(
+          marker = list(
+            color = groupColor,
+            opacity = unselectedOpacity, 
+            size = 8
+          )   
         )
-      ),
-      showlegend=FALSE,
-      legend = list(x = 100, y = 0.1),
-      xaxis = x,
-      yaxis = y,
-      margin = margin,
-      font = list(
-        family="Arial",
-        size= 18,
-        color= "rgb(58, 62, 65)"
+      )   
+    
+    }
+
+    p <- p %>%
+      layout(
+        title = list(
+          text = "", 
+          font = list(
+            family = "Arial", 
+            size = 24, 
+            color = "#004F80"
+          )
+        ), 
+        showlegend = FALSE, 
+        legend = list(
+          x = 100, 
+          y = 0.1
+          ), 
+        xaxis = x, 
+        yaxis = y, 
+        margin = margin, 
+        font = list(
+          family = "Arial", 
+          size = 18, 
+          color = "rgb(58, 62, 65)"
+        ) 
       )
-    )
-
-  p$x$source <- paste0(plotName,"VolcanoPlot")
-
-  p
+      
+    p$x$source <- paste0(plotName, "VolcanoPlot")
+    
+    p
 
 }
 

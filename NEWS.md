@@ -1,17 +1,16 @@
-# CUSOMShinyHelpers 1.5.2
- Adding new functions, updating a few existing functions to support continuous vs continuous variable analysis 
+# CUSOMShinyHelpers 1.6.0
+
  
 ## New Functionality 
--- getScatterPlotByGroup - new plot function to display scatter plot colored by group - optionally add linear model fitted value traces per group label. 
--- getLinearModelWithInteraction - new function to return linear model with interaction between independent variable and specificed interaction variable
- 
-## Major Changes 
--- getLinearModel - logic to format linear model dataframe based on data type of indepdendent variable (factor vs. continuous)
--- formatFoldChangeDataframe - logic to label fold change dataframe correclty based on data type of indepdendent variable (factor vs. continuous)
- 
-## Minor Changes
--- getStatTestbyKeyGroup - refactoring parameter names to be more descriptive for getLinearModel args 
 
+
+## Major Changes 
+GetVolcanoPlot now utilizes `selectedpoints`, `selected` and `unselected` properties to call out / highlight row with `selected point` = 1  
+GetLinearModelWithInteraction dynamically determines whether to include interaction term - accomodates both simple lm or lm with interaction term. 
+getScatterPlotByGroup now accomodates single, double and triple traces. When passing `addFitLines` = TRUE, plot now includes 95% CI ribbons. 
+
+## Minor Changes
+AddSignificanceGroup returns color as a derived column based on groups
   
 ## Bug Fixes 
 None in this release
