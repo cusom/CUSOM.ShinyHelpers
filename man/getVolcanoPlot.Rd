@@ -12,14 +12,14 @@ getVolcanoPlot(
   text,
   key,
   plotName,
-  colors = c("#686868", "#3E99CD", "#1D4D7C"),
-  shape = "X"
+  color,
+  shape = "circle"
 )
 }
 \arguments{
 \item{.data}{dataframe containing fold change data}
 
-\item{significanceGroup}{significance group column}
+\item{significanceGroup}{significance group column - each group results in a separate trace}
 
 \item{text}{column containing text values to show in tooltip}
 
@@ -27,7 +27,7 @@ getVolcanoPlot(
 
 \item{plotName}{- name to attribute to plot (used for tracking clicks, events, etc)}
 
-\item{colors}{- optional colors argument}
+\item{color}{- column with color to use for each row / group in dataset - should be unique per significance group / trace}
 
 \item{shape}{- optional shape - should be passed as a nammed column in source data.}
 
