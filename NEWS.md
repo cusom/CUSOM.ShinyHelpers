@@ -10,7 +10,8 @@
 
 ## Minor Changes
 - AddSignificanceGroup returns color as a derived column based on groups
-- createTooltip function eases creating HTML divs with tooltips 
+- createTooltip function eases creating HTML divs with tooltips
+- createTutorialTooltip function eases creating tooltips with tutorial launch bound to onclick event 
 
 ## Bug Fixes 
 None in this release
