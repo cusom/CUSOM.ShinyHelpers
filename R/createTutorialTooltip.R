@@ -19,6 +19,7 @@ createTutorialTooltip <- function(Text,onClickFunction,TooltipText,additionalTex
         glue(
           '{opentag}{Text}
               <span onclick=\"{onClickFunction}\"
+                data-html="true"
                 data-toggle="tooltip"
                 data-placement="auto right"
                 title=""

@@ -12,6 +12,7 @@
 - AddSignificanceGroup returns color as a derived column based on groups
 - createTooltip function eases creating HTML divs with tooltips
 - createTutorialTooltip function eases creating tooltips with tutorial launch bound to onclick event 
+- createTooltip and createTutorialTooltip functions now support HTML within hover text
 
 ## Bug Fixes 
 None in this release

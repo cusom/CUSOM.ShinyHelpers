@@ -4,7 +4,7 @@
 \alias{createTooltip}
 \title{returns standard text with info-circle tooltip. If TooltipText is missing or NA, tooltip span element is omitted.}
 \usage{
-createTooltip(Text, URL, TooltipText)
+createTooltip(Text, URL, TooltipText, ShowTooltip = TRUE)
 }
 \arguments{
 \item{Text}{Text to diplay before info circle tooltip}
@@ -12,6 +12,8 @@ createTooltip(Text, URL, TooltipText)
 \item{URL}{URL to open for onclick event}
 
 \item{TooltipText}{text to display in tooltip on hover}
+
+\item{ShowTooltip}{boolean - whether to add info tooltip or just output Text - defaults to TRUE}
 }
 \value{
 HTML div with tooltip span element
