@@ -1,35 +1,37 @@
-#' formats p value based on threshold
+#' formats significance Variable value value based on threshold and adjustment method
 #'
-#' @param p.value - numeric - p value
-#' @param p.value.adjustment.method string - p value adjustment method if any - defaults to "none"
+#' @param significanceVariable - numeric - significanceVariable
+#' @param adjustmentMethod string - multiple hypothesis correction method if any - defaults to "none"
+#' @param formatInsignificantValues logical - whether to format and return values that are "insignificant" based on threshold
 #' @return string - formatted p or q value depending on adjustment method.
 #' @export
-formatPValue <- function(p.value,p.value.adjustment.method="none"){
-
-  if (!is.na(p.value)) {
-
-    pValueAdjustInd <- p.value.adjustment.method != "none"
-    p.value.threshold <- ifelse(pValueAdjustInd,0.1,0.05)
-
-    if (p.value <= p.value.threshold) {
-
-      p.value <- formatC(p.value, format = "e", digits = 2)
-      p.value.prefix <- ifelse(pValueAdjustInd,"q","p")
-      return(paste0(p.value.prefix, "-value = ", p.value))
+formatPValue <- function (significanceVariable, adjustmentMethod = "none", formatInsignificantValues = FALSE) 
+{
+  if (!is.na(significanceVariable)) {
+    
+    adjustedInd <- adjustmentMethod != "none"
+    threshold <- ifelse(adjustedInd, 0.1, 0.05)
+    
+    if (significanceVariable <= threshold | formatInsignificantValues) {
+      
+      formattedValue<- formatC(significanceVariable, format = "e", digits = 2)
+      prefix <- ifelse(adjustedInd, "q", "p")
+      
+      return(glue("{prefix}-value = {formattedValue}"))
+      
     }
-
+    
     else {
 
-      return(paste0("No significant difference"))
-
+        return("No significant difference")
     }
-
+    
   }
-
+  
   else {
-
-    return(paste0("Unable to compute p-value using chosen methods"))
-
+    
+    return("Unable to compute using chosen methods")
+    
   }
-
+  
 }

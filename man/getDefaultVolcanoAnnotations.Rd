@@ -7,9 +7,9 @@
 getDefaultVolcanoAnnotations(
   maxFoldChange,
   upRegulatedText,
-  pValueThreshold,
-  pValueThresholdLabel,
-  pValueAdjustedInd = FALSE
+  significanceThreshold,
+  adjustedInd = FALSE,
+  includeThresholdLabel = TRUE
 )
 }
 \arguments{
@@ -17,9 +17,11 @@ getDefaultVolcanoAnnotations(
 
 \item{upRegulatedText}{- text to use for "up regulated" groups -- down regulated text will simply replace "up" with "down"}
 
-\item{pValueThreshold}{- numeric - p value cutoff threshold - helps anchor the dotted line for splits between significant groups}
+\item{significanceThreshold}{- numeric - significance threshold}
 
-\item{pValueAdjustedInd}{- logical - indicates if the p.value has been adjusted}
+\item{adjustedInd}{- logical - indicates if the significance variable has been adjusted with a multiple hypothesis correction}
+
+\item{includeThresholdLabel}{- logical - whether to include arrow with significance threshold}
 }
 \value{
 list of lists of plotly annotation objects

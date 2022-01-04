@@ -1,18 +1,30 @@
-# CUSOMShinyHelpers 1.6.3
+# CUSOMShinyHelpers 1.7.0
 
- 
 ## New Functionality 
+No major new functionality in this release.
 
+***
 ## Major Changes 
-- GetVolcanoPlot now utilizes `selectedpoints`, `selected` and `unselected` properties to call out / highlight row with `selected point` = 1  
-- GetLinearModelWithInteraction dynamically determines whether to include interaction term - accomodates both simple lm or lm with interaction term. 
-- getScatterPlotByGroup now accomodates single, double and triple traces. When passing `addFitLines` = TRUE, plot now includes 95% CI ribbons. 
+`getVolcanoPlot` - Volcano plot now includes legend output, sorted by expected trace order of "Down", "Not Significant", then "Up". Marker colors match expected values passed via `color` parameter. Minor parameter re-naming. 
 
+`getGroupedStatAnnotations` - Includes significance key annotation. Annotations now include "ns" for insignificant statistical results. Annotations now include formatted statistical value as hovertext. 
+
+`getVolcanoAnnotations` - Naming changes to be more generic (not referencing "p-value" globally). `parameters` output list is not backward-compatible with previous versions. Any references to `parameters` list need to be updated. 
+
+***
 ## Minor Changes
-- AddSignificanceGroup returns color as a derived column based on groups
-- createTooltip function eases creating HTML divs with tooltips
-- createTutorialTooltip function eases creating tooltips with tutorial launch bound to onclick event 
-- createTooltip and createTutorialTooltip functions now support HTML within hover text
+`addGroupCount` - includes new optional parameter `addLineBreak` to add line breaks between group label and group count 
 
+`addSignificanceGroup` - Outputs more simplified group labels - ex) "up (q < 0.1)". Minor parameter re-naming. 
+
+`formatPValue` - includes optional parameter `formatInsignificantValues` which will output formatted values even if value is not less than significance threshold. 
+
+`getDefaultVolcanoAnnotations` - minor adjustments to top-level and threshold text annotation positions. Minor changes to parameter naming. 
+
+`getSOMStandardFooter` - switched to utilizing `glue` rather than `paste0`. Minor formatting changes.  
+
+`getStatAnnotationAnchorLines` - added `groupIsSignificant` parameter to indicate whether the `significanceVariable` value should be foramtted as "ns" or not. Minor formatting changes.  
+
+***
 ## Bug Fixes 
 None in this release

@@ -9,29 +9,34 @@
 getSOMStandardFooter <- function(footerImageFilePath='./images/medicine_h_clr.png', additionalText ='') {
 
   return(
-    paste0(
-      '<center>
-          <img src="',footerImageFilePath,'" width="400" height="auto">
-        </center>
-      <br />
-      <center>
-        <strong>',additionalText,'</strong>
-      </center>
+    glue('
+      <center>          
+        <img src="{footerImageFilePath}" width="400" height="auto">       
+      </center> 
+      
+      <br />  
+      
+      <center> 
+        <strong>{additionalText}</strong>      
+      </center> 
+      
       <hr />
-      <div class="u-foottextwrap">
-        <p>&copy; ',format(Sys.Date(), "%Y"),'&nbsp;
-          <a href="http://www.cu.edu/regents/">
-          <strong> The Regents of the University of Colorado,</strong>
-          </a>a body corporate. All rights reserved.
+      
+      <div class="u-foottextwrap">      
+        <p>&copy; {format(Sys.Date(), "%Y")}&nbsp;          
+          <a href=http://www.cu.edu/regents/">         
+            <strong> The Regents of the University of Colorado,</strong>          
+          </a>a body corporate. All rights reserved.       
         </p>
-        <p> Accredited by the
-          <a href=\"https://www.hlcommission.org/component/directory/?Action=ShowBasic&amp;Itemid=&amp;instid=1040\">
-          <strong> Higher Learning Commission.</strong>
-          </a>All trademarks are registered property of the University. Used by permission only.
-        </p>
-      </div>
-      '
-    )
+        
+        <p>Accredited by the 
+          <a href="https://www.hlcommission.org/component/directory/?Action=ShowBasic&amp;Itemid=&amp;instid=1040">          
+            <strong> Higher Learning Commission.</strong>          
+          </a>All trademarks are registered property of the University. Used by permission only.        
+        </p>     
+     </div>
+     '
+   )
   )
 
 }

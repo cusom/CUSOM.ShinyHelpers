@@ -4,10 +4,12 @@
 \alias{addGroupCount}
 \title{Adds HTML formatted count to group variable}
 \usage{
-addGroupCount(.data, .group)
+addGroupCount(.data, group, addLineBreak = TRUE)
 }
 \arguments{
 \item{.data}{dataframe with group variable}
+
+\item{addLineBreak}{logical - whether to insert a line break between group label and count. Defaults to TRUE}
 
 \item{.group}{grouping variable to add count}
 }

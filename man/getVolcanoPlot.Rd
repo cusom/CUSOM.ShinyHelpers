@@ -6,8 +6,8 @@
 \usage{
 getVolcanoPlot(
   .data,
-  foldChangeVar,
-  pValueVar,
+  foldChangeVariable,
+  significanceVariable,
   significanceGroup,
   text,
   key,
@@ -18,6 +18,10 @@ getVolcanoPlot(
 }
 \arguments{
 \item{.data}{dataframe containing fold change data}
+
+\item{foldChangeVariable}{fold change variable}
+
+\item{significanceVariable}{p value variable}
 
 \item{significanceGroup}{significance group column - each group results in a separate trace}
 
@@ -30,10 +34,6 @@ getVolcanoPlot(
 \item{color}{- column with color to use for each row / group in dataset - should be unique per significance group / trace}
 
 \item{shape}{- optional shape - should be passed as a nammed column in source data.}
-
-\item{xvar}{fold change variable}
-
-\item{yvar}{p value variable}
 }
 \value{
 returns Plotly scatter plot showing fold change vs p value colored by significance group

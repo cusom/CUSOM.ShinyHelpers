@@ -2,18 +2,24 @@
 % Please edit documentation in R/formatPValue.R
 \name{formatPValue}
 \alias{formatPValue}
-\title{formats p value based on threshold}
+\title{formats significance Variable value value based on threshold and adjustment method}
 \usage{
-formatPValue(p.value, p.value.adjustment.method = "none")
+formatPValue(
+  significanceVariable,
+  adjustmentMethod = "none",
+  formatInsignificantValues = FALSE
+)
 }
 \arguments{
-\item{p.value}{- numeric - p value}
+\item{significanceVariable}{- numeric - significanceVariable}
 
-\item{p.value.adjustment.method}{string - p value adjustment method if any - defaults to "none"}
+\item{adjustmentMethod}{string - multiple hypothesis correction method if any - defaults to "none"}
+
+\item{formatInsignificantValues}{logical - whether to format and return values that are "insignificant" based on threshold}
 }
 \value{
 string - formatted p or q value depending on adjustment method.
 }
 \description{
-formats p value based on threshold
+formats significance Variable value value based on threshold and adjustment method
 }

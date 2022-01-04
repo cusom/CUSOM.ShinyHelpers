@@ -4,7 +4,14 @@
 \alias{getStatAnnotationAnchorLines}
 \title{function to generate list of line anchors for stat annotations}
 \usage{
-getStatAnnotationAnchorLines(.data, group, groupMembers, statVar)
+getStatAnnotationAnchorLines(
+  .data,
+  group,
+  groupMembers,
+  significanceVariable,
+  groupIsSignificant,
+  includeInsignificantValues = FALSE
+)
 }
 \arguments{
 \item{.data}{dataframe}
@@ -13,7 +20,11 @@ getStatAnnotationAnchorLines(.data, group, groupMembers, statVar)
 
 \item{groupMembers}{string/vector - all possible group labels from group column}
 
-\item{statVar}{column containing statistical variable result (i.e. p.value from statistical test)}
+\item{significanceVariable}{column containing statistical variable result (i.e. p.value from statistical test)}
+
+\item{groupIsSignificant}{column - logical indicating whether significanceVariable value is significant.}
+
+\item{includeInsignificantValues}{logical - whether to include results that are not significant. Defaults to FALSE}
 }
 \value{
 list of position references for each annotation

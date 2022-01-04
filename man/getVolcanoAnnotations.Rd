@@ -7,24 +7,24 @@
 getVolcanoAnnotations(
   .data,
   foldChangeVar,
-  pValueVar,
+  significanceVariable,
   selected,
   arrowLabelTextVar,
   ...
 )
 }
 \arguments{
-\item{.data}{dataframe containing fold change data along with selecte point indicator "selected_"}
+\item{.data}{dataframe containing fold change data along with selected point indicator "selected_"}
 
 \item{foldChangeVar}{fold change variable}
 
-\item{pValueVar}{p value variable}
+\item{significanceVariable}{significance value variable}
 
 \item{selected}{selected indicator column}
 
 \item{arrowLabelTextVar}{name of column in dataframe to pull for arrow annotation text}
 
-\item{...}{- additiaonal named arguments to include in calls to other functions.}
+\item{...}{- additional named arguments to include in calls to other functions.}
 }
 \value{
 returns list of lists of annotation objects

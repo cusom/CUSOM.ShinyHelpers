@@ -4,10 +4,14 @@
 \alias{getGroupedStatAnnotations}
 \title{function to generate stat annotations across multiple groups}
 \usage{
-getGroupedStatAnnotations(AnnotationAnchorLines)
+getGroupedStatAnnotations(AnnotationAnchorLines, adjustmentMethod, ...)
 }
 \arguments{
 \item{AnnotationAnchorLines}{list of annotation references (outputted from getStatAnnotationAnchorLines function)}
+
+\item{adjustmentMethod}{string - name of multiple hypothesis correction method applied to significance variable}
+
+\item{...}{dots - additional arguments to be passed to other functions (like formatPValue)}
 }
 \value{
 list statistic annotations to be overlayed for each group

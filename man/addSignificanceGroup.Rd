@@ -4,19 +4,30 @@
 \alias{addSignificanceGroup}
 \title{Function to add 3 group significance group label to fold change dataframe}
 \usage{
-addSignificanceGroup(.data, foldChangeVar, pValueVar, threshold)
+addSignificanceGroup(
+  .data,
+  foldChangeVar,
+  significanceVariable,
+  adjustedInd,
+  significanceThreshold,
+  originalSignificanceThreshold
+)
 }
 \arguments{
-\item{.data}{fold change dataframe (x = fold change + y = p value )}
+\item{.data}{fold change dataframe}
 
-\item{foldChangeVar}{name of fold change column}
+\item{significanceVariable}{name of significance variable column (p-value, q-value, etc)}
 
-\item{pValueVar}{name of p value column}
+\item{adjustedInd}{logical - indicating whether or not a multiple hypothesis correction was applied. When TRUE, "q" will is used. When FALSE "p" is used.}
 
-\item{threshold}{p value threshold defaults to 0.05}
+\item{significanceThreshold}{numeric - value indicating threshold at which an observation in the significanceVariable coulumn is considered statistically significant.}
+
+\item{originalSignificanceThreshold}{numeric - value indicating un-transformed threshold at which an observation in the significanceVariable coulumn is considered statistically significant.}
+
+\item{foldChangeVariable}{name of fold change column}
 }
 \value{
-returns labels for signficance groups (3 - up, down, not significant)
+returns labels and colors for 3 signficance groups (up, down, not significant)
 }
 \description{
 Function to add 3 group significance group label to fold change dataframe
