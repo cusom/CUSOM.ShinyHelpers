@@ -1,4 +1,4 @@
-# CUSOMShinyHelpers 1.7.0
+# CUSOMShinyHelpers 1.7.1
 
 ## New Functionality 
 No major new functionality in this release.
@@ -24,6 +24,8 @@ No major new functionality in this release.
 `getSOMStandardFooter` - switched to utilizing `glue` rather than `paste0`. Minor formatting changes.  
 
 `getStatAnnotationAnchorLines` - added `groupIsSignificant` parameter to indicate whether the `significanceVariable` value should be foramtted as "ns" or not. Minor formatting changes.  
+
+added `data.tree-conversion` helper functions to support hierarchical inputs built with the `shinyTree` package. 
 
 ***
 ## Bug Fixes 
