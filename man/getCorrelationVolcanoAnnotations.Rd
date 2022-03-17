@@ -8,7 +8,7 @@ similar to getVolcanoAnnotations, geared towards specific annotations for correl
 getCorrelationVolcanoAnnotations(
   .data,
   foldChangeVar,
-  pValueVar,
+  significanceVariable,
   selected,
   arrowLabelTextVar,
   ...
@@ -19,7 +19,7 @@ getCorrelationVolcanoAnnotations(
 
 \item{foldChangeVar}{fold change variable}
 
-\item{pValueVar}{p value variable}
+\item{significanceVariable}{statistical significance variable}
 
 \item{selected}{selected indicator column}
 

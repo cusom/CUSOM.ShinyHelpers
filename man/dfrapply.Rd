@@ -22,11 +22,11 @@ Recursively apply function to all data.frames in a nested list
 \details{
 **Disclaimer**
 
-       These are helper functions from the github version of the \href{https://github.com/shinyTree/shinyTree}{shinyTree} package which are very helpful
-         to transform dataframes to nested lists and back again.
-       These functions are not yet available (still listed as an enhancement \href{https://github.com/shinyTree/shinyTree/issues/8}{ Add data.frame -> shinyTree helper function #8} )
+       These are helper functions from the github version of the \href{https://github.com/shinyTree/shinyTree}{shinyTree} package which are very helpful 
+         to transform dataframes to nested lists and back again. 
+       These functions are not yet available (still listed as an enhancement \href{https://github.com/shinyTree/shinyTree/issues/8}{ Add data.frame -> shinyTree helper function #8} ) 
          in the lastest version on CRAN \href{https://cran.r-project.org/web/packages/shinyTree/index.html}{v0.2.7} and the github version builds are \href{https://travis-ci.org/github/shinyTree/shinyTree}{currently failing}.
-       Rather than pulling the dev version of the pacakge to include these functions, adding them here until a stable version is available on CRAN.
+       Rather than pulling the dev version of the pacakge to include these functions, adding them here until a stable version is available on CRAN. 
          I claim no credit or ownership of any of this code. All credit should be attributed to the original authors listed on the github repo.
 }
 \author{

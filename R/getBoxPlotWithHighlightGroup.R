@@ -61,53 +61,6 @@ getBoxPlotWithHighlightGroup <- function(.data, key, group, groupBaselineLabel, 
     highlight_B_comparison <- .data %>%
       filter(!!.group != groupBaselineLabel,!!.highlightGroup != highlightGroups[1])
 
-    f <- list(
-      family = "Arial",
-      color = "rgb(58, 62, 65)",
-      size = 12
-    )
-
-    x <- list(
-      title = "",
-      font = list(
-        family = "Arial",
-        color = "rgb(58, 62, 65)",
-        size = 18
-      ),
-      showgrid = FALSE,
-      zeroline = FALSE,
-      showline = TRUE,
-      showticklabels = FALSE
-    )
-
-    y <- list(
-      title = list(
-        text = yVariableLabel,
-        font = list(
-          family = "Arial",
-          size = 18
-        )
-      ),
-      font = list(
-        family = "Arial",
-        color = "rgb(58, 62, 65)",
-        size = 18
-      ),
-      showgrid = FALSE,
-      zeroline = FALSE,
-      showline = TRUE,
-      showticklabels = TRUE,
-      fixedrange = TRUE
-    )
-
-    margin <- list(
-      autoexpand = TRUE,
-      l = 25,
-      r = 15,
-      t = 20,
-      b = 20
-    )
-
     p1 <- plot_ly(type = "box", colors = baselineColor) %>%
       add_boxplot(y = baseline$value, x = -1, type = "box",
                   boxpoints = FALSE, name = baseline$group, color = baseline$group, legendgroup="baseline") %>%
@@ -132,27 +85,50 @@ getBoxPlotWithHighlightGroup <- function(.data, key, group, groupBaselineLabel, 
 
     p1 <- p1 %>%
       layout(
+        showlegend = TRUE,
+        legendgroup='baseline',
         title = '',
         xaxis = list(
-          title = "",
-          font = list(
+          title = list(
+            text = "",
+            standoff = 0,
+            font = list(
+              family = "Arial",
+              color = "rgb(58, 62, 65)",
+              size = 14
+            )
+          ),
+          tickfont = list(
             family = "Arial",
             color = "rgb(58, 62, 65)",
-            size = 18),
+            size = 10
+          ),
           showgrid = FALSE,
           zeroline = FALSE,
           showline = TRUE,
           showticklabels = FALSE,
           fixedrange = TRUE
         ),
-        yaxis = y,
-        font = list(
-          family="Arial",
-          size= 18,
-          color= "rgb(58, 62, 65)"
-        ),
-        showlegend = TRUE,
-        legendgroup='baseline'
+        yaxis = list(
+          title = list(
+            text = yVariableLabel,
+            font = list(
+              family = "Arial",
+              color = "rgb(58, 62, 65)",
+              size = 14
+            )
+          ),
+          tickfont = list(
+            family = "Arial",
+            color = "rgb(58, 62, 65)",
+            size = 10
+          ),
+          showgrid = FALSE,
+          zeroline = FALSE,
+          showline = TRUE,
+          showticklabels = TRUE,
+          fixedrange = TRUE
+        )
       )
 
 
@@ -184,38 +160,92 @@ getBoxPlotWithHighlightGroup <- function(.data, key, group, groupBaselineLabel, 
 
     p2 <- p2 %>%
       layout(
+        showlegend = TRUE,
+        legendgroup="comparison",
         title = '',
         xaxis = list(
-          title = "",
-          font = list(
+          title = list(
+            text = "",
+            standoff = 0,
+            font = list(
+              family = "Arial",
+              color = "rgb(58, 62, 65)",
+              size = 14
+            )
+          ),
+          tickfont = list(
             family = "Arial",
             color = "rgb(58, 62, 65)",
-            size = 18),
+            size = 10
+          ),
           showgrid = FALSE,
           zeroline = FALSE,
           showline = TRUE,
           showticklabels = FALSE,
           fixedrange = TRUE
         ),
-        yaxis = y,
-        font = list(
-          family="Arial",
-          size= 18,
-          color= "rgb(58, 62, 65)"
-        ),
-        showlegend = TRUE,
-        legendgroup="comparison"
+        yaxis = list(
+          title = list(
+            text = yVariableLabel,
+            font = list(
+              family = "Arial",
+              color = "rgb(58, 62, 65)",
+              size = 14
+            )
+          ),
+          tickfont = list(
+            family = "Arial",
+            color = "rgb(58, 62, 65)",
+            size = 10
+          ),
+          showgrid = FALSE,
+          zeroline = FALSE,
+          showline = TRUE,
+          showticklabels = TRUE,
+          fixedrange = TRUE
+        )
       )
 
     p <- subplot(p1,p2,shareX = TRUE,shareY = TRUE,margin = 0.0) %>%
-      layout(title = "",
-             font = list(
-               family = "Arial",
-               size = 18,
-               color = "rgb(58, 62, 65)"
-             ),
-             margin = margin,
-             showlegend = TRUE
+      layout(
+        showlegend = TRUE,
+        legend = list(
+          title = list(
+            text = "",
+            font = list(
+              family = "Arial",
+              color = "rgb(58, 62, 65)",
+              size = 14
+            )
+          ),
+          font = list(
+            family = "Arial",
+            color = "rgb(58, 62, 65)",
+            size = 14
+          )
+        ),
+        title = list(
+          font = list(
+            family = "Arial",
+            color = "rgb(58, 62, 65)",
+            size = 18
+          ),
+          pad = list(
+            t = 10,
+            l = 5
+          ),
+          x = 0,
+          xanchor = "left",
+          xref = "container",
+          y = 1
+        ),
+        margin = list(
+          autoexpand = TRUE,
+          l = 25,
+          r = 15,
+          t = 20,
+          b = 20
+        )
       )
 
     p$x$source <- paste0(plotName, "BoxPlot")

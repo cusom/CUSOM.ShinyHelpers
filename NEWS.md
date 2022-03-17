@@ -1,32 +1,35 @@
-# CUSOMShinyHelpers 1.7.1
+# CUSOMShinyHelpers 1.7.2
 
 ## New Functionality 
 No major new functionality in this release.
 
 ***
 ## Major Changes 
-`getVolcanoPlot` - Volcano plot now includes legend output, sorted by expected trace order of "Down", "Not Significant", then "Up". Marker colors match expected values passed via `color` parameter. Minor parameter re-naming. 
-
-`getGroupedStatAnnotations` - Includes significance key annotation. Annotations now include "ns" for insignificant statistical results. Annotations now include formatted statistical value as hovertext. 
-
-`getVolcanoAnnotations` - Naming changes to be more generic (not referencing "p-value" globally). `parameters` output list is not backward-compatible with previous versions. Any references to `parameters` list need to be updated. 
+No major changes in this release. 
 
 ***
 ## Minor Changes
-`addGroupCount` - includes new optional parameter `addLineBreak` to add line breaks between group label and group count 
+- reduced default font size and added new standard legend, title, and axis layouts for the following plotting functions:
 
-`addSignificanceGroup` - Outputs more simplified group labels - ex) "up (q < 0.1)". Minor parameter re-naming. 
+    `getBoxPlotWithHighlightGroup`
 
-`formatPValue` - includes optional parameter `formatInsignificantValues` which will output formatted values even if value is not less than significance threshold. 
+    `getScatterPlotByGroup`
 
-`getDefaultVolcanoAnnotations` - minor adjustments to top-level and threshold text annotation positions. Minor changes to parameter naming. 
+    `getVolcanoPlot`
 
-`getSOMStandardFooter` - switched to utilizing `glue` rather than `paste0`. Minor formatting changes.  
+- Reduced default font size for the following annotation functions:
+  
+    `getCorrelationVolcanoAnnotations`
 
-`getStatAnnotationAnchorLines` - added `groupIsSignificant` parameter to indicate whether the `significanceVariable` value should be foramtted as "ns" or not. Minor formatting changes.  
+    `getDefaultVolcanoAnnotations`
 
-added `data.tree-conversion` helper functions to support hierarchical inputs built with the `shinyTree` package. 
+- Added new logic to handle various annotation labels ("Up" vs "Down", "Increasing" vs "Decreasing", "Greater" vs "Decreased") for the `getDefaultVolcanoAnnotations` function. 
+
+
+- Minor naming conventions and element positioning changes applied to the `getCorrelationVolcanoAnnotations` function.
+
+
 
 ***
 ## Bug Fixes 
-None in this release
+- Added missing `text` and `hoverinfo` properties to the `getScatterPlotByGroup` plot function. 
