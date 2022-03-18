@@ -4,10 +4,20 @@
 \alias{getGroupedStatAnnotations}
 \title{function to generate stat annotations across multiple groups}
 \usage{
-getGroupedStatAnnotations(AnnotationAnchorLines, adjustmentMethod, ...)
+getGroupedStatAnnotations(
+  AnnotationAnchorLines,
+  statTest,
+  covariates,
+  adjustmentMethod,
+  ...
+)
 }
 \arguments{
 \item{AnnotationAnchorLines}{list of annotation references (outputted from getStatAnnotationAnchorLines function)}
+
+\item{statTest}{- string - name of statistical test perfomed}
+
+\item{covariates}{- list - list of features included in linear model as covariates}
 
 \item{adjustmentMethod}{string - name of multiple hypothesis correction method applied to significance variable}
 

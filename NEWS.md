@@ -1,4 +1,4 @@
-# CUSOMShinyHelpers 1.7.2
+# CUSOMShinyHelpers 1.7.3
 
 ## New Functionality 
 No major new functionality in this release.
@@ -28,7 +28,7 @@ No major changes in this release.
 
 - Minor naming conventions and element positioning changes applied to the `getCorrelationVolcanoAnnotations` function.
 
-
+- Added new text logic, hovertext property, and significance key annotation output to `getGroupedStatAnnotations` function. Function now expects new `statTest` and `covariates` parameters. 
 
 ***
 ## Bug Fixes 
