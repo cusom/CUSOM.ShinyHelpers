@@ -1,35 +1,21 @@
-# CUSOMShinyHelpers 1.7.3
+# CUSOMShinyHelpers 1.8.0
 
 ## New Functionality 
-No major new functionality in this release.
+Adding helper functions to enable Gene Set Enrichment Analysis (GSEA):
 
 ***
 ## Major Changes 
-No major changes in this release. 
+GSEA functions: 
+
+`runfGSEA` -> Run 2-sided fgseaMultilevel analysis (positive and negative) with adjusted pvals
+
+`plotGSEAEnrichment` - > Generate a plotly-based GSEA Enrichment plot 
+
 
 ***
 ## Minor Changes
-- reduced default font size and added new standard legend, title, and axis layouts for the following plotting functions:
-
-    `getBoxPlotWithHighlightGroup`
-
-    `getScatterPlotByGroup`
-
-    `getVolcanoPlot`
-
-- Reduced default font size for the following annotation functions:
-  
-    `getCorrelationVolcanoAnnotations`
-
-    `getDefaultVolcanoAnnotations`
-
-- Added new logic to handle various annotation labels ("Up" vs "Down", "Increasing" vs "Decreasing", "Greater" vs "Decreased") for the `getDefaultVolcanoAnnotations` function. 
-
-
-- Minor naming conventions and element positioning changes applied to the `getCorrelationVolcanoAnnotations` function.
-
-- Added new text logic, hovertext property, and significance key annotation output to `getGroupedStatAnnotations` function. Function now expects new `statTest` and `covariates` parameters. 
+No minor changes in this release
 
 ***
 ## Bug Fixes 
-- Added missing `text` and `hoverinfo` properties to the `getScatterPlotByGroup` plot function. 
+No bug fixes in this release
