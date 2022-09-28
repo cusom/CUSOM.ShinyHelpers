@@ -1,4 +1,4 @@
-# CUSOMShinyHelpers 1.8.0
+# CUSOMShinyHelpers 1.8.1
 
 ## New Functionality 
 Adding helper functions to enable Gene Set Enrichment Analysis (GSEA):
@@ -18,4 +18,4 @@ No minor changes in this release
 
 ***
 ## Bug Fixes 
-No bug fixes in this release
+- Version 1.8.1 Fixed bug in function `getLinearModelWithInteraction`: hard-coded `group_by(Analyte)` clause throwing error "Warning: Error in group_by: Must group by variables found in `.data`. ✖ Column `Analyte` is not found." if different nammed column was passed to function.  
