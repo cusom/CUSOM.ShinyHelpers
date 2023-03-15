@@ -1,7 +1,8 @@
-# CUSOMShinyHelpers 1.8.1
+# CUSOMShinyHelpers 1.8.2
 
 ## New Functionality 
-Adding helper functions to enable Gene Set Enrichment Analysis (GSEA):
+Adding helper functions to enable Gene Set Enrichment Analysis (GSEA)
+Updating Volcano Plots to combine same significance groups / shapes into same legend group
 
 ***
 ## Major Changes 
@@ -9,12 +10,15 @@ GSEA functions:
 
 `runfGSEA` -> Run 2-sided fgseaMultilevel analysis (positive and negative) with adjusted pvals
 
-`plotGSEAEnrichment` - > Generate a plotly-based GSEA Enrichment plot 
+`plotGSEAEnrichment` -> Generate a plotly-based GSEA Enrichment plot 
+
+`getVolcanoPlot` -> Combine same significance groups / shapes into same legend group
 
 
 ***
 ## Minor Changes
-No minor changes in this release
+- Version 1.8.2 - Updating Volcano Plots to combine same significance groups / shapes into same legend group
+
 
 ***
 ## Bug Fixes 

@@ -49,6 +49,7 @@ getVolcanoPlot <- function(.data, foldChangeVariable, significanceVariable, sign
 
     i_group = as.character(groups[i,1])
     i_shape = as.character(groups[i,2])
+    i_showlegend <- i_shape == "circle"
 
     df <- .data %>%
       filter(
@@ -76,6 +77,8 @@ getVolcanoPlot <- function(.data, foldChangeVariable, significanceVariable, sign
         color = significanceGroup,
         colors = groupColor,
         key = key,
+        showlegend = i_showlegend,
+        legendgroup = i_group,
         marker = list(
           symbol = shape,
           size = 8,
@@ -98,8 +101,7 @@ getVolcanoPlot <- function(.data, foldChangeVariable, significanceVariable, sign
             opacity = unselectedOpacity,
             size = 8
           )
-        ),
-        showlegend = TRUE
+        )
       )
   }
 
