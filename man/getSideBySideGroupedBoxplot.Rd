@@ -2,7 +2,8 @@
 % Please edit documentation in R/getSideBySideGroupedBoxPlot.R
 \name{getSideBySideGroupedBoxplot}
 \alias{getSideBySideGroupedBoxplot}
-\title{Plotly function to generate side-by-side box and whisker plots comparing groups by highlighted group}
+\title{Plotly function to generate side-by-side box and whisker plots
+comparing groups by highlighted group}
 \usage{
 getSideBySideGroupedBoxplot(
   .data,
@@ -22,25 +23,32 @@ getSideBySideGroupedBoxplot(
 
 \item{.key}{dataframe key column}
 
-\item{.group}{string - column indicating highlighted group membership (A vs B)}
+\item{.group}{string - column indicating highlighted group
+membership (A vs B)}
 
-\item{.comparisonGroup}{string - column indicating the group label that should be used as the comparison}
+\item{.comparisonGroup}{string - column indicating the group
+label that should be used as the comparison}
 
-\item{.comparisonBaseline}{string - value indicating which of the comparison group values should be used as comparison}
+\item{.comparisonBaseline}{string - value indicating which of the comparison
+group values should be used as comparison}
 
-\item{.value}{numeric - column with numerical value to compare between groups}
+\item{.value}{numeric - column with numerical value to compare
+between groups}
 
-\item{.valueLabel}{string - column indicating the label for numerical values used in boxplots}
+\item{.valueLabel}{string - column indicating the label for numerical
+values used in boxplots}
 
 \item{.text}{string - column containing text values to show in tooltip}
 
 \item{showJitter}{boolean - show jittered points?}
 
-\item{plotName}{string - name to attribute to plot (used for tracking clicks, events, etc)}
+\item{plotName}{string - name to attribute to plot
+(used for tracking clicks, events, etc)}
 }
 \value{
 returns subplot 1 x 2 plotly box and whisker plot
 }
 \description{
-Plotly function to generate side-by-side box and whisker plots comparing groups by highlighted group
+Plotly function to generate side-by-side box and whisker plots
+comparing groups by highlighted group
 }

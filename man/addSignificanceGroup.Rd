@@ -16,6 +16,8 @@ addSignificanceGroup(
 \arguments{
 \item{.data}{fold change dataframe}
 
+\item{foldChangeVar}{name of fold change column}
+
 \item{significanceVariable}{name of significance variable column (p-value, q-value, etc)}
 
 \item{adjustedInd}{logical - indicating whether or not a multiple hypothesis correction was applied. When TRUE, "q" will is used. When FALSE "p" is used.}
@@ -23,8 +25,6 @@ addSignificanceGroup(
 \item{significanceThreshold}{numeric - value indicating threshold at which an observation in the significanceVariable coulumn is considered statistically significant.}
 
 \item{originalSignificanceThreshold}{numeric - value indicating un-transformed threshold at which an observation in the significanceVariable coulumn is considered statistically significant.}
-
-\item{foldChangeVariable}{name of fold change column}
 }
 \value{
 returns labels and colors for 3 signficance groups (up, down, not significant)

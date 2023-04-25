@@ -9,9 +9,10 @@ getGroupedStatTestByKeyGroup(.data, groupVar, ...)
 \arguments{
 \item{.data}{dataframe}
 
-\item{...}{additional arguments to be passed to getStatTestByKeyGroup function}
+\item{groupVar}{string - column of group values}
 
-\item{.groupVar}{string - column of group values}
+\item{...}{additional arguments to be passed to
+getStatTestByKeyGroup function}
 }
 \value{
 dataframe containing resulting p.value for each group calculated

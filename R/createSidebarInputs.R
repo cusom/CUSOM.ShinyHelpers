@@ -2,9 +2,9 @@
 #' Requires specfic module format where inputs are a nammed list (Inputs) within the module script.
 #'
 #' @param sidebarName - string - indicates which tab / sidebar to attribute inputs
-#
+#' @importFrom shiny conditionalPanel
 #' @return returns a shiny conditional Panel with appropriate UI objects
-
+#' @export
 createSidebarInputs <- function(sidebarName) {
 
   UIModuleFunctionName <- paste0(sidebarName,'UI')
@@ -12,8 +12,9 @@ createSidebarInputs <- function(sidebarName) {
   UIObjects <- do.call(UIModuleFunctionName,list(sidebarName))
 
   return(
-    conditionalPanel(condition = paste0("input.sidebar == '",sidebarName,"'"),
-                     UIObjects$Inputs
+    shiny::conditionalPanel(
+      condition = paste0("input.sidebar == '",sidebarName,"'"),
+      UIObjects$Inputs
     )
   )
 

@@ -18,13 +18,17 @@ getStatAnnotationAnchorLines(
 
 \item{group}{column of group labels used to calcualte statistic}
 
-\item{groupMembers}{string/vector - all possible group labels from group column}
+\item{groupMembers}{string/vector - all possible group labels
+from group column}
 
-\item{significanceVariable}{column containing statistical variable result (i.e. p.value from statistical test)}
+\item{significanceVariable}{column containing statistical variable
+result (i.e. p.value from statistical test)}
 
-\item{groupIsSignificant}{column - logical indicating whether significanceVariable value is significant.}
+\item{groupIsSignificant}{column - logical indicating whether
+significanceVariable value is significant.}
 
-\item{includeInsignificantValues}{logical - whether to include results that are not significant. Defaults to FALSE}
+\item{includeInsignificantValues}{logical - whether to include
+results that are not significant. Defaults to FALSE}
 }
 \value{
 list of position references for each annotation

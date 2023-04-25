@@ -2,8 +2,10 @@
 % Please edit documentation in R/getCorrelationVolcanoAnnotations.R
 \name{getCorrelationVolcanoAnnotations}
 \alias{getCorrelationVolcanoAnnotations}
-\title{gets all possible correlation volcano plot annotations in a single call. Combines list output from default and arrow annotations.
-similar to getVolcanoAnnotations, geared towards specific annotations for correlation volcano plots.}
+\title{gets all possible correlation volcano plot annotations in a single call.
+Combines list output from default and arrow annotations.
+similar to getVolcanoAnnotations, geared towards specific
+annotations for correlation volcano plots.}
 \usage{
 getCorrelationVolcanoAnnotations(
   .data,
@@ -15,7 +17,8 @@ getCorrelationVolcanoAnnotations(
 )
 }
 \arguments{
-\item{.data}{dataframe containing fold change data along with selecte point indicator "selected_"}
+\item{.data}{dataframe containing fold change data along with
+selecte point indicator "selected_"}
 
 \item{foldChangeVar}{fold change variable}
 
@@ -23,18 +26,23 @@ getCorrelationVolcanoAnnotations(
 
 \item{selected}{selected indicator column}
 
-\item{arrowLabelTextVar}{name of column in dataframe to pull for arrow annotation text}
+\item{arrowLabelTextVar}{name of column in dataframe to pull
+for arrow annotation text}
 
-\item{...}{- additiaonal named arguments to include in calls to other functions.}
+\item{...}{- additiaonal named arguments to include in calls
+to other functions.}
 }
 \value{
 returns list of lists of annotation objects
-         -- annotations - list of default volcano annotations
-         -- shapes - list of shapes - defaults to dotted line separating significance groups
-         -- arrow - list of arrow annotations to highlight points on volcano plot
-         -- parameters - metatdata used to generate annotation lists
+annotations - list of default volcano annotations
+shapes - list of shapes - defaults to dotted line
+separating significance groups
+arrow - list of arrow annotations to highlight points on volcano plot
+parameters - metatdata used to generate annotation lists
 }
 \description{
-gets all possible correlation volcano plot annotations in a single call. Combines list output from default and arrow annotations.
-similar to getVolcanoAnnotations, geared towards specific annotations for correlation volcano plots.
+gets all possible correlation volcano plot annotations in a single call.
+Combines list output from default and arrow annotations.
+similar to getVolcanoAnnotations, geared towards specific
+annotations for correlation volcano plots.
 }

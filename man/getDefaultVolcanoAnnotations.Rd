@@ -13,21 +13,26 @@ getDefaultVolcanoAnnotations(
 )
 }
 \arguments{
-\item{maxFoldChange}{- numeric - indicates the max value along the x axis for the plot (fold change) - helps anchor the annotations along the x-axis}
+\item{maxFoldChange}{- numeric - indicates the max value along
+the x axis for the plot (fold change) - helps anchor the
+annotations along the x-axis}
 
-\item{upRegulatedText}{- text to use for "up regulated" groups -- down regulated text will simply replace "up" with "down"}
+\item{upRegulatedText}{- text to use for "up regulated" groups --
+down regulated text will simply replace "up" with "down"}
 
 \item{significanceThreshold}{- numeric - significance threshold}
 
-\item{adjustedInd}{- logical - indicates if the significance variable has been adjusted with a multiple hypothesis correction}
+\item{adjustedInd}{- logical - indicates if the significance
+variable has been adjusted with a multiple hypothesis correction}
 
-\item{includeThresholdLabel}{- logical - whether to include arrow with significance threshold}
+\item{includeThresholdLabel}{- logical - whether to include
+arrow with significance threshold}
 }
 \value{
 list of lists of plotly annotation objects
-         -- up regulated arror at top of plot (with up regulated text)
-         -- down regulated arrow at the top of plot
-         -- p value threshold with "p or q < threshold" text and up arrow
+-- up regulated arror at top of plot (with up regulated text)
+-- down regulated arrow at the top of plot
+-- p value threshold with "p or q < threshold" text and up arrow
 }
 \description{
 volcano plot Plotly function to get standard volcano annotations

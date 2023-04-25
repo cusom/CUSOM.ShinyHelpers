@@ -2,7 +2,8 @@
 % Please edit documentation in R/getScatterPlotByGroup.R
 \name{getScatterPlotByGroup}
 \alias{getScatterPlotByGroup}
-\title{generate scatter plot colored by group - optionally add linear model fitted values trace lines per group member.}
+\title{generate scatter plot colored by group
+optionally add linear model fitted values trace lines per group member.}
 \usage{
 getScatterPlotByGroup(
   .data,
@@ -21,17 +22,22 @@ getScatterPlotByGroup(
 
 \item{key}{A string or numeric column - key value for dataframe.}
 
-\item{x}{A numeric column for x value in scatter - independent variable used in linear model fits if applicable}
+\item{x}{A numeric column for x value in scatter -
+independent variable used in linear model fits if applicable}
 
-\item{y}{A numeric column for y value in scatter - response variable used in linear model fits if applicable}
+\item{y}{A numeric column for y value in scatter -
+response variable used in linear model fits if applicable}
 
 \item{group}{A string column indicating group membership - should be binary.}
 
-\item{groupBaselineLabel}{string constant - indicating the base reference value for group parameter}
+\item{groupBaselineLabel}{string constant -
+indicating the base reference value for group parameter}
 
-\item{text}{string column indicating value to display on hover / tooltip}
+\item{text}{string column indicating value
+to display on hover / tooltip}
 
-\item{addFitLines}{whether to add fit lines to the scatter plot based on groups from group parameter}
+\item{addFitLines}{whether to add fit lines to the scatter
+plot based on groups from group parameter}
 
 \item{plotName}{string indicating the name of the plot}
 }
@@ -39,5 +45,6 @@ getScatterPlotByGroup(
 plolty scatter plot object
 }
 \description{
-generate scatter plot colored by group - optionally add linear model fitted values trace lines per group member.
+generate scatter plot colored by group
+optionally add linear model fitted values trace lines per group member.
 }

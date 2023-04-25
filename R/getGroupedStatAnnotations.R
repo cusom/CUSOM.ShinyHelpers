@@ -1,15 +1,25 @@
 #' function to generate stat annotations across multiple groups
 #'
-#' @param AnnotationAnchorLines list of annotation references (outputted from getStatAnnotationAnchorLines function)
+#' @param AnnotationAnchorLines list of annotation references
+#' (outputted from getStatAnnotationAnchorLines function)
 #' @param statTest - string - name of statistical test perfomed
-#' @param covariates - list - list of features included in linear model as covariates
-#' @param adjustmentMethod string - name of multiple hypothesis correction method applied to significance variable
-#' @param ... dots - additional arguments to be passed to other functions (like formatPValue)
+#' @param covariates - list - list of features included in
+#' linear model as covariates
+#' @param adjustmentMethod string - name of multiple hypothesis
+#' correction method applied to significance variable
+#' @param ... dots - additional arguments to be passed to
+#' other functions (like formatPValue)
 #' @return list statistic annotations to be overlayed for each group
+#' @importFrom dplyr case_when
 #' @export
 
-
-getGroupedStatAnnotations <- function (AnnotationAnchorLines, statTest, covariates, adjustmentMethod, ...){
+getGroupedStatAnnotations <- function(
+  AnnotationAnchorLines,
+  statTest,
+  covariates,
+  adjustmentMethod,
+  ...
+  ) {
 
   annotations <- list()
 
@@ -36,7 +46,7 @@ getGroupedStatAnnotations <- function (AnnotationAnchorLines, statTest, covariat
     statResult <- AnnotationAnchorLines[[i]]$statResult
     annotation[["x"]] <- AnnotationAnchorLines[[i]]$x1 - (AnnotationAnchorLines[[i]]$x1 - AnnotationAnchorLines[[i]]$x0)/2
     annotation[["y"]] <- 1.05
-    annotation[["text"]] <- case_when(
+    annotation[["text"]] <- dplyr::case_when(
       is.na(statResult) ~ "NA",
       !AnnotationAnchorLines[[i]]$isSignificant ~ "ns",
       statResult <= 0.001 ~  "***",
@@ -47,17 +57,25 @@ getGroupedStatAnnotations <- function (AnnotationAnchorLines, statTest, covariat
     annotations <- c(annotations, list(annotation))
   }
 
-  keyText = ifelse(
+  keyText <- ifelse(
     adjustmentMethod != "none",
-    '<span><b>Statistical Significance Key</b>:        ns q > 0.1         * q <= 0.1         ** q <= 0.01        *** q <= 0.001</span>',
-    '<span><b>Statistical Significance Key</b>:        ns p > 0.05        * p <= 0.05        ** p <= 0.01        *** p <= 0.001</span>'
+    "<span><b>Statistical Significance Key</b>:        ns q > 0.1         * q <= 0.1         ** q <= 0.01        *** q <= 0.001</span>",
+    "<span><b>Statistical Significance Key</b>:        ns p > 0.05        * p <= 0.05        ** p <= 0.01        *** p <= 0.001</span>"
   )
 
-  adjLetterString <- ifelse(adjustmentMethod=="none","p","q")
-  covariatesString <- ifelse(!is.null(covariates) & statTest == "Linear Model",glue(' adjusted for {glue_collapse(covariates,", ", last = " and ")}'),'')
-  correctionString <- ifelse(adjustmentMethod=="none","",glue(", corrected using the {adjustmentMethod} method"))
+  adjLetterString <- ifelse(adjustmentMethod == "none", "p", "q")
+  covariatesString <- ifelse(
+    !is.null(covariates) & statTest == "Linear Model",
+    glue::glue(' adjusted for {glue::glue_collapse(covariates,", ", last = " and ")}'),
+    ""
+  )
+  correctionString <- ifelse(
+    adjustmentMethod == "none",
+    "",
+    glue::glue(", corrected using the {adjustmentMethod} method")
+  )
 
-  hoverText <- glue("{adjLetterString}-values calculated based on a {statTest}{covariatesString}{correctionString}.")
+  hoverText <- glue::glue("{adjLetterString}-values calculated based on a {statTest}{covariatesString}{correctionString}.")
 
   significanceKey <- list(
     type = "line",
@@ -79,4 +97,3 @@ getGroupedStatAnnotations <- function (AnnotationAnchorLines, statTest, covariat
   return(annotations)
 
 }
-

@@ -19,7 +19,8 @@ getBoxplot(.data, .key, .group, .value, .valueLabel, .text, plotName)
 
 \item{.text}{string - column containing text values to show in tooltip}
 
-\item{plotName}{string - name to attribute to plot (used for tracking clicks, events, etc)}
+\item{plotName}{string - name to attribute to plot
+(used for tracking clicks, events, etc)}
 }
 \value{
 returns plotly box and whisker plot

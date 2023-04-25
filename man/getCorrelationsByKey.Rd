@@ -17,17 +17,23 @@ getCorrelationsByKey(
 \arguments{
 \item{.data}{A dataframe}
 
-\item{id}{A string or numeric column - represents a unique observation within each key/group combination. PersonId, LabId, RecordID, etc}
+\item{id}{A string or numeric column - represents a unique observation
+within each key/group combination. PersonId, LabId, RecordID, etc}
 
-\item{key}{A string or numeric column - key value for dataframe. Correlations will be computed between comparison key and all other key values}
+\item{key}{A string or numeric column - key value for dataframe.
+Correlations will be computed between comparison key and all other key values}
 
-\item{response}{A numeric column - numerical value to use with correlations test between keys.}
+\item{response}{A numeric column - numerical value to use with
+correlations test between keys.}
 
-\item{comparisonLabel}{A string value - key label to compute all correlations against}
+\item{comparisonLabel}{A string value - key label to compute
+all correlations against}
 
-\item{type}{a string - indicating which correlations test to perform. One of either pearson or spearman -- see Hmisc::rcorr function}
+\item{type}{a string - indicating which correlations test to perform.
+One of either pearson or spearman -- see Hmisc::rcorr function}
 
-\item{adjustmentMethod}{- nammed method to correct p.values for multiple comparisons}
+\item{adjustmentMethod}{- nammed method to correct p.values
+for multiple comparisons}
 }
 \value{
 dataframe containing resulting p.values for each key/group stat test

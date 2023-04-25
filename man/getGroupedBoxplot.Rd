@@ -2,7 +2,8 @@
 % Please edit documentation in R/getGroupedBoxplot.R
 \name{getGroupedBoxplot}
 \alias{getGroupedBoxplot}
-\title{Plotly function to generate multiple box and whisker plots comparing group across secondary grouping level}
+\title{Plotly function to generate multiple box and whisker plots comparing
+group across secondary grouping level}
 \usage{
 getGroupedBoxplot(
   .data,
@@ -18,29 +19,37 @@ getGroupedBoxplot(
 )
 }
 \arguments{
-\item{.data}{dataframe containing numeric values between 2 groups, across secondary grouping level}
+\item{.data}{dataframe containing numeric values between 2 groups,
+across secondary grouping level}
 
 \item{.key}{dataframe key column}
 
-\item{.group}{string - column indicating highlighted group membership (A vs B)}
+\item{.group}{string - column indicating highlighted group
+membership (A vs B)}
 
 \item{.legendGroup}{string - column indicating the secondary group label}
 
-\item{.value}{numeric - column with numerical value to compare between groups}
+\item{.value}{numeric - column with numerical value to
+compare between groups}
 
-\item{.valueLabel}{string - column indicating the label for numerical values used in boxplots}
+\item{.valueLabel}{string - column indicating the label for
+numerical values used in boxplots}
 
-\item{.text}{string - column containing text values to show in tooltip}
+\item{.text}{string - column containing text values to
+show in tooltip}
 
-\item{.customData}{string - column of custom data for plot (can be used to store additional data in custom data attribute)}
+\item{.customData}{string - column of custom data for plot
+(can be used to store additional data in custom data attribute)}
 
 \item{showJitter}{boolean - show jittered points?}
 
-\item{plotName}{string - name to attribute to plot (used for tracking clicks, events, etc)}
+\item{plotName}{string - name to attribute to plot
+(used for tracking clicks, events, etc)}
 }
 \value{
 returns subplot 1 x 2 plotly box and whisker plot
 }
 \description{
-Plotly function to generate multiple box and whisker plots comparing group across secondary grouping level
+Plotly function to generate multiple box and whisker plots comparing
+group across secondary grouping level
 }

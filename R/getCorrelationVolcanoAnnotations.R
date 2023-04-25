@@ -1,35 +1,73 @@
-#' gets all possible correlation volcano plot annotations in a single call. Combines list output from default and arrow annotations.
-#' similar to getVolcanoAnnotations, geared towards specific annotations for correlation volcano plots.
-#'
-#' @param .data dataframe containing fold change data along with selecte point indicator "selected_"
+#' gets all possible correlation volcano plot annotations in a single call.
+#' Combines list output from default and arrow annotations.
+#' similar to getVolcanoAnnotations, geared towards specific
+#' annotations for correlation volcano plots.
+#' @param .data dataframe containing fold change data along with
+#' selecte point indicator "selected_"
 #' @param foldChangeVar fold change variable
 #' @param significanceVariable statistical significance variable
 #' @param selected selected indicator column
-#' @param arrowLabelTextVar name of column in dataframe to pull for arrow annotation text
-#' @param ... - additiaonal named arguments to include in calls to other functions.
+#' @param arrowLabelTextVar name of column in dataframe to pull
+#' for arrow annotation text
+#' @param ... - additiaonal named arguments to include in calls
+#' to other functions.
 #' @return returns list of lists of annotation objects
-#'          -- annotations - list of default volcano annotations
-#'          -- shapes - list of shapes - defaults to dotted line separating significance groups
-#'          -- arrow - list of arrow annotations to highlight points on volcano plot
-#'          -- parameters - metatdata used to generate annotation lists
+#' annotations - list of default volcano annotations
+#' shapes - list of shapes - defaults to dotted line
+#' separating significance groups
+#' arrow - list of arrow annotations to highlight points on volcano plot
+#' parameters - metatdata used to generate annotation lists
+#' @importFrom rlang enquo
+#' @import dplyr
 #' @export
+getCorrelationVolcanoAnnotations <- function (
+  .data,
+  foldChangeVar,
+  significanceVariable,
+  selected,
+  arrowLabelTextVar,
+  ...
+  ) {
 
-getCorrelationVolcanoAnnotations <- function (.data, foldChangeVar, significanceVariable, selected, arrowLabelTextVar, ...) {
+  foldChangeVar <- rlang::enquo(foldChangeVar)
+  significanceVariable <- rlang::enquo(significanceVariable)
+  selected <- rlang::enquo(selected)
+  arrowLabelTextVar <- rlang::enquo(arrowLabelTextVar)
+  maxFoldChange <- getMaxAbsValue(
+    .data, 
+    !!foldChangeVar, 
+    inf.rm = TRUE, 
+    buffer = 1.1
+  )
 
-  foldChangeVar <- enquo(foldChangeVar)
-  significanceVariable <- enquo(significanceVariable)
-  selected <- enquo(selected)
-  arrowLabelTextVar <- enquo(arrowLabelTextVar)
-  maxFoldChange <- getMaxAbsValue(.data, !!foldChangeVar, inf.rm = TRUE,buffer = 1.1)
+  includeArrow <- dim(
+    .data |>
+      dplyr::filter(
+        !!selected == 1,
+        !is.na(!!foldChangeVar),
+        !is.na(!!significanceVariable)
+      )
+    )[1] > 0
 
-  includeArrow <- dim(.data %>% filter(!!selected == 1, !is.na(!!foldChangeVar),!is.na(!!significanceVariable)))[1] > 0
+  adjustmentMethodVar <- colnames(.data)[which(grepl("adjust", colnames(.data)))][1]
 
-  adjustmentMethodVar <- colnames(.data)[which(grepl("adjust",colnames(.data)))][1]
-  tranformationVar <- colnames(.data)[which(grepl("log",colnames(.data)))][1]
-  adjustmentMethod <- .data %>% ungroup() %>% select(!!adjustmentMethodVar) %>% unique() %>% pull()
+  tranformationVar <- colnames(.data)[which(grepl("log", colnames(.data)))][1]
+
+  adjustmentMethod <- .data |>
+    dplyr::ungroup() |>
+    dplyr::select(!!adjustmentMethodVar) |>
+    dplyr::distinct() |>
+    dplyr::pull()
+
   adjustedInd <- adjustmentMethod != "none"
+
   significanceThreshold <- ifelse(adjustedInd, 0.1, 0.05)
-  significanceThresholdTransformed <- ifelse(!is.na(tranformationVar),-log10(significanceThreshold), significanceThreshold)
+
+  significanceThresholdTransformed <- ifelse(
+    !is.na(tranformationVar),
+    -log10(significanceThreshold),
+    significanceThreshold
+  )
 
   parameters <- list(
     "maxFoldChange" = maxFoldChange,
@@ -47,22 +85,59 @@ getCorrelationVolcanoAnnotations <- function (.data, foldChangeVar, significance
     ...
   )
 
-  shapes <- getDefaultVolcanoLine(cutoffThreshold = significanceThresholdTransformed, color = "black", lineType = "dash")
+  shapes <- getDefaultVolcanoLine(
+    cutoffThreshold = significanceThresholdTransformed,
+    color = "black",
+    lineType = "dash"
+  )
 
   if (includeArrow) {
 
-    xcoordinate <- .data %>% ungroup() %>% filter(!!selected == 1) %>% select(!!foldChangeVar) %>% pull()
-    ycoordinate <- .data %>% ungroup() %>% filter(!!selected == 1) %>% select(!!significanceVariable) %>% pull()
-    arrowLabelText <- .data %>% ungroup() %>% filter(!!selected == 1) %>% select(!!arrowLabelTextVar) %>% pull()
-    arrow <- getVolcanoArrowAnnotation(xcoordinate, ycoordinate,arrowLabelText)
-  }
-  else {
+    xcoordinate <- .data |>
+      dplyr::ungroup() |>
+      dplyr::filter(!!selected == 1) |>
+      dplyr::select(!!foldChangeVar) |>
+      dplyr::pull()
+
+    ycoordinate <- .data |>
+      dplyr::ungroup() |>
+      dplyr::filter(!!selected == 1) |>
+      dplyr::select(!!significanceVariable) |>
+      dplyr::pull()
+
+    arrowLabelText <- .data |>
+      dplyr::ungroup() |>
+      dplyr::filter(!!selected == 1) |>
+      dplyr::select(!!arrowLabelTextVar) |>
+      dplyr::pull()
+
+    arrow <- getVolcanoArrowAnnotation(
+      xcoordinate,
+      ycoordinate,
+      arrowLabelText
+    )
+
+  }  else {
     arrow <- list()
   }
-  return(list(annotations = annotations, shapes = shapes, arrow = arrow,  parameters = parameters))
+
+  return(
+    list(
+      annotations = annotations,
+      shapes = shapes,
+      arrow = arrow,
+      parameters = parameters
+    )
+  )
 }
 
-getCorrelationVolcanoDefaultAnnotations <- function (maxFoldChange, titleText = "", significanceThreshold, adjustedInd = FALSE, includeThresholdLabel = TRUE) {
+getCorrelationVolcanoDefaultAnnotations <- function (
+  maxFoldChange,
+  titleText = "",
+  significanceThreshold,
+  adjustedInd = FALSE,
+  includeThresholdLabel = TRUE
+) {
 
   upAnchor <- 0.75
   downAnchor <- 0.25
@@ -77,7 +152,7 @@ getCorrelationVolcanoDefaultAnnotations <- function (maxFoldChange, titleText = 
         yref = "paper",
         axref = "x",
         ayref = "y",
-        showarrow = T,
+        showarrow = TRUE,
         arrowcolor = "#1D4D7C",
         ax = 0,
         ay = 0
@@ -86,7 +161,7 @@ getCorrelationVolcanoDefaultAnnotations <- function (maxFoldChange, titleText = 
         x = upAnchor,
         y = 1.05,
         text = "Positive",
-        showarrow = F,
+        showarrow = FALSE,
         xref = "paper",
         yref = "paper",
         font = list(
@@ -101,7 +176,7 @@ getCorrelationVolcanoDefaultAnnotations <- function (maxFoldChange, titleText = 
         yref = "paper",
         axref = "x",
         ayref = "y",
-        showarrow = T,
+        showarrow = TRUE,
         arrowcolor = "#3E99CD",
         ax = 0,
         ay = 0
@@ -110,7 +185,7 @@ getCorrelationVolcanoDefaultAnnotations <- function (maxFoldChange, titleText = 
         x = downAnchor,
         y = 1.05,
         text = "Negative",
-        showarrow = F,
+        showarrow = FALSE,
         xref = "paper",
         yref = "paper",
         font = list(
@@ -121,7 +196,11 @@ getCorrelationVolcanoDefaultAnnotations <- function (maxFoldChange, titleText = 
       list(
         x = 0.025,
         y = significanceThreshold * 1.2,
-        text = ifelse(includeThresholdLabel,glue("&#9650; <b>{significanceThresholdAnnotation} < {significanceThreshold}</b>"),""),
+        text = ifelse(
+          includeThresholdLabel,
+          glue::glue("&#9650; <b>{significanceThresholdAnnotation} < {significanceThreshold}</b>"),
+          ""
+        ),
         xref = "paper",
         yref = "y",
         axref = "x",
@@ -139,7 +218,7 @@ getCorrelationVolcanoDefaultAnnotations <- function (maxFoldChange, titleText = 
         x = 0.5,
         y = 1.075,
         text = titleText,
-        showarrow = F,
+        showarrow = FALSE,
         xref = "paper",
         yref = "paper",
         font = list(

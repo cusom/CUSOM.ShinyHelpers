@@ -16,18 +16,20 @@ getScatterPlotWithSmoothing(
 \arguments{
 \item{.data}{dataframe containing pairwise data (x vs y)}
 
+\item{xVar}{x variable column}
+
+\item{yVar}{y variable column}
+
 \item{colorVar}{column containing colors to apply for each point}
 
 \item{textVar}{column containing text values to show in tooltip}
 
-\item{smoothingMethod}{- nammed argument to pass to ggplot geom_smooth see ?ggplot2::geom_smooth()}
-
-\item{xvar}{x variable column}
-
-\item{yvar}{y variable column}
+\item{smoothingMethod}{- nammed argument to pass to ggplot
+geom_smooth see ?ggplot2::geom_smooth()}
 }
 \value{
-returns ggplot scatter plot showing x, y points with geom_smooth() layer added using nammed smoothing method
+returns ggplot scatter plot showing x, y points with
+geom_smooth() layer added using nammed smoothing method
 }
 \description{
 GGplot function to generate standard volcano plot from fold change data

@@ -9,7 +9,8 @@ getSelectedRecordsAgePlot(.data, .group, .value)
 \arguments{
 \item{.data}{dataframe containing group column to check}
 
-\item{.group}{column, string - group value to compare percent distribution by sex}
+\item{.group}{column, string - group value to compare percent
+distribution by sex}
 
 \item{.value}{column, numeric - age column to show distribution across groups}
 }

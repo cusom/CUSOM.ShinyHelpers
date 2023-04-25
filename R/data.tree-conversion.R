@@ -251,7 +251,6 @@ dfToTree <- function(
 #' newDf <- treeToDf(tree, c("Sex", "Class", "Survived"))
 #'}
 #' @return data.frame
-#' 
 #' @author Jasper Schelfhout
 #' @export
 treeToDf <- function(tree, hierarchy){
@@ -262,7 +261,7 @@ treeToDf <- function(tree, hierarchy){
   }
   
   if(depth < length(hierarchy)){
-    hierarchy <- tail(hierarchy, depth)    
+    hierarchy <- utils::tail(hierarchy, depth)
     warning(sprintf("To many levels specified in hierarchy. Only using last %s: %s",
                     depth,
                     paste(hierarchy, collapse = ", ")
@@ -293,22 +292,23 @@ treeToDf <- function(tree, hierarchy){
 #' @param tree named nested list
 #' @param hierarchy sorted character vector with name for each level of the list
 #' @return nested list with one level less that is stacked to a data.frame
-#' 
+#' @importFrom utils tail
 #' @author Jasper Schelfhout \email{jasper.schelfhout@@openanalytics.eu}
 nodesToDf <- function(
   tree,
-  hierarchy){
-  depth <- depth(tree) 
-  if(depth == 0 || depth < length(hierarchy)){
+  hierarchy
+) {
+  depth <- depth(tree)
+  if (depth == 0 || depth < length(hierarchy)) {
     return(tree)
   }
-  if(depth == 1){
+  if (depth == 1) {
     df <- stackList(tree, hierarchy)
-  } else if(depth > 1){
+  } else if(depth > 1) {
     df <- lapply(
       tree,
-      treeToDf, 
-      hierarchy = tail(hierarchy, depth-1))
+      treeToDf,
+      hierarchy = utils::tail(hierarchy, depth - 1))
   }
   df
 }

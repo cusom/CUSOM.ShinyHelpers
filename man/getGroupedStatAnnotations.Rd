@@ -13,15 +13,19 @@ getGroupedStatAnnotations(
 )
 }
 \arguments{
-\item{AnnotationAnchorLines}{list of annotation references (outputted from getStatAnnotationAnchorLines function)}
+\item{AnnotationAnchorLines}{list of annotation references
+(outputted from getStatAnnotationAnchorLines function)}
 
 \item{statTest}{- string - name of statistical test perfomed}
 
-\item{covariates}{- list - list of features included in linear model as covariates}
+\item{covariates}{- list - list of features included in
+linear model as covariates}
 
-\item{adjustmentMethod}{string - name of multiple hypothesis correction method applied to significance variable}
+\item{adjustmentMethod}{string - name of multiple hypothesis
+correction method applied to significance variable}
 
-\item{...}{dots - additional arguments to be passed to other functions (like formatPValue)}
+\item{...}{dots - additional arguments to be passed to
+other functions (like formatPValue)}
 }
 \value{
 list statistic annotations to be overlayed for each group

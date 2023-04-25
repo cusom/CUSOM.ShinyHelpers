@@ -2,7 +2,8 @@
 % Please edit documentation in R/getBoxPlotWithHighlightGroup.R
 \name{getBoxPlotWithHighlightGroup}
 \alias{getBoxPlotWithHighlightGroup}
-\title{Plotly function to generate standard box and whisker plot with highighted groups}
+\title{Plotly function to generate standard box and 
+whisker plot with highighted groups}
 \usage{
 getBoxPlotWithHighlightGroup(
   .data,
@@ -25,7 +26,8 @@ getBoxPlotWithHighlightGroup(
 
 \item{group}{string - group column - should only contain 2 groups}
 
-\item{groupBaselineLabel}{string - value indicating the group label that should be used as the comparison}
+\item{groupBaselineLabel}{string - value indicating the
+group label that should be used as the comparison}
 
 \item{value}{numeric - numeric value to compare between groups}
 
@@ -33,17 +35,24 @@ getBoxPlotWithHighlightGroup(
 
 \item{text}{string - column containing text values to show in tooltip}
 
-\item{highlightGroup}{string - column with highlight groups (A vs B or 1 vs 2 etc...)}
+\item{highlightGroup}{string - column with highlight
+groups (A vs B or 1 vs 2 etc...)}
 
-\item{colors}{vector of colors to use for base boxplot and jitter - defaults to grey/blue. Color used for baseline should be passed as first value}
+\item{colors}{vector of colors to use for base boxplot and
+jitter - defaults to grey/blue. Color used for baseline
+should be passed as first value}
 
-\item{highlightColors}{vector of colors to use for highlighted points - defaults to orange/red}
+\item{highlightColors}{vector of colors to use for
+highlighted points - defaults to orange/red}
 
-\item{plotName}{string - name to attribute to plot (used for tracking clicks, events, etc)}
+\item{plotName}{string - name to attribute to plot
+(used for tracking clicks, events, etc)}
 }
 \value{
-returns plotly box and whisker plot with secondary traces indicating highlighted groups
+returns plotly box and whisker plot with
+secondary traces indicating highlighted groups
 }
 \description{
-Plotly function to generate standard box and whisker plot with highighted groups
+Plotly function to generate standard box and 
+whisker plot with highighted groups
 }

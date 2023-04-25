@@ -2,7 +2,8 @@
 % Please edit documentation in R/getVolcanoAnnotations.R
 \name{getVolcanoAnnotations}
 \alias{getVolcanoAnnotations}
-\title{gets all possible volcano plot annotations in a single call. Combines list output from default and arrow annotations.}
+\title{gets all possible volcano plot annotations in a single call.
+Combines list output from default and arrow annotations.}
 \usage{
 getVolcanoAnnotations(
   .data,
@@ -14,7 +15,8 @@ getVolcanoAnnotations(
 )
 }
 \arguments{
-\item{.data}{dataframe containing fold change data along with selected point indicator "selected_"}
+\item{.data}{dataframe containing fold change data along
+with selected point indicator "selected_"}
 
 \item{foldChangeVar}{fold change variable}
 
@@ -22,17 +24,21 @@ getVolcanoAnnotations(
 
 \item{selected}{selected indicator column}
 
-\item{arrowLabelTextVar}{name of column in dataframe to pull for arrow annotation text}
+\item{arrowLabelTextVar}{name of column in dataframe to
+pull for arrow annotation text}
 
-\item{...}{- additional named arguments to include in calls to other functions.}
+\item{...}{- additional named arguments to include in calls to
+other functions.}
 }
 \value{
 returns list of lists of annotation objects
-         -- annotations - list of default volcano annotations
-         -- shapes - list of shapes - defaults to dotted line separating significance groups
-         -- arrow - list of arrow annotations to highlight points on volcano plot
-         -- parameters - metatdata used to generate annotation lists
+-- annotations - list of default volcano annotations
+-- shapes - list of shapes - defaults to dotted line separating
+significance groups
+-- arrow - list of arrow annotations to highlight points on volcano plot
+-- parameters - metatdata used to generate annotation lists
 }
 \description{
-gets all possible volcano plot annotations in a single call. Combines list output from default and arrow annotations.
+gets all possible volcano plot annotations in a single call.
+Combines list output from default and arrow annotations.
 }

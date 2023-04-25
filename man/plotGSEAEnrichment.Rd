@@ -15,7 +15,8 @@ plotGSEAEnrichment(pathName, stats, res, title = "", gseaParam = 0)
 
 \item{title}{string plot title}
 
-\item{gseaParam}{int GSEA parameter value, all gene-level statis are raised to the power of 'gseaParam' before calculation of GSEA enrichment scores.}
+\item{gseaParam}{int GSEA parameter value, all gene-level statis are
+raised to the power of 'gseaParam' before calculation of GSEA enrichment scores.}
 }
 \value{
 plotly plot object

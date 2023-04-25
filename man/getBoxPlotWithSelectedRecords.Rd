@@ -2,7 +2,8 @@
 % Please edit documentation in R/getBoxPlotWithSelectedRecords.R
 \name{getBoxPlotWithSelectedRecords}
 \alias{getBoxPlotWithSelectedRecords}
-\title{Plotly function to generate standard box and whisker plot with highighted / selected points}
+\title{Plotly function to generate standard box and
+whisker plot with highighted / selected points}
 \usage{
 getBoxPlotWithSelectedRecords(
   .data,
@@ -23,7 +24,8 @@ getBoxPlotWithSelectedRecords(
 
 \item{.group}{string - group column - should only contain 2 groups}
 
-\item{.groupBaselineLabel}{string - value indicating the group label that should be used as the comparison}
+\item{.groupBaselineLabel}{string - value indicating the
+group label that should be used as the comparison}
 
 \item{.value}{numeric - numeric value to compare between groups}
 
@@ -31,13 +33,16 @@ getBoxPlotWithSelectedRecords(
 
 \item{.text}{string - column containing text values to show in tooltip}
 
-\item{.selectedIndicator}{boolean - column indicating whether the row has been selected via click or selected action}
+\item{.selectedIndicator}{boolean - column indicating whether
+the row has been selected via click or selected action}
 
-\item{plotName}{string - name to attribute to plot (used for tracking clicks, events, etc)}
+\item{plotName}{string - name to attribute to plot
+(used for tracking clicks, events, etc)}
 }
 \value{
 returns plotly box and whisker plot
 }
 \description{
-Plotly function to generate standard box and whisker plot with highighted / selected points
+Plotly function to generate standard box and
+whisker plot with highighted / selected points
 }

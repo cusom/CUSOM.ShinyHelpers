@@ -2,7 +2,8 @@
 % Please edit documentation in R/getLinearModelWithInteraction.R
 \name{getLinearModelWithInteraction}
 \alias{getLinearModelWithInteraction}
-\title{run linear model with interaction between independent variable and specificed interaction variable}
+\title{run linear model with interaction between independent variable
+and specificed interaction variable}
 \usage{
 getLinearModelWithInteraction(
   .data,
@@ -19,25 +20,34 @@ getLinearModelWithInteraction(
 \arguments{
 \item{.data}{A dataframe}
 
-\item{id}{A string or numeric column - represents a unique observation within each key/group combination. PersonId, LabId, etc}
+\item{id}{A string or numeric column - represents a unique observation
+within each key/group combination. PersonId, LabId, etc}
 
-\item{key}{A string or numeric column - key value for dataframe. Statistics will be computed between groups for each key value}
+\item{key}{A string or numeric column - key value for dataframe.
+Statistics will be computed between groups for each key value}
 
-\item{response}{numeric column - used as response variable in linear model}
+\item{response}{numeric column - used as response variable in
+linear model}
 
-\item{independentVariable}{a string or numeric column - used as independent variable in linear model}
+\item{independentVariable}{a string or numeric column
+used as independent variable in linear model}
 
-\item{covariates}{vector of features names in the dataset to be added to linear model as covariates}
+\item{covariates}{vector of features names in the dataset
+to be added to linear model as covariates}
 
-\item{interactionVariable}{a string or numeric column in dataset to be added to interaction term with response variable}
+\item{interactionVariable}{a string or numeric column in dataset to
+be added to interaction term with response variable}
 
-\item{adjustmentMethod}{optional argument specifiying multiple hypothesis correction to apply to linear model result - defaults to "none"}
+\item{adjustmentMethod}{optional argument specifiying multiple
+hypothesis correction to apply to linear model result - defaults to "none"}
 
-\item{...}{dots - accomodate additional arguments when function is called as parent router}
+\item{...}{dots - accomodate additional arguments when function is
+called as parent router}
 }
 \value{
 dataframe containing resulting p.values for each key/group stat test
 }
 \description{
-run linear model with interaction between independent variable and specificed interaction variable
+run linear model with interaction between independent variable
+and specificed interaction variable
 }

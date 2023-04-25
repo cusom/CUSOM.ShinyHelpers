@@ -14,11 +14,11 @@ getDataframeFromDatabase(
 \arguments{
 \item{queryString}{string paramterized sql query where parameters are indicated by "?"}
 
+\item{parameters}{tibble of parameter values}
+
+\item{convertFactorsToStrings}{boolean whether to convert all factor variables to character strings default = TRUE}
+
 \item{...}{conn_args list of database connection arguments: driver, server, database name, userid, password, port}
-
-\item{paramters}{tibble of parameter values}
-
-\item{converFactorsToStrings}{boolean whether to convert all factor variables to character strings default = TRUE}
 }
 \value{
 returns sql query result as a dataframe

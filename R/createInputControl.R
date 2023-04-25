@@ -7,56 +7,50 @@
 #' @param  selected - string
 #' @param ... dots - additional arguments to pass to widgets functions
 #' @return returns a shiny input widget based on inputs
+#' @importFrom shinyWidgets prettyRadioButtons
+#' @importFrom shinyWidgets pickerInput
+#' @importFrom shinyWidgets awesomeCheckboxGroup
+#' @importFrom shiny sliderInput
+#' @importFrom shinyWidgets materialSwitch
 #' @export
 createInputControl <- function(controlType, inputId, label, choices, selected, ...) {
 
   if(controlType=="radioButtons") {
 
-    prettyRadioButtons(
+    shinyWidgets::prettyRadioButtons(
       inputId = inputId,
       label = label,
       choiceNames = unique(choices),
       choiceValues = unique(choices),
       selected = selected,
       ...
-      #icon = icon("check")
     )
 
   } else if (controlType=="pickerInput"){
 
-    pickerInput(
+    shinyWidgets::pickerInput(
       inputId = inputId,
       label = label,
       choices = choices,
       selected = selected,
-      ...
-      # options = list(
-      #   `actions-box` = TRUE,
-      #   `live-search` = TRUE,
-      #   size = 10,
-      #   `selected-text-format` = "count > 3",
-      #   `max-options` =  choiceLimit
-      # ),
-      # multiple = multiple
+      ...      
     )
 
   } else if (controlType=="checkboxGroupInput"){
 
-    #checkboxGroupInput(
-    awesomeCheckboxGroup(
+    shinyWidgets::awesomeCheckboxGroup(
       inputId = inputId,
       label = label,
       choices = choices,
       selected = selected,
       ...
-      #inline = TRUE
     )
 
   } else if (controlType=="sliderInput"){
 
     range <- range(choices,na.rm = FALSE)
 
-    sliderInput(
+    shiny::sliderInput(
       inputId = inputId,
       label = label,
       min = min(range),
@@ -67,12 +61,10 @@ createInputControl <- function(controlType, inputId, label, choices, selected, .
 
   else if (controlType=="primarySwitch") {
 
-    materialSwitch(
+    shinyWidgets::materialSwitch(
       inputId = inputId,
       label = label,
       ...
-      # value = TRUE,
-      # status = "primary"
     )
 
   }

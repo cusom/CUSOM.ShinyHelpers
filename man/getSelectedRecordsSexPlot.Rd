@@ -9,7 +9,8 @@ getSelectedRecordsSexPlot(.data, .group)
 \arguments{
 \item{.data}{dataframe containing group column to check}
 
-\item{.group}{column, string - group value to compare percent distribution by sex}
+\item{.group}{column, string - group value to compare percent
+distribution by sex}
 }
 \value{
 returns plolty stacked bar chart.

@@ -2,7 +2,8 @@
 % Please edit documentation in R/createTutorialTooltip.R
 \name{createTutorialTooltip}
 \alias{createTutorialTooltip}
-\title{returns standard turtorial text with info-circle tooltip. If TooltipText is missing or NA, tooltip element is omitted.}
+\title{returns standard turtorial text with info-circle tooltip. 
+If TooltipText is missing or NA, tooltip element is omitted.}
 \usage{
 createTutorialTooltip(
   Text,
@@ -27,5 +28,6 @@ createTutorialTooltip(
 HTML div with tooltip span element
 }
 \description{
-returns standard turtorial text with info-circle tooltip. If TooltipText is missing or NA, tooltip element is omitted.
+returns standard turtorial text with info-circle tooltip. 
+If TooltipText is missing or NA, tooltip element is omitted.
 }

@@ -1,19 +1,31 @@
 #' get Plotly box and whisker plot showing age distribution by group
 #'
 #' @param .data dataframe containing group column to check
-#' @param .group column, string - group value to compare percent distribution by sex
+#' @param .group column, string - group value to compare percent
+#' distribution by sex
 #' @param .value column, numeric - age column to show distribution across groups
 #' @return returns plolty box and whisker plot
+#' @importFrom rlang enquo
+#' @import dplyr
+#' @import plotly
 #' @export
-getSelectedRecordsAgePlot <- function(.data, .group, .value) {
+getSelectedRecordsAgePlot <- function(
+  .data,
+  .group,
+  .value
+) {
 
-  .group <- enquo(.group)
-  .value <- enquo(.value)
+  .group <- rlang::enquo(.group)
+  .value <- rlang::enquo(.value)
 
-  if (nrow(.data)>0) {
+  if (nrow(.data) > 0) {
 
-    .data <- .data %>%
-      mutate(y = !!.value, color = !!.group, text = paste0(!!.value) )
+    .data <- .data |>
+      dplyr::mutate(
+        y = !!.value,
+        color = !!.group,
+        text = paste0(!!.value)
+      )
 
     f <- list(
       family = "Arial",
@@ -39,25 +51,20 @@ getSelectedRecordsAgePlot <- function(.data, .group, .value) {
       showticklabels = TRUE
     )
 
-    margin <- list(autoexpand = TRUE,
-                   l = 10,
-                   r = 10,
-                   t = 10)
-
-    p <- plot_ly(
+    p <- plotly::plot_ly(
       data = .data,
       y = ~ y,
       color= ~ color,
       colors = c("#BBBDC0", "#287BA5"),
       text = ~ text,
-      hoverinfo = 'text',
+      hoverinfo = "text",
       type = "box",
       boxpoints = "all",
       jitter = 1,
       pointpos = 0
-    ) %>%
-      layout(
-        font= f,
+    ) |>
+      plotly::layout(
+        font = f,
         xaxis = xaxis,
         yaxis = yaxis,
         showlegend = FALSE
@@ -65,8 +72,7 @@ getSelectedRecordsAgePlot <- function(.data, .group, .value) {
 
     return(p)
 
-  }
-  else {
+  } else {
     return(NULL)
   }
 

@@ -1,15 +1,19 @@
 
 #' Utility function to get standard School of Medicine Footer HTML
 #'
-#' @param footerImageFilePath optional parameter to source a specfic image for footer. Assumes image is in "www" directroy in application folder
+#' @param footerImageFilePath optional parameter to source a specfic
+#' image for footer. Assumes image is in "www" directroy in application folder
 #' @param additionalText string - optional text to include below footer image
 #' @return HTML
 #' @export
 
-getSOMStandardFooter <- function(footerImageFilePath='./images/medicine_h_clr.png', additionalText ='') {
+getSOMStandardFooter <- function(
+  footerImageFilePath = "./images/medicine_h_clr.png",
+  additionalText = ""
+  ) {
 
   return(
-    glue('
+    glue::glue('
       <center>          
         <img src="{footerImageFilePath}" width="400" height="auto">       
       </center> 
@@ -40,4 +44,3 @@ getSOMStandardFooter <- function(footerImageFilePath='./images/medicine_h_clr.pn
   )
 
 }
-

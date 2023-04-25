@@ -18,17 +18,24 @@ getStatTestByKeyGroup(
 \arguments{
 \item{.data}{A dataframe}
 
-\item{...}{dots - accomodate additional arguments when function is called as parent router}
+\item{id}{A string or numeric column - represents a unique
+observation within each key/group combination. PersonId, LabId, etc}
 
-\item{.id}{A string or numeric column - represents a unique observation within each key/group combination. PersonId, LabId, etc}
+\item{key}{A string or numeric column - key value for dataframe.
+Statistics will be computed between groups for each key value}
 
-\item{.key}{A string or numeric column - key value for dataframe. Statistics will be computed between groups for each key value}
+\item{response}{A numeric column - numerical value to use
+with statitical test between groups.}
 
-\item{.group}{A string column indicating group membership - should be binary.}
+\item{independentVariable}{A string column indicating group membership - should be binary.}
 
-\item{.value}{A numeric column - numerical value to use with statitical test between groups.}
+\item{baselineLabel}{independentVariable label used for fold change comparison / calculation}
 
-\item{method}{a string - indicating which statisical test to perform. One of either ks.test, t.test, or wilcox.test}
+\item{testMethod}{a string - indicating which statisical
+test to perform. One of either ks.test, t.test, or wilcox.test}
+
+\item{...}{dots - accomodate additional arguments
+function is called as parent router}
 }
 \value{
 dataframe containing resulting p.values for each key/group stat test

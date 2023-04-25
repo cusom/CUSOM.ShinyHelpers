@@ -23,20 +23,26 @@ getVolcanoPlot(
 
 \item{significanceVariable}{p value variable}
 
-\item{significanceGroup}{significance group column - each group results in a separate trace}
+\item{significanceGroup}{significance group column - each group
+results in a separate trace}
 
 \item{text}{column containing text values to show in tooltip}
 
-\item{key}{- key column in fold change data - will be used for capuring select events}
+\item{key}{- key column in fold change data - will be used for
+capuring select events}
 
-\item{plotName}{- name to attribute to plot (used for tracking clicks, events, etc)}
+\item{plotName}{- name to attribute to plot
+(used for tracking clicks, events, etc)}
 
-\item{color}{- column with color to use for each row / group in dataset - should be unique per significance group / trace}
+\item{color}{- column with color to use for each row / group in dataset -
+should be unique per significance group / trace}
 
-\item{shape}{- optional shape - should be passed as a nammed column in source data.}
+\item{shape}{- optional shape - should be passed as a nammed
+column in source data.}
 }
 \value{
-returns Plotly scatter plot showing fold change vs p value colored by significance group
+returns Plotly scatter plot showing fold change vs p value
+colored by significance group
 }
 \description{
 Plotly function to generate standard volcano plot from fold change data

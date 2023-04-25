@@ -9,9 +9,9 @@ addGroupCount(.data, group, addLineBreak = TRUE)
 \arguments{
 \item{.data}{dataframe with group variable}
 
-\item{addLineBreak}{logical - whether to insert a line break between group label and count. Defaults to TRUE}
+\item{group}{grouping variable to add count}
 
-\item{.group}{grouping variable to add count}
+\item{addLineBreak}{logical - whether to insert a line break between group label and count. Defaults to TRUE}
 }
 \value{
 datframe with html formatted group count

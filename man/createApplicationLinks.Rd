@@ -10,8 +10,9 @@ createApplicationLinks(linkData)
 \item{linkData}{A dataframe containing the following required columns
 label - string - label to be used for link button
 imageURL - string - background image to use for link button
-link - string - link to use for onclick event linked to button
-IsCurrentApplication - boolean - indicates whether the row is for the current application}
+link - string - link for onclick event linked to button
+IsCurrentApplication - boolean - indicates whether the
+row is for the current application}
 }
 \value{
 shiny div containing shiny action button objects

@@ -1,4 +1,5 @@
-#' returns standard turtorial text with info-circle tooltip. If TooltipText is missing or NA, tooltip element is omitted.
+#' returns standard turtorial text with info-circle tooltip. 
+#' If TooltipText is missing or NA, tooltip element is omitted.
 #'
 #' @param Text Text to diplay before info circle tooltip
 #' @param onClickFunction function and arguments to be bound to onclick event
@@ -6,17 +7,18 @@
 #' @param additionalText additional text to be shown below text / tooltip line
 #' @param size size of H tag to use - defaults to 3 for <h3>
 #' @return HTML div with tooltip span element
+#' @importFrom shiny HTML
 #' @export
 
 createTutorialTooltip <- function(Text,onClickFunction,TooltipText,additionalText, size = "3") {
 
-  opentag <- glue("<h{size}>")
-  closetag <- glue("</h{size}>")
+  opentag <- glue::glue("<h{size}>")
+  closetag <- glue::glue("</h{size}>")
 
-  if( TooltipText != "" & !is.na(TooltipText)) {
+  if(TooltipText != "" && !is.na(TooltipText)) {
     return(
-      HTML(
-        glue(
+      shiny::HTML(
+        glue::glue(
           '{opentag}{Text}
               <span onclick=\"{onClickFunction}\"
                 data-html="true"
@@ -32,12 +34,10 @@ createTutorialTooltip <- function(Text,onClickFunction,TooltipText,additionalTex
         )
       )
     )
-  }
-  else {
+  } else {
     return(
-      HTML(
-        glue('{opentag}{Text}{closetag}'
-        )
+      shiny::HTML(
+        glue::glue("{opentag}{Text}{closetag}")
       )
     )
   }

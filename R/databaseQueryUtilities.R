@@ -1,30 +1,30 @@
 #' Function to pull data from database using paramterized DBI odbc query
 #' @param queryString string paramterized sql query where parameters are indicated by "?"
-#' @param paramters tibble of parameter values
-#' @param converFactorsToStrings boolean whether to convert all factor variables to character strings default = TRUE
+#' @param parameters tibble of parameter values
+#' @param convertFactorsToStrings boolean whether to convert all factor variables to character strings default = TRUE
 #' @param ... conn_args list of database connection arguments: driver, server, database name, userid, password, port
 #' @return returns sql query result as a dataframe
 #' @export
 getDataframeFromDatabase <- function(queryString,parameters,convertFactorsToStrings = TRUE,...) {
 
   if(!is.null(parameters)){
-    parameters %>%
-      mutate_if(is.factor, as.character) -> parameters
+    parameters |>
+      dplyr::mutate_if(is.factor, as.character) -> parameters
   }
 
   dbhandle <- dbConnector(...)
 
-  query <- dbSendQuery(dbhandle,queryString)
+  query <- DBI::dbSendQuery(dbhandle,queryString)
 
-  dbBind(query, parameters)
+  DBI::dbBind(query, parameters)
 
-  data <- dbFetch(query)
+  data <- DBI::dbFetch(query)
 
-  dbClearResult(query)
+  DBI::dbClearResult(query)
 
   if(convertFactorsToStrings){
-    data <- data %>%
-      mutate_if(is.factor, as.character) -> data
+    data <- data |>
+      dplyr::mutate_if(is.factor, as.character) -> data
   }
 
   return(data)

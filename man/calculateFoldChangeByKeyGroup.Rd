@@ -21,13 +21,13 @@ calculateFoldChangeByKeyGroup(
 
 \item{.group}{A string - column indicating group membership - should be binary.}
 
+\item{.response}{A number - numerical value to use with statitical test. Should be log2 transformed values.}
+
 \item{baselineGroupLabel}{a string - indicating which statisical test to perform by name..}
 
 \item{inf.rm}{logical indicating whether to remove INF fold changes (dividing by 0) - defaults to TRUE}
 
 \item{...}{dots to accomodate additiaon arguments passed when called from parent function}
-
-\item{.value}{A number - numerical value to use with statitical test. Should be log2 transformed values.}
 }
 \value{
 dataframe indicating  fold change (raw and log2) between baseline and comparison for each group by key value

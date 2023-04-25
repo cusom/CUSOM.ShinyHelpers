@@ -1,13 +1,14 @@
 #' Utility Plotly function to return blank plot when useful
 #'
 #' @param text string defaults to "" - optional text to display in plot
-#
 #' @return returns empty Plotly scatter plot
+#' @import dplyr
+#' @import plotly
 #' @export
 
-getBoxplotForEmptyData <- function(text="") {
+getBoxplotForEmptyData <- function(text = "") {
 
-  data <- as_tibble(list(x = 1, text = text))
+  data <- tibble::as_tibble(list(x = 1, text = text))
 
   xaxis <- list(
     title = "",
@@ -35,21 +36,21 @@ getBoxplotForEmptyData <- function(text="") {
     b = 20
   )
 
-  plot_ly(
+  plotly::plot_ly(
     data = data,
     x = ~x,
     y = ~x,
     text = ~ text,
-    hoverinfo = 'none',
+    hoverinfo = "none",
     type = "scatter",
     mode = "none",
     colors = "white",
     marker = list(
       color = "white"
     )
-  ) %>%
-    layout(
-      title = '',
+  ) |>
+    plotly::layout(
+      title = "",
       xaxis = xaxis,
       yaxis = yaxis,
       margin = margin,
@@ -65,12 +66,13 @@ getBoxplotForEmptyData <- function(text="") {
         ax = 0,
         ay = 0,
         font = list(
-          color = '#264E86',
-          family = 'sans serif',
+          color = "#264E86",
+          family = "sans serif",
           size = 32
         )
       )
-    ) %>% config(
+    ) |>
+    plotly::config(
       displayModeBar = FALSE,
       displaylogo = FALSE
     )

@@ -2,20 +2,25 @@
 % Please edit documentation in R/fillMissingSexObservations.R
 \name{fillMissingSexObservations}
 \alias{fillMissingSexObservations}
-\title{Utility function to fill in missing missing conbinations between sex and another group variable}
+\title{Utility function to fill in missing missing
+conbinations between sex and another group variable}
 \usage{
 fillMissingSexObservations(.data, .group, groupLabels)
 }
 \arguments{
 \item{.data}{dataframe containing group column to check}
 
-\item{groupLabels}{vector - labels to check for membership - useful when the source dataframe is missing a required group ex(Group A vs Group B)}
+\item{.group}{column, string - group labels to check}
 
-\item{.groupVar}{column, string - group labels to check}
+\item{groupLabels}{vector - labels to check for membership
+useful when the source dataframe is missing a
+required group ex(Group A vs Group B)}
 }
 \value{
-returns completed dataframe with 0 filled in for missing combinations.
+returns completed dataframe with 0 filled in
+for missing combinations.
 }
 \description{
-Utility function to fill in missing missing conbinations between sex and another group variable
+Utility function to fill in missing missing
+conbinations between sex and another group variable
 }

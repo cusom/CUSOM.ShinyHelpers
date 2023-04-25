@@ -13,7 +13,8 @@ summarizeByGroup(.data, .summaryVar, ..., na.rm = TRUE)
 
 \item{...}{group variables to summarize within dataframe - can be mutliples.}
 
-\item{na.rm}{boolean - indicates whether NA values should be stripped from summary calculation. Defaults to TRUE}
+\item{na.rm}{boolean - indicates whether NA values should be stripped 
+from summary calculation. Defaults to TRUE}
 }
 \value{
 dataframe containing with summaries for each group
