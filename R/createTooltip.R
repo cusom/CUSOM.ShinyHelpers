@@ -5,10 +5,11 @@
 #' @param URL URL to open for onclick event
 #' @param TooltipText text to display in tooltip on hover
 #' @param ShowTooltip boolean - whether to add info tooltip or just output Text - defaults to TRUE
+#' @param ... dots - additional args
 #' @return HTML div with tooltip span element
 #' @importFrom shiny HTML
 #' @export
-createTooltip <- function(Text,URL,TooltipText,ShowTooltip=TRUE) {
+createTooltip <- function(Text,URL,TooltipText,ShowTooltip=TRUE, ...) {
 
   if(!ShowTooltip) {
     return(

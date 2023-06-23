@@ -1,14 +1,14 @@
 Package: CUSOMShinyHelpers
 Type: Package
 Title: CU School of Medicine Helper Functions for Shiny Applications
-Version: 1.9.0
+Version: 1.9.1
 Authors@R: person("Kyle", "Bartsch", email = "kyle.bartsch@cuanschutz.edu",
   role = c("aut", "cre"))
 Description: Consists of standard helper functions within shiny application delevelopment. 
 License: Proprietary
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 7.2.0
+RoxygenNote: 7.2.3
 Imports: 
     rlang,
     shiny (>= 1.5.0),

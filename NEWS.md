@@ -1,10 +1,5 @@
-# CUSOMShinyHelpers 1.9.0
-Adding new helper functions / modules / input widgets
-
-## New Functionality 
-- downloadFile module -> utility module to download dataset files for various formats using `shiny::downloadHandler`
-- getExternalLinks helper functions -> utility functions to create link buttons and tooltips 
-- prettyRadioButtonsFieldSet -> grouped radio button input widget 
+# CUSOMShinyHelpers 1.9.1
+Minor change to `prettyRadioButtonsFieldSet` and `createTooltip` 
 
 ***
 ## Major Changes 
@@ -12,8 +7,7 @@ Adding new helper functions / modules / input widgets
 
 ***
 ## Minor Changes
-- Added @imports / @importFrom for all functions
-- minor syntax updates
+- Updated `prettyRadioButtonsFieldSet` to accommodate separate `names` and `values` passed to function - i.e. if you want to use ID field for `values` but show a user friendly `names` value in input widget. Update required adding a simple `dots` param to `createTooltip` function.  
 
 ***
 ## Bug Fixes 

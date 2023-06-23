@@ -127,7 +127,7 @@ getRadioButton <- function(radioChoices, ...) {
       inline = args$inline,
       type = "radio",
       choiceNames = purrr::pmap(radioChoices, createTooltip),
-      choiceValues = radioChoices$Text,
+      choiceValues = radioChoices$Values,
       status = args$status,
       shape = args$shape,
       outline = args$outline,
