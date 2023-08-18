@@ -1,4 +1,4 @@
-# CUSOMShinyHelpers 1.9.1
+# CUSOMShinyHelpers 1.9.2
 Minor change to `prettyRadioButtonsFieldSet` and `createTooltip` 
 
 ***
@@ -11,4 +11,4 @@ Minor change to `prettyRadioButtonsFieldSet` and `createTooltip`
 
 ***
 ## Bug Fixes 
-- No bug fixes in this release
+- Minor bug fix to `getPairwiseStatTestByKeyGroup` to handle factor variables appropriately

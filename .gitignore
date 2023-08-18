@@ -1,6 +1,8 @@
 ConnectionStrings.config
 PrivateSettings.config
 
+debug/*
+
 config.yml
 
 # History files

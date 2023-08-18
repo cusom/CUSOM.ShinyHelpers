@@ -8,7 +8,7 @@
 #' @param response A numeric column - numerical value to use
 #' with statitical test between groups.
 #' @param independentVariable A string column indicating group membership - should be binary.
-#' @param baselineLabel independentVariable label used for fold change comparison / calculation 
+#' @param baselineLabel independentVariable label used for fold change comparison / calculation
 #' @param testMethod a string - indicating which statisical
 #' test to perform. One of either ks.test, t.test, or wilcox.test
 #' @param ... dots - accomodate additional arguments
@@ -21,14 +21,14 @@
 #' @export
 getStatTestByKeyGroup <- function(
   .data,
-  id, 
-  key, 
-  response, 
-  independentVariable, 
-  baselineLabel, 
-  testMethod, 
+  id,
+  key,
+  response,
+  independentVariable,
+  baselineLabel,
+  testMethod,
   ...
-) 
+)
 {
 
   id <- rlang::enquo(id)
@@ -99,12 +99,12 @@ getStatTestByKeyGroup <- function(
 #' @importFrom rlang :=
 #' @import dplyr
 getLinearModel <- function(
-  .data, 
-  id, 
-  key, 
-  response, 
-  independentVariable, 
-  covariates, 
+  .data,
+  id,
+  key,
+  response,
+  independentVariable,
+  covariates,
   adjustmentMethod,
   ...
 ) {
@@ -119,7 +119,7 @@ getLinearModel <- function(
       dplyr::select(!!key, !!id, !!response, !!covariates) |>
       dplyr::group_by(!!key) |>
       dplyr::summarise_at(
-        dplyr::vars(!!covariates), 
+        dplyr::vars(!!covariates),
         dplyr::n_distinct
       ) |>
       tidyr::pivot_longer(!!covariates) |>
@@ -226,13 +226,13 @@ getLinearModel <- function(
 }
 
 getPairwiseStatTestByKeyGroup <- function (
-  .data, 
-  .id, 
-  .key, 
-  .group, 
-  .response, 
-  method, 
-  adjustmentMethod, 
+  .data,
+  .id,
+  .key,
+  .group,
+  .response,
+  method,
+  adjustmentMethod,
   ...
 ) {
 
@@ -242,15 +242,16 @@ getPairwiseStatTestByKeyGroup <- function (
   .response <- rlang::enquo(.response)
 
   groupLabels <- .data |>
-    dplyr::pull(!!.group) |>
-    dplyr::distinct()
-
+    dplyr::select(!!.group) |>
+    dplyr::distinct() |>
+    dplyr::pull()
+  
   StatResults <- .data |>
     dplyr::select(!!.key, !!.group, !!.response) |>
     dplyr::group_by(!!.key, !!.group) |>
     dplyr::summarise(!!.response := list(!!.response)) |>
     tidyr::pivot_wider(
-      names_from = !!.group, 
+      names_from = !!.group,
       values_from = !!.response,
       values_fill = NA
     ) |>
@@ -263,7 +264,7 @@ getPairwiseStatTestByKeyGroup <- function (
       fit = purrr::map(
         data, ~ runStatMethod(
           method,
-          unlist(.x$x), 
+          unlist(.x$x),
           unlist(.x$y)
           )
         ),
@@ -284,7 +285,7 @@ getPairwiseStatTestByKeyGroup <- function (
     )
     StatResults$p.value.original <- StatResults$p.value
     StatResults$p.value <- stats::p.adjust(
-      StatResults$p.value, 
+      StatResults$p.value,
       getStatTestByKeyGroup.getAdjustmentMethodName(adjustmentMethod)
     )
     StatResults$p.value.adjustment.method <- adjustmentMethod
@@ -331,7 +332,7 @@ runStatMethod <- function(method, x, y) {
 #' @export
 getStatTestByKeyGroup.methods <- c("Linear Model",
   "Kolmogorov-Smirnov Test",
-  "Student's t-test", 
+  "Student's t-test",
   "Wilcoxon test"
   )
 
@@ -343,18 +344,20 @@ getStatTestByKeyGroup.adjustment.methods <- p.adjust.methods
 # internal lookup between label and method name for all stat tests
 getStatTestByKeyGroup.getMethodName <- function(method) {
 
-  statMethods <- data.frame(
+  statMethods <- tibble::tibble(
     StatTestMethodLabel = c("Kolmogorov-Smirnov Test",
-      "Student's t-test",
-      "Wilcoxon test"
+                            "Student's t-test",
+                            "Wilcoxon test"
     ),
     StatTestMethodName = c("ks.test", "t.test", "wilcox.test")
   )
 
-  methodName <- as.character
-    (statMethods[which(statMethods$StatTestMethodLabel == method),
-    "StatTestMethodName"]
-  )
+  methodName <- statMethods |>
+    dplyr::filter(
+      StatTestMethodLabel == method | StatTestMethodName == method
+    ) |>
+    dplyr::select(StatTestMethodName) |>
+    dplyr::pull()
 
   if(length(methodName) == 0) {
     msg <- paste0("'", method, "' Method Not Yet Implemented")
