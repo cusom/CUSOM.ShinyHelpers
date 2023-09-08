@@ -1,5 +1,5 @@
-# CUSOMShinyHelpers 1.9.2
-Minor change to `prettyRadioButtonsFieldSet` and `createTooltip` 
+# CUSOMShinyHelpers 1.9.3
+Bug fix for `downloadFile` module
 
 ***
 ## Major Changes 
@@ -12,3 +12,4 @@ Minor change to `prettyRadioButtonsFieldSet` and `createTooltip`
 ***
 ## Bug Fixes 
 - Minor bug fix to `getPairwiseStatTestByKeyGroup` to handle factor variables appropriately
+- Added `writexl` package dependency for save excel file function in `downloadFile` module 

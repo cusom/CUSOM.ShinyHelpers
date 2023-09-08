@@ -7,10 +7,10 @@
 #' @return module to handle file download - ui elements and server componenents
 #' @import shiny
 #' @importFrom shinyWidgets prettyRadioButtons
-#' @importFrom shinybusy show_modal_spinner
-#' @importFrom shinybusy remove_modal_spinner
+#' @importFrom shinybusy show_modal_spinner remove_modal_spinner
 #' @importFrom vroom vroom_write
 #' @importFrom shinyalert shinyalert
+#' @importFrom writexl write_xlsx
 #' @export
 downloadFile <- function(id, fileName, dataForDownload, downloadButtonLabel = "Download") {
 
