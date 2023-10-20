@@ -1,4 +1,4 @@
-# CUSOMShinyHelpers 1.9.3
+# CUSOMShinyHelpers 1.9.4
 Bug fix for `downloadFile` module
 
 ***
@@ -7,7 +7,8 @@ Bug fix for `downloadFile` module
 
 ***
 ## Minor Changes
-- Updated `prettyRadioButtonsFieldSet` to accommodate separate `names` and `values` passed to function - i.e. if you want to use ID field for `values` but show a user friendly `names` value in input widget. Update required adding a simple `dots` param to `createTooltip` function.  
+- Updated `prettyRadioButtonsFieldSet` to accommodate separate `names` and `values` passed to function - i.e. if you want to use ID field for `values` but show a user friendly `names` value in input widget. Update required adding a simple `dots` param to `createTooltip` function. 
+- Suppressed console output from `geom_smooth()` calls for scatter plots
 
 ***
 ## Bug Fixes 
