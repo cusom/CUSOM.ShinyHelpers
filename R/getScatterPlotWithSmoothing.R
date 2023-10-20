@@ -13,11 +13,11 @@
 #' @export
 
 getScatterPlotWithSmoothing <- function(
-  .data, 
-  xVar, 
-  yVar, 
-  colorVar, 
-  textVar, 
+  .data,
+  xVar,
+  yVar,
+  colorVar,
+  textVar,
   smoothingMethod = "lm"
 ) {
 
@@ -36,7 +36,7 @@ getScatterPlotWithSmoothing <- function(
         color = !!colorVar
       )
     ) +
-    ggplot2::geom_smooth(method = smoothingMethod) +
+    ggplot2::geom_smooth(formula = 'y ~ x', method = smoothingMethod) +
     ggplot2::geom_point(
       ggplot2::aes(text = !!textVar)) +
     ggplot2::scale_color_viridis_c() +
